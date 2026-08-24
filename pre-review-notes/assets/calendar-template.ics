@@ -2,7 +2,7 @@ TEMPLATE NOTES (delete everything above the BEGIN:VCALENDAR line when
 delivering — the delivered file must start at BEGIN:VCALENDAR):
 
 Revision-calendar export for the pre-review-notes skill
-(Step 3 of SKILL.md). Turns the chapter priority order into study
+(the planning stage of SKILL.md). Turns the chapter priority order into study
 blocks the learner can import into any calendar app (Apple / Google /
 Outlook / phone calendars all accept .ics).
 

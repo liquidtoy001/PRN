@@ -11,8 +11,13 @@ pre-review-notes/tmp/
 pre-review-notes/evals/**/build/
 pre-review-notes/evals/**/build-zh/
 
-# Third-party course inputs are local test data, never repository assets
+# User-owned and third-party source material stays local
+test-data/
+downloads/
 examples/stat3007/slides/*.pdf
+
+# Generated release artifacts belong in GitHub Releases, not Git history
+dist/
 
 # Python/editor/OS noise
 __pycache__/

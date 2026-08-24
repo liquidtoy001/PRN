@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "course": {
+    "id": "STAT3007",
+    "title": "Deep Learning"
+  },
+  "preferences": {
+    "mode": "lightweight",
+    "language": "zh",
+    "format": "latex-pdf",
+    "assessment_date": null,
+    "study_hours_available": null
+  },
+  "materials": {
+    "inventory_path": "tests/fixtures/stat3007/materials.csv",
+    "inventory_digest": "95fb8a706a9d85769d4856b22ab255248bce206f042dc4af32fd09c8e27e35dd"
+  },
+  "evidence_boundary": {
+    "assessment_specification": "absent",
+    "past_assessments": "absent",
+    "official_solutions": "absent",
+    "notes": [
+      "The example is lecture-driven and does not support an exam weighting."
+    ]
+  },
+  "chapters": [
+    {
+      "slug": "regression",
+      "title": "Regression",
+      "status": "delivered",
+      "priority_basis": "Representative smoke-test chapter; exam weighting unknown.",
+      "source_ids": [
+        "S002"
+      ],
+      "input_digest": "1e751d059b41eaac1846a119224b8606dbd20d2bd01011c564310a07f3b29cee",
+      "artifacts": [
+        "examples/stat3007/notes/chapter-01-regression-zh.tex",
+        "examples/stat3007/notes/pdf/stat3007-regression-notes-zh.pdf"
+      ],
+      "qa": {
+        "citations": "pass",
+        "reasoning": "pass",
+        "pdf_structure": "pass",
+        "visual": "pass"
+      },
+      "updated_at": "2026-08-24T13:45:57Z"
+    }
+  ],
+  "last_action": "Rebuilt and visually verified the Chinese Regression chapter with v0.1.0 tooling.",
+  "next_action": "Request assessment evidence before producing an exam-priority ranking.",
+  "updated_at": "2026-08-24T13:45:57Z"
+}

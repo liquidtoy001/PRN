@@ -27,6 +27,7 @@
 
 \newcommand{\chaptertitle}[1]{{\large\bfseries\color{titleblue}#1}\\[2pt]}
 \newcommand{\pref}[1]{\colorbox{yellowbg}{\scriptsize\texttt{\color{yellowtext}#1}}}
+\newcommand{\sourceref}[2]{\pref{#1: #2}}
 \newcommand{\subtitle}[1]{{\scriptsize\color{gray}\itshape#1}}
 \newcommand{\topicsection}[1]{%
   \vspace{6pt}{\noindent\normalsize\bfseries\color{titleblue}#1}\\[-6pt]
@@ -42,7 +43,7 @@
 
 \vspace*{2pt}
 \chaptertitle{试验章节：回归（Regression）}
-\pref{02-regression.pdf 第 2--34 页}\quad
+\sourceref{S002}{PDF 第 2--34 页}\quad
 \subtitle{中文笔记试验；仅依据讲义，不代表当前课程的考试权重。}
 
 \vspace{4pt}
@@ -51,7 +52,7 @@
 \end{keybox}
 
 \topicsection{1. 学习问题与回归设定}
-\pref{02-regression.pdf 第 2、7、14 页}
+\sourceref{S002}{PDF 第 2、7、14 页}
 \begin{rc}
 监督学习的数据由样本对 $(x_i,y_i)$ 组成。回归的目标 $y_i$ 是实数；分类的目标则是离散值。讲义把机器学习过程概括为四个相互连接的选择：
 \begin{enumerate}
@@ -67,7 +68,7 @@
 \end{rc}
 
 \topicsection{2. 普通最小二乘法（Ordinary Least Squares, OLS）}
-\pref{02-regression.pdf 第 16--19 页}
+\sourceref{S002}{PDF 第 16--19 页}
 \begin{rc}
 设设计矩阵 $X\in\mathbb{R}^{n\times d}$ 的第 $i$ 行为 $x_i^\top$，响应向量为 $y\in\mathbb{R}^n$。普通最小二乘法（Ordinary Least Squares, OLS）最小化
 \[
@@ -85,7 +86,7 @@ X^\top X\beta=X^\top y.
 \end{rc}
 
 \topicsection{推导：OLS 正规方程}
-\pref{02-regression.pdf 第 18 页}
+\sourceref{S002}{PDF 第 18 页}
 \begin{rc}
 \textbf{讲义中的问题：} 通过对平方误差求导，推导 OLS 的闭式解。
 
@@ -101,7 +102,7 @@ X^\top X\beta=X^\top y.
 \end{rc}
 
 \topicsection{3. 岭回归（Ridge Regression）与偏置项（bias/intercept term）}
-\pref{02-regression.pdf 第 20--25 页}
+\sourceref{S002}{PDF 第 20--25 页}
 \begin{rc}
 岭回归（Ridge Regression）在 OLS 目标中加入 $\ell_2$ 惩罚：
 \[
@@ -123,7 +124,7 @@ v^\top(X^\top X+\lambda I)v=\lVert Xv\rVert_2^2+\lambda\lVert v\rVert_2^2>0.
 \end{rc}
 
 \topicsection{4. 非线性与非参数回归}
-\pref{02-regression.pdf 第 26--32 页}
+\sourceref{S002}{PDF 第 26--32 页}
 \begin{rc}
 \textbf{基函数方法。} 将输入映射为 $(g_1(x),\ldots,g_k(x))$，再在变换后的特征上拟合线性模型。模型对新系数是线性的，但对原始输入可以是非线性的。
 
@@ -143,7 +144,7 @@ h_n(x)=\frac{\sum_iK(x,x_i)y_i}{\sum_iK(x,x_i)}.
 \end{rc}
 
 \topicsection{练习：1 近邻回归（1-Nearest-Neighbour Regression, 1-NN）预测函数}
-\pref{02-regression.pdf 第 27--29 页}
+\sourceref{S002}{PDF 第 27--29 页}
 \begin{rc}
 \textbf{题目（来自讲义）：} “Given three training examples with $(x,y)$ being $(1,1)$, $(2,2)$, $(4,4)$, draw the function learned by 1NN.”
 
@@ -159,7 +160,7 @@ h_n(x)=\frac{\sum_iK(x,x_i)y_i}{\sum_iK(x,x_i)}.
 \end{rc}
 
 \topicsection{\color{redline}\ding{72} 校验发现：讲义内部表述不一致}
-\pref{02-regression.pdf 第 27--28 页}
+\sourceref{S002}{PDF 第 27--28 页}
 \begin{rc}
 第 27 页将 1-NN 定义为“返回最近训练点的响应值”，这一规则得到分段常数函数；第 28 页却把图中的 1-NN 拟合描述为 piecewise-linear（分段线性）。除非存在未说明的插值规则，否则两种表述不一致。本章按第 27 页的明确公式计算，并保留该冲突记录。
 \begin{keybox}\centering\small\bfseries\color{redline}
@@ -168,7 +169,7 @@ h_n(x)=\frac{\sum_iK(x,x_i)y_i}{\sum_iK(x,x_i)}.
 \end{rc}
 
 \topicsection{讲义末尾选择题：独立核对}
-\pref{02-regression.pdf 第 33 页}
+\sourceref{S002}{PDF 第 33 页}
 \begin{rc}
 讲义要求判断以下说法：
 \begin{itemize}
@@ -181,7 +182,7 @@ h_n(x)=\frac{\sum_iK(x,x_i)y_i}{\sum_iK(x,x_i)}.
 \end{rc}
 
 \topicsection{5. 速查卡}
-\pref{02-regression.pdf 第 34 页及前述页码}
+\sourceref{S002}{PDF 第 34 页及前述页码}
 \begin{rc}
 \textbf{OLS 目标：} $\lVert X\beta-y\rVert_2^2$。
 
@@ -215,10 +216,10 @@ h_n(x)=\frac{\sum_iK(x,x_i)y_i}{\sum_iK(x,x_i)}.
 \toprule
 \textbf{来源} & \textbf{本章用途} \\
 \midrule
-02-regression.pdf 第 18 页 & OLS 闭式解的讲义推导；已独立复算。 \\
-02-regression.pdf 第 29 页 & 1-NN 绘图练习；已处理并列距离。 \\
-02-regression.pdf 第 33 页 & 讲义选择题；逐项给出理由。 \\
-02-regression.pdf 第 34 页 & 讲义明确列出的 “What You Need to Know” 边界。 \\
+S002, PDF 第 18 页 & OLS 闭式解的讲义推导；已独立复算。 \\
+S002, PDF 第 29 页 & 1-NN 绘图练习；已处理并列距离。 \\
+S002, PDF 第 33 页 & 讲义选择题；逐项给出理由。 \\
+S002, PDF 第 34 页 & 讲义明确列出的 “What You Need to Know” 边界。 \\
 \bottomrule
 \end{tabular}
 

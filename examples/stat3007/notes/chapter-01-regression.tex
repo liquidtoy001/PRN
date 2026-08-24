@@ -28,6 +28,7 @@
 
 \newcommand{\chaptertitle}[1]{{\large\bfseries\color{titleblue}#1}\\[2pt]}
 \newcommand{\pref}[1]{\colorbox{yellowbg}{\scriptsize\texttt{\color{yellowtext}#1}}}
+\newcommand{\sourceref}[2]{\pref{#1: #2}}
 \newcommand{\subtitle}[1]{{\scriptsize\color{gray}\itshape#1}}
 \newcommand{\topicsection}[1]{%
   \vspace{6pt}{\noindent\normalsize\bfseries\color{titleblue}#1}\\[-6pt]
@@ -57,7 +58,7 @@
 
 \vspace*{2pt}
 \chaptertitle{Pilot Chapter: Regression}
-\pref{02-regression.pdf pp. 2--34}\quad
+\sourceref{S002}{PDF pp. 2--34}\quad
 \subtitle{Selected as a prerequisite-level smoke test, not as an assessment-priority claim.}
 
 \vspace{4pt}
@@ -70,7 +71,7 @@ frequently tested, or representative of a current STAT3007 offering.
 \end{keybox}
 
 \topicsection{1. Learning setup}
-\pref{02-regression.pdf pp. 2, 7, 14}
+\sourceref{S002}{PDF pp. 2, 7, 14}
 
 \begin{rc}
 In supervised learning, the data are pairs $(x_i,y_i)$. A regression target $y_i$
@@ -93,7 +94,7 @@ procedure, and generalization assumptions.
 \end{rc}
 
 \topicsection{2. Ordinary least squares}
-\pref{02-regression.pdf pp. 16--19}
+\sourceref{S002}{PDF pp. 16--19}
 
 \begin{rc}
 For a design matrix $X\in\mathbb{R}^{n\times d}$ with row $x_i^\top$ and response
@@ -116,7 +117,7 @@ the conditional likelihood is equivalent to minimizing the same squared-error ob
 \end{rc}
 
 \topicsection{Worked derivation: the OLS normal equations}
-\pref{02-regression.pdf p. 18}
+\sourceref{S002}{PDF p. 18}
 
 \begin{rc}
 \textbf{Source problem.} Derive the closed-form OLS estimator by differentiating the
@@ -141,7 +142,7 @@ The inverse formula needs a full-column-rank design; the normal equations themse
 \end{rc}
 
 \topicsection{3. Ridge regression and the bias term}
-\pref{02-regression.pdf pp. 20--25}
+\sourceref{S002}{PDF pp. 20--25}
 
 \begin{rc}
 Ridge regression adds an $\ell_2$ penalty:
@@ -171,7 +172,7 @@ which $\widehat b=\bar y-\bar x^\top\widehat\beta$.
 \end{rc}
 
 \topicsection{4. Nonlinear and nonparametric regression}
-\pref{02-regression.pdf pp. 26--32}
+\sourceref{S002}{PDF pp. 26--32}
 
 \begin{rc}
 \textbf{Basis functions.} Map $x$ to
@@ -197,7 +198,7 @@ dimensionality for nearest neighbours.
 \end{rc}
 
 \topicsection{Worked exercise: the 1-NN prediction function}
-\pref{02-regression.pdf pp. 27--29}
+\sourceref{S002}{PDF pp. 27--29}
 
 \begin{rc}
 \textbf{Problem statement (from the slide):} ``Given three training examples with
@@ -221,7 +222,7 @@ A 1-NN regressor is piecewise constant, with transitions at Voronoi boundaries.
 \end{rc}
 
 \topicsection{\color{redline}\ding{72} Verification finding: a source inconsistency}
-\pref{02-regression.pdf pp. 27--28}
+\sourceref{S002}{PDF pp. 27--28}
 
 \begin{rc}
 Page 27 defines 1-NN prediction as the response of the nearest training point. That
@@ -238,7 +239,7 @@ the discrepancy.
 \end{rc}
 
 \topicsection{Worked exercise: end-of-lecture checks}
-\pref{02-regression.pdf p. 33}
+\sourceref{S002}{PDF p. 33}
 
 \begin{rc}
 The slide asks which statements are correct. The independently checked answers are:
@@ -256,7 +257,7 @@ Therefore the correct choices are the second and fourth statements.
 \end{rc}
 
 \topicsection{5. Quick reference card}
-\pref{02-regression.pdf p. 34 and cited pages above}
+\sourceref{S002}{PDF p. 34 and cited pages above}
 
 \begin{rc}
 \textbf{OLS objective:} $\lVert X\beta-y\rVert_2^2$.
@@ -296,10 +297,10 @@ therefore maps instruction and in-lecture practice only; it is not an exam map.
 \toprule
 \textbf{Source} & \textbf{Role in this pilot chapter} \\
 \midrule
-02-regression.pdf p. 18 & Instructor derivation of the OLS closed form; independently re-derived. \\
-02-regression.pdf p. 29 & Instructor 1-NN drawing exercise; solved with tie cases stated. \\
-02-regression.pdf p. 33 & Instructor multiple-choice check; each option justified. \\
-02-regression.pdf p. 34 & Explicit ``What You Need to Know'' content boundary for the lecture. \\
+S002, PDF p. 18 & Instructor derivation of the OLS closed form; independently re-derived. \\
+S002, PDF p. 29 & Instructor 1-NN drawing exercise; solved with tie cases stated. \\
+S002, PDF p. 33 & Instructor multiple-choice check; each option justified. \\
+S002, PDF p. 34 & Explicit ``What You Need to Know'' content boundary for the lecture. \\
 \bottomrule
 \end{tabular}
 

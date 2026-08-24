@@ -4,7 +4,7 @@ PRE-REVIEW NOTES — COURSE OVERVIEW MAP TEMPLATE
 ============================================================
 A one-page visual map of an entire course: every topic block as a
 colour-coded section of cards, plus a final section for the assessment
-structure. Render it at the END of Step 3 of SKILL.md, as the visual
+structure. Render it at the end of the planning stage in SKILL.md, as the visual
 form of the chapter plan you share with the learner — the learner sees
 coverage, timing, and assessment weight at a glance before any chapter
 is drafted.
@@ -14,7 +14,7 @@ Calibration rules (same as the note templates):
    real week numbers, real topic names, real mark breakdowns.
    No invented emphasis — the no-fabricated-relevance rule applies
    to this map exactly as it does to the notes.
- - The assessment section at the bottom is filled from Step 1
+ - The assessment section at the bottom is filled from the evidence map
    findings (grading breakdown, exam format, stated weightings).
  - One colour family per topic block, in syllabus order top-to-bottom;
    the LEGEND at the end maps colours back to week ranges.
@@ -119,7 +119,7 @@ Delete this comment block after filling in the template.
 <!-- ============================================================
      ASSESSMENT SECTION — always last, always the gray family.
      One full-width card per assessment component, filled from the
-     Step 1 assessment-landscape summary. Put the real mark split in
+     assessment-landscape summary. Put the real mark split in
      the card-sub line (e.g. "closed book · 10 Qs · 32/40 marks from
      Topic X") — this line is what justifies the chapter order.
      ============================================================ -->

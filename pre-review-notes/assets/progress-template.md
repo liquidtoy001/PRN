@@ -1,14 +1,17 @@
 <!--
-进度追踪模板 — pre-review-notes (SKILL.md Step 10)
-交付第一章时以 progress.md 为名创建于笔记目录，之后每次交付后更新。
+进度追踪模板 — pre-review-notes
+study_state.json 是机器可读的事实来源。本文件是面向学习者的摘要，
+交付第一章时以 progress.md 为名创建于笔记目录，之后每次交付后同步更新。
 新会话（或换一个工具/平台）开始时先读本文件即可接续，无需重新对齐。
 使用时删除本注释块。
 -->
 
 # [COURSE CODE] 复习笔记进度 / Progress
 
-**考试日期:** [date] · **笔记格式:** [LaTeX / Markdown] · **笔记语言:** [中文 / English / 中英双语] · **输出目录:** [path]
-**考核结构摘要:** [Step 1 结论一行,例如"期末 40 分:32 可计算性 + 6 复杂度 + 2 量子 · 闭卷 120 分钟"]
+**模式:** [lightweight / full / exam-cram] · **考试日期:** [date / 未提供]
+**笔记格式:** [LaTeX / Markdown] · **笔记语言:** [中文 / English / 中英双语] · **输出目录:** [path]
+**状态文件:** [study_state.json path] · **材料清单摘要:** [inventory digest / 未生成]
+**考核结构摘要:** [assessment mapping 结论一行,例如"期末 40 分:32 可计算性 + 6 复杂度 + 2 量子 · 闭卷 120 分钟"]
 **权重证据基础:** [例如"3 份往年卷 + 官方样卷答案" / "仅 1 份样卷 — 薄样本,以大纲权重声明为准"]
 
 ## 章节优先级与状态
@@ -19,7 +22,7 @@
 | 2 | [topic] | [weight basis] | 🔧 起草中 | — |
 | 3 | [topic] | [weight basis] | ⬜ 待写 | — |
 
-状态图例:⬜ 待写 · 🔧 起草中 · 🔍 校验中(Step 7)· ✅ 已交付
+状态图例: ⬜ planned · 🔧 drafting · 🔍 verified · ✅ delivered · ♻️ stale · ⛔ blocked
 
 ## 上次会话
 

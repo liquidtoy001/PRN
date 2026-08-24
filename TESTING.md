@@ -1,6 +1,34 @@
-# pre-review-notes 人工测试实验方案
+# pre-review-notes 测试与人工评测方案
 
-本文件定义一套**可复现的人工实验**，用来验证 pre-review-notes 技能是否真的产出"比基线更好的、按考试校准的复习笔记"，而不是凭感觉判断。任何人拿到本仓库都能照此重跑。
+本文件同时定义确定性工程检查和一套**可复现的人工实验**。自动化检查证明结构、脚本、
+状态和包满足可观察约束；人工盲评检验笔记是否真的优于基线。前者不能替代后者。
+
+---
+
+## 0. 自动化检查
+
+在仓库根目录运行：
+
+```powershell
+python -m compileall -q pre-review-notes/scripts tools tests/unit
+python -m unittest discover -s tests/unit -v
+$env:PYTHONUTF8 = '1'
+python C:\path\to\skill-creator\scripts\quick_validate.py pre-review-notes
+python tools/package_skill.py
+```
+
+使用本地 STAT3007 测试资料时，先确认 33 个第三方 PDF 位于 Git 忽略的
+`test-data/stat3007/slides/`，再离线校验 manifest：
+
+```powershell
+python pre-review-notes/scripts/download_materials.py `
+  tests/fixtures/stat3007/materials.csv `
+  --output-dir test-data/stat3007/slides `
+  --verify-only
+```
+
+`git ls-files '*.pdf'` 不得列出 `test-data/` 或原始 slide PDF。生成的 Release ZIP 必须把
+`SKILL.md` 放在 ZIP 根目录，并且不得包含 PDF、测试资料、缓存或历史 ZIP。
 
 ---
 
@@ -15,6 +43,7 @@
 | H3 | **答题深度校准**：真题的解答深度/格式贴近官方答案（不过度展开、不遗漏得分点）。 | 深度失控，与评分标准脱节。 |
 | H4 | **反模式合规**：不出现 one-shot 巨文件、不按教材顺序硬写、不编造引用、不省略推导复算。 | 违反 SKILL.md 明令禁止项。 |
 | H5 | **可用性**：真实用户在真实平台上能顺利触发并完成一章交付，主观有用性评分高于基线。 | 流程门槛过高或产出不解决问题。 |
+| H6 | **可恢复性**：材料未变化时可复用已验证章节；来源或配置变化时能标记需要重建。 | 状态退化成不可验证的聊天记录或手工进度。 |
 
 ---
 
@@ -128,9 +157,9 @@ D6 原题引用
 
 ## 8. 结果如何回流到技能
 
-- 若 D2/编造率不达标 → 强化 SKILL.md Step 1 薄样本纪律与反模式"禁编造考试相关性"表述。
-- 若 D3 不达标 → 强化 Step 6 官方答案校准与 Step 7 独立复算的措辞。
-- 若 D1 不达标 → 检查 Step 3 权重排序是否被模型忽略，考虑在模板中前置"考核映射表"。
+- 若 D2/编造率不达标 → 强化 `references/evidence-workflow.md` 的薄样本纪律与引用规则。
+- 若 D3 不达标 → 强化 `references/authoring.md` 的官方答案校准与独立复算规则。
+- 若 D1 不达标 → 检查 topic-priority 流程是否被忽略，考虑在模板中前置"考核映射表"。
 - 若 D5 不达标 → 回看 USAGE.md 使用门槛与触发说明，可能是平台/提示方式问题而非方法论问题。
 - 每次实验结论与版本号挂钩，追加到 README 版本历史。
 

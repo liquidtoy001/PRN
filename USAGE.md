@@ -1,49 +1,147 @@
 # 使用方法 · USAGE
 
-前提只有两个：你使用的 AI 工具能 **(a) 检索/读取你的课程材料**，且 **(b) 能输出文件或长文本**。技能本身与具体平台无关。
+完整功能需要一个能够读取 skill 目录、访问课程材料、运行本地脚本并写出文件的 Agent。
+只有对话框或知识库的平台仍可使用核心方法，但无法自动获得材料哈希、增量状态和 PDF QA。
 
-## 方式一：国产模型 + Agent 工具（推荐，技能零修改原生可用）
+## 1. 安装完整 skill
 
-- **一键安装**（需 Node.js，适用于 Claude Code 及兼容 skills 目录的 agent）：
+### 从源码目录安装
 
-  ```bash
-  npx skills add https://github.com/liquidtoy001/pre-review-notes
-  ```
+把整个 `pre-review-notes/` 目录复制到目标 Agent 的 skills 目录。不要只复制
+`SKILL.md`，因为 v0.1.0 会按需读取 `references/`、复用 `assets/` 并运行 `scripts/`。
 
-- **Claude Code + 国产模型兼容 API**（智谱 GLM Coding Plan / Kimi K2 / DeepSeek 均提供 Anthropic 兼容端点）：
-  1. 把 `pre-review-notes/` 目录整个复制到 `~/.claude/skills/pre-review-notes/`
-  2. 课程材料放进项目目录
-  3. 直接说"帮我做 XX 课的期末复习笔记"，技能自动触发
-- **Qoder / Trae / CodeBuddy 等国产 Agentic IDE**：把 `pre-review-notes/` 目录放入工作区或注册为本地 skill / rules，材料放同一工作区即可。
+如果目标环境支持 `skills` CLI，可以从仓库安装：
 
-## 方式二：智能体平台（非技术背景用户，一次配置长期用）
+```bash
+npx skills add https://github.com/liquidtoy001/PRN
+```
 
-在 **扣子 Coze / 腾讯元器 / 智谱清言智能体** 上新建智能体：
+### 从 Release ZIP 安装
 
-1. 将 `SKILL.md` 全文粘贴为智能体的系统提示词（人设与回复逻辑）
-2. 课程材料上传到平台的知识库
-3. 文科课程可将 `markdown-template.md` 的正文一并贴入提示词末尾
-4. 配置完成后可分享给同学复用
+运行下面的命令会在本地 `dist/` 生成扁平 ZIP；`SKILL.md` 位于 ZIP 根目录：
 
-## 方式三：网页版直接对话（降级用法）
+```powershell
+python tools/package_skill.py
+```
 
-Kimi（长上下文，适合一次传几十个课件）、腾讯元宝、豆包、DeepSeek 网页版等：每次会话先粘贴 `SKILL.md` 全文，再上传材料。可用，但没有自动触发机制，建议手动提醒模型遵守"反模式清单"（不许按教材顺序写、不许编造考试相关性）。
+将 `dist/pre-review-notes-v0.1.0.zip` 上传到支持 skill ZIP 导入的平台。`dist/` 被 Git
+忽略，正式包应作为 GitHub Release asset 发布，而不是提交进仓库。
 
-## 方式四：海外平台
+## 2. 准备课程资料
 
-- **claude.ai / Claude Desktop**：设置 → Capabilities 中直接上传 `pre-review-notes-v0.0.2.zip`
-- **ChatGPT / Gemini**：同方式三，将 `SKILL.md` 贴入 Project Instructions 或 Gem 指令
+课程材料默认属于本地输入，不属于 skill、Git 仓库或 Release。推荐结构：
 
-## 输出格式与语言
+```text
+my-course-project/
+├── materials/             自己的 slides、作业、往年题、答案
+├── output/                inventory、state、笔记和 PDF
+└── .gitignore             忽略 materials/ 中不可公开的文件
+```
 
-使用时，先明确告诉模型三件事：
+生成材料清单：
 
-1. 笔记主语言：中文、English 或中英双语；
-2. 是否需要可直接观看的 PDF；
-3. 数学/CS 课程是否保留可编辑的 LaTeX 源文件。
+```powershell
+python path/to/pre-review-notes/scripts/inventory_materials.py `
+  materials `
+  --output output/materials.json
+```
 
-如果选择中文，skill 会在首次出现时保留特殊术语的英文，例如“普通最小二乘法（Ordinary Least Squares, OLS）”和“岭回归（Ridge Regression）”。如果需要 PDF，模型必须先编译 `.tex`，再检查 PDF 页数、文本可提取性，并渲染代表页检查版式；只有通过这些检查才应报告 PDF 已交付。
+脚本会生成稳定 source ID、相对路径、角色提示、大小和 SHA-256。安装了 `pypdf` 时，
+还会抽样检查 PDF 文本并标记可能需要 OCR 的扫描件。角色分类和 OCR 标记都是路由提示，
+不是课程事实。
 
-## 检索端补强（可选）
+如果资料由 URL manifest 管理：
 
-材料量大时，可用 **腾讯 ima 知识库 / 飞书知识问答 / NotebookLM** 做带引用溯源的材料库，负责检索端；生成端接上述任一方式。
+```powershell
+python path/to/pre-review-notes/scripts/download_materials.py `
+  materials.csv `
+  --output-dir local-materials
+```
+
+## 3. 发起任务
+
+一个足够完整的请求示例：
+
+```text
+使用 pre-review-notes 处理 STAT3007。
+模式使用 lightweight，主语言中文，专业术语首次出现保留英文。
+先完成 Regression 一章，交付可编辑 LaTeX 和经过检查的 PDF。
+材料目录是 ./materials，输出放在 ./output。
+```
+
+如果没有提供模式、语言、格式或影响排序的考试时间，skill 会只确认缺失项，不会重复询问
+已经明确的偏好。
+
+### 三种模式
+
+| 模式 | 适合场景 | 主要结果 |
+|---|---|---|
+| `lightweight` | 第一次试用、只做一章、只有 slides | 材料边界、临时 topic map、一篇代表章节 |
+| `full` | 多种资料齐全、准备长期维护 | 完整 assessment map、状态文件、逐章交付和增量更新 |
+| `exam-cram` | 考试临近且时间预算明确 | 证据驱动的取舍、最高收益章节、练习动作和未覆盖风险 |
+
+## 4. 输出语言与专业术语
+
+主语言可以是中文、English 或中英双语。中文笔记首次出现专业或易混淆术语时使用：
+
+```text
+普通最小二乘法（Ordinary Least Squares, OLS）
+岭回归（Ridge Regression）
+1-最近邻（1-Nearest Neighbour, 1-NN）
+```
+
+代码标识符、公式、论文标题和原文引用保留规范形式。双语正文与中文正文加少量英文术语不是
+同一种输出，skill 会保持已确认的主语言一致。
+
+## 5. 引用、状态和增量更新
+
+LaTeX 使用：
+
+```tex
+\sourceref{S002}{PDF p. 18}
+\assessref{S014}{2023 final Q2(b)}
+```
+
+Markdown 使用：
+
+```text
+[source:S002|PDF p. 18]
+[assessment:S014|2023 final Q2(b)]
+```
+
+验证引用：
+
+```powershell
+python path/to/pre-review-notes/scripts/validate_citations.py `
+  output/chapter.tex `
+  --inventory output/materials.json
+```
+
+多章节任务使用 `study_state.json` 记录真实状态，`progress.md` 只是可读摘要。输入 digest
+没有变化且章节已经 verified/delivered 时，可以跳过重建。
+
+## 6. LaTeX 和 PDF
+
+```powershell
+python path/to/pre-review-notes/scripts/build_note.py `
+  output/chapter.tex `
+  --output-dir output/pdf
+```
+
+脚本会编译、重新打开 PDF、遍历页面并用 Poppler 渲染代表页。它会把视觉状态保留为
+`pending`；Agent 或用户必须真正查看最新 PNG，确认没有裁切、重叠、乱码或空白页后，才能
+把章节标记为 delivered。缺少编译器、`pypdf` 或 Poppler 时必须明确报告，不能把 `.tex`
+冒充已完成的 PDF。
+
+## 7. 仅支持文本指令的平台
+
+无法加载目录的网页版可以粘贴 `SKILL.md`，再按任务附上相应 reference 和模板。例如做中文
+LaTeX/PDF 时至少附上：
+
+- `references/modes.md`；
+- `references/evidence-workflow.md`；
+- `references/authoring.md`；
+- `references/pdf-workflow.md`；
+- `assets/template.tex`。
+
+这种方式没有自动脚本、稳定状态和渐进式资源加载，是兼容性降级方案，不等同于完整安装。

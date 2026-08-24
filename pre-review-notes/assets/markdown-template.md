@@ -13,16 +13,16 @@ using; everything below the line is the actual template.
 
 # Chapter [X]: [Topic Name]
 
-**Source:** [e.g. Week 4 lecture / Ch. 7 / Module 3] · **Why this matters:** [one line —
+**Source:** [source:S001|PDF p. 18] · **Why this matters:** [one line —
 e.g. "18 of 100 marks; recurs in every past sitting; official model answer exists for
-Essay Question 3."]
+Essay Question 3." If unsupported, state that the priority is unknown.]
 
 ---
 
 ## [X.1] [Concept Name]
 
-**Source tag:** [where taught] · **Tested in:** [worksheet #, assignment #, past-exam
-year + question]
+**Source tag:** [source:S001|PDF p. 18] · **Tested in:**
+[assessment:S004|2023 final Q2(b)]
 
 [One plain-language framing sentence: what problem does this concept solve, or what
 question does it answer?]
@@ -39,7 +39,8 @@ own section below, not here.]
 
 ## Derivation: [Descriptive title, e.g. "2022 Past Paper Q4 Walkthrough"]
 
-**Source tag:** [exact source — exam year + Q#, or worksheet/assignment #]
+**Source tag:** [source:S002|Worksheet 4 Q2] · **Assessment evidence:**
+[assessment:S004|2023 final Q2(b)]
 
 **Problem.** [Restate the real problem concisely.]
 
@@ -60,8 +61,8 @@ combination appeared in 3 of the last 4 exam sittings."]
 
 ## ⚠️ Trap: [Name of the specific confusion or mistake]
 
-**Source of this warning:** [e.g. "Lecturer explicitly flagged, Week 4" / "Examiner
-report 2022" / "confused in 3 of 5 sample answers reviewed"]
+**Source of this warning:** [source:S003|PDF p. 21] or
+[assessment:S006|Examiner report 2022, p. 3]
 
 **The trap:** [What learners commonly get wrong, and why it looks right at first.]
 
@@ -91,9 +92,9 @@ report 2022" / "confused in 3 of 5 sample answers reviewed"]
 
 | Source | Topic / key point tested |
 |---|---|
-| [e.g. 2021 exam Q3] | [what it tested, one line] |
-| [e.g. Worksheet 4 Task 2] | [what it tested] |
-| [e.g. Assignment 2 Q1] | [what it tested] |
+| [assessment:S004\|2021 exam Q3] | [what it tested, one line] |
+| [source:S002\|Worksheet 4 Task 2] | [what it tested] |
+| [assessment:S005\|Assignment 2 Q1] | [what it tested] |
 
 > 🔴 [One-sentence summary of the highest-probability item type for the next
 > assessment, based on recurrence across the sources above.]

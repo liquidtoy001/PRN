@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "course": {
+    "id": "COURSE-ID",
+    "title": "Course title"
+  },
+  "preferences": {
+    "mode": "lightweight",
+    "language": "zh",
+    "format": "latex-pdf",
+    "assessment_date": null,
+    "study_hours_available": null
+  },
+  "materials": {
+    "inventory_path": null,
+    "inventory_digest": null
+  },
+  "evidence_boundary": {
+    "assessment_specification": "unknown",
+    "past_assessments": "unknown",
+    "official_solutions": "unknown",
+    "notes": []
+  },
+  "chapters": [],
+  "last_action": null,
+  "next_action": null,
+  "updated_at": null
+}
