@@ -1,0 +1,313 @@
+% TC5 / Group B smoke-test artifact for the pre-review-notes skill.
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[left=2.2cm,right=1.2cm,top=1.2cm,bottom=1.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{everypage}
+
+\tcbuselibrary{skins,breakable}
+
+\definecolor{barblue}{HTML}{2E75B6}
+\definecolor{titleblue}{HTML}{2E75B6}
+\definecolor{redline}{HTML}{C0392B}
+\definecolor{yellowbg}{HTML}{FFF3CD}
+\definecolor{yellowtext}{HTML}{856404}
+\definecolor{lightblue}{HTML}{D6EAF8}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\hypersetup{colorlinks=true,linkcolor=titleblue,urlcolor=titleblue}
+
+\newcommand{\chaptertitle}[1]{{\large\bfseries\color{titleblue}#1}\\[2pt]}
+\newcommand{\pref}[1]{\colorbox{yellowbg}{\scriptsize\texttt{\color{yellowtext}#1}}}
+\newcommand{\subtitle}[1]{{\scriptsize\color{gray}\itshape#1}}
+\newcommand{\topicsection}[1]{%
+  \vspace{6pt}{\noindent\normalsize\bfseries\color{titleblue}#1}\\[-6pt]
+  {\color{barblue}\rule{\linewidth}{1.2pt}}\\[2pt]
+}
+
+\newtcolorbox{rc}{
+  blanker,breakable,
+  borderline west={2pt}{0pt}{redline},
+  left=8pt,top=1pt,bottom=1pt,
+  before skip=0pt,after skip=3pt,
+}
+\newtcolorbox{keybox}{
+  colback=lightblue,colframe=barblue,
+  boxrule=0.8pt,arc=2pt,
+  left=4pt,right=4pt,top=2pt,bottom=2pt,
+  before skip=4pt,after skip=4pt,
+}
+\newcommand{\step}[2]{{\small\color{redline}\bfseries#1}\;{\small#2}\\[1pt]}
+
+\AddEverypageHook{\tikz[remember picture,overlay]{
+  \fill[barblue] ([yshift=0pt]current page.north west)
+    rectangle ([yshift=-14pt]current page.north east);
+}}
+
+\begin{document}
+
+\vspace*{2pt}
+\chaptertitle{Pilot Chapter: Regression}
+\pref{02-regression.pdf pp. 2--34}\quad
+\subtitle{Selected as a prerequisite-level smoke test, not as an assessment-priority claim.}
+
+\vspace{4pt}
+
+\begin{keybox}
+\small\textbf{Evidence boundary.} The supplied material contains lecture slides only.
+No grading breakdown, exam format, past paper, marking rubric, or official solution was
+available. Accordingly, this chapter makes no claim that regression is highly weighted,
+frequently tested, or representative of a current STAT3007 offering.
+\end{keybox}
+
+\topicsection{1. Learning setup}
+\pref{02-regression.pdf pp. 2, 7, 14}
+
+\begin{rc}
+In supervised learning, the data are pairs $(x_i,y_i)$. A regression target $y_i$
+is real-valued, whereas a classification target is discrete. The lecture frames model
+learning as four linked choices:
+\begin{enumerate}
+  \item collect training data;
+  \item choose a hypothesis or model class;
+  \item choose an objective that measures fit;
+  \item optimize the objective to obtain model parameters.
+\end{enumerate}
+Training fit is not the final goal: the learned model should also work on unseen data.
+Regularization injects prior structure or discourages fitting irregularities in the sample.
+
+\begin{keybox}
+\centering\small\bfseries
+A regression method is defined jointly by its model class, objective, optimization
+procedure, and generalization assumptions.
+\end{keybox}
+\end{rc}
+
+\topicsection{2. Ordinary least squares}
+\pref{02-regression.pdf pp. 16--19}
+
+\begin{rc}
+For a design matrix $X\in\mathbb{R}^{n\times d}$ with row $x_i^\top$ and response
+vector $y\in\mathbb{R}^n$, ordinary least squares (OLS) minimizes
+\[
+  R_n(\beta)=\sum_{i=1}^{n}(x_i^\top\beta-y_i)^2
+             =\lVert X\beta-y\rVert_2^2.
+\]
+The normal equations are
+\[
+  X^\top X\beta=X^\top y.
+\]
+If $X^\top X$ is invertible, the unique solution is
+\[
+  \widehat\beta_{\mathrm{OLS}}=(X^\top X)^{-1}X^\top y.
+\]
+If $X^\top X$ is singular, the inverse formula is invalid and the normal equations can
+have multiple solutions. Under Gaussian conditional noise with fixed variance, maximizing
+the conditional likelihood is equivalent to minimizing the same squared-error objective.
+\end{rc}
+
+\topicsection{Worked derivation: the OLS normal equations}
+\pref{02-regression.pdf p. 18}
+
+\begin{rc}
+\textbf{Source problem.} Derive the closed-form OLS estimator by differentiating the
+sum of squared errors.
+
+\medskip
+\textbf{Independently checked solution:}
+
+\step{\ding{192}}{Expand the quadratic:
+$R_n(\beta)=\beta^\top X^\top X\beta-2y^\top X\beta+y^\top y$.}
+\step{\ding{193}}{Differentiate. Since $X^\top X$ is symmetric,
+$\nabla_\beta R_n(\beta)=2X^\top X\beta-2X^\top y$.}
+\step{\ding{194}}{Set the gradient to zero to obtain
+$X^\top X\beta=X^\top y$.}
+\step{\ding{195}}{When $X^\top X$ is invertible, left-multiply by its inverse:
+$\widehat\beta=(X^\top X)^{-1}X^\top y$.}
+
+\begin{keybox}
+\centering\small\bfseries
+The inverse formula needs a full-column-rank design; the normal equations themselves do not.
+\end{keybox}
+\end{rc}
+
+\topicsection{3. Ridge regression and the bias term}
+\pref{02-regression.pdf pp. 20--25}
+
+\begin{rc}
+Ridge regression adds an $\ell_2$ penalty:
+\[
+  \widehat\beta_{\mathrm{ridge}}
+  =\arg\min_{\beta}\left(\lVert X\beta-y\rVert_2^2
+  +\lambda\lVert\beta\rVert_2^2\right),\qquad \lambda>0,
+\]
+which gives
+\[
+  \widehat\beta_{\mathrm{ridge}}
+  =(X^\top X+\lambda I)^{-1}X^\top y.
+\]
+The solution is unique because, for every nonzero $v$,
+\[
+  v^\top(X^\top X+\lambda I)v
+  =\lVert Xv\rVert_2^2+\lambda\lVert v\rVert_2^2>0.
+\]
+Thus $X^\top X+\lambda I$ is positive definite. With an intercept $b$, the lecture
+penalizes the slope coefficients but not $b$:
+\[
+  \min_{b,\beta}\sum_i(x_i^\top\beta+b-y_i)^2
+  +\lambda\lVert\beta\rVert_2^2.
+\]
+Centering $x_i$ and $y_i$ reduces this to ridge regression without an intercept, after
+which $\widehat b=\bar y-\bar x^\top\widehat\beta$.
+\end{rc}
+
+\topicsection{4. Nonlinear and nonparametric regression}
+\pref{02-regression.pdf pp. 26--32}
+
+\begin{rc}
+\textbf{Basis functions.} Map $x$ to
+$(g_1(x),\ldots,g_k(x))$ and fit a linear model in the transformed features. The model
+is linear in its learned coefficients even when it is nonlinear in the original input.
+
+\medskip
+\textbf{$k$-nearest-neighbour regression.} For a query $x$,
+\[
+  h_n(x)=\frac{1}{k}\sum_{x_i\in N_k(x)}y_i.
+\]
+Its effective representation grows with the stored data, so it is nonparametric in the
+course's sense; this does not mean it has no tunable choices.
+
+\medskip
+\textbf{Kernel regression.} With a similarity function $K$,
+\[
+  h_n(x)=\frac{\sum_i K(x,x_i)y_i}{\sum_i K(x,x_i)}.
+\]
+Both nearest-neighbour and kernel methods can represent flexible functions, but the
+lecture notes their increasing data and computational demands, including the curse of
+dimensionality for nearest neighbours.
+\end{rc}
+
+\topicsection{Worked exercise: the 1-NN prediction function}
+\pref{02-regression.pdf pp. 27--29}
+
+\begin{rc}
+\textbf{Problem statement (from the slide):} ``Given three training examples with
+$(x,y)$ being $(1,1)$, $(2,2)$, $(4,4)$, draw the function learned by 1NN.''
+
+\medskip
+\textbf{Independently checked solution:}
+
+\step{\ding{192}}{The nearest-neighbour boundaries are the midpoints $1.5$ and $3$.}
+\step{\ding{193}}{Away from ties,
+$h(x)=1$ for $x<1.5$, $h(x)=2$ for $1.5<x<3$, and $h(x)=4$ for $x>3$.}
+\step{\ding{194}}{At $x=1.5$ and $x=3$, two samples are equally near; the prediction
+depends on the implementation's tie rule.}
+\step{\ding{195}}{Adding $(5,5)$ introduces a new boundary at $4.5$ and a final region
+with prediction $5$. Adding $(3,3)$ instead gives boundaries $1.5$, $2.5$, and $3.5$.}
+
+\begin{keybox}
+\centering\small\bfseries
+A 1-NN regressor is piecewise constant, with transitions at Voronoi boundaries.
+\end{keybox}
+\end{rc}
+
+\topicsection{\color{redline}\ding{72} Verification finding: a source inconsistency}
+\pref{02-regression.pdf pp. 27--28}
+
+\begin{rc}
+Page 27 defines 1-NN prediction as the response of the nearest training point. That
+definition yields a piecewise-constant function. Page 28 describes the displayed 1-NN
+fit as piecewise-linear. These statements are inconsistent unless an unstated interpolation
+rule is being used. The worked exercise above follows the explicit definition on page 27
+and flags ties rather than silently copying the page-28 wording.
+
+\begin{keybox}
+\centering\small\bfseries\color{redline}
+When prose conflicts with a displayed definition, recompute from the definition and record
+the discrepancy.
+\end{keybox}
+\end{rc}
+
+\topicsection{Worked exercise: end-of-lecture checks}
+\pref{02-regression.pdf p. 33}
+
+\begin{rc}
+The slide asks which statements are correct. The independently checked answers are:
+\begin{itemize}
+  \item Penalizing a large bias term: \textbf{false} for the ridge formulation used here;
+        page 25 leaves the intercept unpenalized.
+  \item Ridge always has a unique solution: \textbf{true} under the stated $\lambda>0$;
+        the positive-definiteness argument above proves it.
+  \item A nonparametric method has no parameters: \textbf{false}; ``nonparametric'' here
+        means model capacity can grow with the data.
+  \item Learning is often formulated as optimization: \textbf{true}; this is the
+        course's framing on pages 7 and 14.
+\end{itemize}
+Therefore the correct choices are the second and fourth statements.
+\end{rc}
+
+\topicsection{5. Quick reference card}
+\pref{02-regression.pdf p. 34 and cited pages above}
+
+\begin{rc}
+\textbf{OLS objective:} $\lVert X\beta-y\rVert_2^2$.
+
+\textbf{OLS solution:} $(X^\top X)^{-1}X^\top y$ only when $X^\top X$ is invertible.
+
+\textbf{Ridge objective:} OLS $+\lambda\lVert\beta\rVert_2^2$, $\lambda>0$.
+
+\textbf{Ridge solution:} $(X^\top X+\lambda I)^{-1}X^\top y$; unique for $\lambda>0$.
+
+\textbf{Intercept:} add a dummy feature for OLS; for the course's ridge formulation,
+center the data and do not penalize the intercept.
+
+\textbf{Basis method:} transform inputs, then fit a model linear in the new coefficients.
+
+\textbf{$k$NN:} average the responses of the $k$ nearest points.
+
+\textbf{Kernel regression:} similarity-weighted average of all observed responses.
+
+\begin{keybox}
+\centering\small\bfseries\color{redline}
+Check rank assumptions, distinguish an intercept from penalized slopes, and remember that
+1-NN predictions are piecewise constant under the stated definition.
+\end{keybox}
+\end{rc}
+
+\topicsection{6. Evidence and practice mapping}
+
+\begin{rc}
+\small
+\textbf{Assessment evidence:} none was present in the downloaded slide set. The table
+therefore maps instruction and in-lecture practice only; it is not an exam map.
+
+\medskip
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}lp{10.2cm}@{}}
+\toprule
+\textbf{Source} & \textbf{Role in this pilot chapter} \\
+\midrule
+02-regression.pdf p. 18 & Instructor derivation of the OLS closed form; independently re-derived. \\
+02-regression.pdf p. 29 & Instructor 1-NN drawing exercise; solved with tie cases stated. \\
+02-regression.pdf p. 33 & Instructor multiple-choice check; each option justified. \\
+02-regression.pdf p. 34 & Explicit ``What You Need to Know'' content boundary for the lecture. \\
+\bottomrule
+\end{tabular}
+
+\begin{keybox}
+\centering\small\bfseries
+Before calling any item ``exam-important'', add the current course profile, assessment
+weighting, past papers, and official solutions.
+\end{keybox}
+\end{rc}
+
+\end{document}

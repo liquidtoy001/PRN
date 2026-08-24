@@ -1,0 +1,34 @@
+lecture,topic,file,url,pdf_pages,bytes,sha256
+Lecture 1,Introduction,01-intro.pdf,https://yenan.github.io/teach/stat3007/notes/01-intro.pdf,43,15638552,b86bbf58c708711ff3bf6ecca712cf7376dababf8e1222d5a691c370bec51106
+Lecture 2,Regression,02-regression.pdf,https://yenan.github.io/teach/stat3007/notes/02-regression.pdf,34,526154,50269865121a02a35cc82d83052f8c1b754644479ee3584a95e15900b8bd2df6
+Lecture 3,Classification,03-classification.pdf,https://yenan.github.io/teach/stat3007/notes/03-classification.pdf,29,1380301,ae20d6cf97b6b2bcad60819ca45e8fc1414eb54f10369ac272d7520c5adfd3d1
+Lecture 4,Principal Component Analysis,04-pca.pdf,https://yenan.github.io/teach/stat3007/notes/04-pca.pdf,25,2562369,bfe29af548379ef4a9f5001fc7d63784f7e202d02fca546036b60a36c702abed
+Lecture 5,Statistical Learning Theory,05-theory.pdf,https://yenan.github.io/teach/stat3007/notes/05-theory.pdf,35,192722,eea0622181c8268f66c64a392feb1f6b5caf1f71190cd0d30e560e713a4a5756
+Lecture 6,Model Selection,06-selection.pdf,https://yenan.github.io/teach/stat3007/notes/06-selection.pdf,22,907559,10ef1522bde2686282e18a2e7d6547501a1a6e471e135d88259e17d140b1aac6
+Lecture 7,Perceptrons,07-perceptron.pdf,https://yenan.github.io/teach/stat3007/notes/07-perceptron.pdf,31,2194188,0c06e1d975d92638598293c1423ca5fd92b7db8672051438c397cfc58c2f86f8
+Lecture 8,Adaline,08-adaline.pdf,https://yenan.github.io/teach/stat3007/notes/08-adaline.pdf,23,389524,3860198c62a35b61bd3906917b461b65933fb32d0fb524f900cd5757e720db4b
+Lecture 9,Hopfield Networks,09-hopfield.pdf,https://yenan.github.io/teach/stat3007/notes/09-hopfield.pdf,19,568491,9d203f929aad8f8e65e044df94aa7d7edba88d05d445120534e7e36e32e464de
+Lecture 10,Gradient-based Learning,10-grad.pdf,https://yenan.github.io/teach/stat3007/notes/10-grad.pdf,25,808081,4a8f1a4446599fe7c11f716ff01f1a5a643484855164b0dd28cb67edadb42d0d
+Lecture 11,Multilayer Perceptron,11-mlp.pdf,https://yenan.github.io/teach/stat3007/notes/11-mlp.pdf,32,1170241,cdd1be05c744b98e2bb0cb2704d30c562d39feba7863f868d7ec3ecabd81785e
+Lecture 12,Deep Learning Software,12-software.pdf,https://yenan.github.io/teach/stat3007/notes/12-software.pdf,26,852197,2e94e912f876969142cd512cbf93140b7330c6c62206855a8aca7f57f4fc95c4
+Lecture 13,Convolutional Neural Nets,13-cnn1.pdf,https://yenan.github.io/teach/stat3007/notes/13-cnn1.pdf,31,1166759,e726df063bb6b203756076d8d1b3d38f69623d24854ebbc0b5be2e00a448903e
+Lecture 14,Convolutional Neural Nets (cont.),14-cnn2.pdf,https://yenan.github.io/teach/stat3007/notes/14-cnn2.pdf,29,2270060,9e5089fbbfbf94240418fd116d3402bae4c0e12ec07ae02ac89f10c6df3e6a19
+Lecture 15,Convolutional Neural Nets (cont.),15-cnn3.pdf,https://yenan.github.io/teach/stat3007/notes/15-cnn3.pdf,12,10853859,7403364a448a7fae2280f34eef98be95db05d45657699dfa19c09a3cf39c974e
+Lecture 16,Recurrent Neural Nets,16-rnn1.pdf,https://yenan.github.io/teach/stat3007/notes/16-rnn1.pdf,31,2009295,5d5636b9891f00010e2af4bb1794181f9e09278edef05f867e053cc0f7ce8ea9
+Lecture 17,Recurrent Neural Nets (cont.),17-rnn2.pdf,https://yenan.github.io/teach/stat3007/notes/17-rnn2.pdf,21,273163,6f317577d93bad9583f0b22e68b58e50bccacb05f43a5218bde524d13a6af3a3
+Lecture 18,Recurrent Neural Nets (cont.),18-rnn3.pdf,https://yenan.github.io/teach/stat3007/notes/18-rnn3.pdf,24,843283,e0d407c9f945e904cb7a6882a08baee6755568e087cc03c28108ff53221474fd
+Lecture 19,Numerical Optimization,19-opt.pdf,https://yenan.github.io/teach/stat3007/notes/19-opt.pdf,36,1024234,cca38bf48920cb82d76dee0b9606a749cfc5dae084135721745d475df7e08295
+Lecture 20,Initialization and Input Transformation,20-init.pdf,https://yenan.github.io/teach/stat3007/notes/20-init.pdf,28,288427,fea569c42a9e8003efe964ab6e0403268e63db7b386a6c58dd8912898a1e6c34
+Lecture 21,Normalization,21-norm.pdf,https://yenan.github.io/teach/stat3007/notes/21-norm.pdf,20,341737,d509ba460d095634941b1ae9b83848f033bf109786fc8f79548cc10f5536d4f6
+Lecture 22,Adaptive Learning Rates,22-adaptive.pdf,https://yenan.github.io/teach/stat3007/notes/22-adaptive.pdf,20,19390418,9b1f6db825f88d8e6810714ddf301b7e5f08bb4e2002dbf7cd7b1bbcaf96f06f
+Lecture 23,Improving Generalization,23-reg.pdf,https://yenan.github.io/teach/stat3007/notes/23-reg.pdf,28,270366,0feeea5813af37d4d45f33ed60a896b4a391d45fb9a43b21bd8b0525bf9d346c
+Lecture 24,Adversarial Learning,24-adv.pdf,https://yenan.github.io/teach/stat3007/notes/24-adv.pdf,29,3382335,46a408476ad3f066fa6bacb6ec88d3f213448df9aa0cf63d1dba0d75701f536c
+Lecture 25,Activation Functions,25-activation.pdf,https://yenan.github.io/teach/stat3007/notes/25-activation.pdf,25,410735,a36bfb846dc029b49b202589568741e6547a19c95cb49b46a4f65ce7b00194bb
+Lecture 26,Residual Networks,26-resnet.pdf,https://yenan.github.io/teach/stat3007/notes/26-resnet.pdf,25,426220,5c2eb967d384bf89efc3c19818b22c521503fa22eac8dc4e3ca87d3abf92e7b5
+Lecture 27,Attention,27-attention.pdf,https://yenan.github.io/teach/stat3007/notes/27-attention.pdf,36,4033488,15452bad94c3ab94c33ed750a63b6fd282436758fd5aa2055e4a4a587d50bf99
+Lecture 28,Autoencoders,28-ae.pdf,https://yenan.github.io/teach/stat3007/notes/28-ae.pdf,23,2166490,732a20cba83623386c1f737bb959498bd4dbe5e79c6375c89cecfef3a9bfdee2
+Lecture 29,Variational Autoencoders,29-vae.pdf,https://yenan.github.io/teach/stat3007/notes/29-vae.pdf,23,552720,9c13ed3da0a4aa4c5fb906e887f569639bd5e52b86de9c3b46cfa2600e06d40d
+Lecture 30,Generative Adversarial Networks,30-gan.pdf,https://yenan.github.io/teach/stat3007/notes/30-gan.pdf,16,3096299,6852ef69016bb760d67c8615f0178bcc9d0df3011e249c06cc39c183fe6c2c96
+Lecture 31,Reinforcement Learning,31-rl1.pdf,https://yenan.github.io/teach/stat3007/notes/31-rl1.pdf,20,352010,2e0636ea999f67f005d1d797960f912304ede30233f67612ed1cd7da6b48946d
+Lectures 32-33,Reinforcement Learning (cont.),32-rl2.pdf,https://yenan.github.io/teach/stat3007/notes/32-rl2.pdf,24,457353,d19ffa4519486c72bfbb28542da139fa3026076112609d69f407babe49f76b17
+Lecture 34,Review,33-review.pdf,https://yenan.github.io/teach/stat3007/notes/33-review.pdf,24,4860374,154b22d5583239fd2225f56cdc04d745380cb8ae1fd61f870ee86faa4837ae69

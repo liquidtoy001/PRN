@@ -55,7 +55,12 @@ search of publicly posted course materials for the same course.
 - `calendar-template.ics` — revision-plan calendar: weight-proportional study blocks,
   importable into any calendar app (Step 3).
 - `progress-template.md` — cross-session progress tracker for the multi-chapter loop
-  (Step 9).
+  (Step 10).
+
+When a LaTeX chapter is requested as a viewable document, the `.tex` file is an
+editable source artifact, not the final deliverable. The workflow below must also
+produce a compiled PDF and pass the PDF rendering checks before the chapter is
+reported as complete.
 
 ---
 
@@ -69,10 +74,29 @@ search of publicly posted course materials for the same course.
   non-LaTeX equivalent structure.
 - **Compiled output**: source file only, or also compiled to PDF/HTML? Many learners compile
   themselves — don't assume they want a rendered file.
-- **Annotation language**: if the learner studies in a second language, ask whether they want
-  inline glosses in their first language. The template supports this natively (see the `\note`
-  macro / the "Personal gloss" block in the Markdown template) without touching the main content
-  language.
+- **Note language**: confirm the language of the main note before drafting whenever the user
+  has not already specified it. Offer a concise choice such as **Chinese**, **English**, or
+  **bilingual Chinese-English**. Treat the main language as a delivery requirement for the
+  chapter, the compiled PDF, the course overview map, and `progress.md`; do not silently infer
+  it from the language of the conversation or the source slides.
+- **Annotation language**: separately ask whether the learner wants inline glosses in another
+  language. A bilingual note is not the same as a monolingual note with occasional glosses.
+  The LaTeX template supports optional glosses through `\note{...}`/`\cn{...}`, while the
+  Markdown template has a “Personal gloss” block. Keep the requested main language unchanged.
+- **Language consistency**: preserve mathematical notation, code identifiers, quoted source
+  text, and proper nouns as needed, but translate explanatory prose, headings, captions, trap
+  boxes, quick-reference cards, and assessment summaries into the confirmed note language.
+  If a source term has no safe translation, keep the original term and add a short gloss rather
+  than switching the whole chapter's language.
+- **Technical-term convention for Chinese notes**: keep English as the canonical form for
+  specialised, difficult, or easily-confused terms. On first use, write
+  `中文（English, acronym）` where an acronym exists, then use the acronym or English name
+  consistently afterwards. For example: 普通最小二乘法（Ordinary Least Squares, OLS）、
+  岭回归（Ridge Regression）、1 近邻回归（1-Nearest-Neighbour Regression, 1-NN）、
+  正则化（Regularization）和梯度消失（Vanishing Gradient）。 Do not invent a literal
+  Chinese translation when the English term is the clearer search, implementation, or
+  assessment term; retain the original English in equations, code, bibliographic titles,
+  and quoted source wording.
 - **Granularity**: default to **one file per chapter/topic**, not one giant file — easier to
   regenerate a single chapter later without disturbing the rest.
 
@@ -206,15 +230,47 @@ outdated content). If something cannot be verified with confidence, either resol
 delivering, or flag the uncertainty explicitly to the learner rather than presenting it as
 settled fact.
 
-### Step 8 — Deliver
+### Step 8 — Compile and visually verify LaTeX output
+
+For quantitative courses or whenever the learner asks for a PDF, compile each
+LaTeX chapter after Step 7. Use the LaTeX compile skill's bundled Tectonic
+workflow when available, falling back to detected TeX Live/MiKTeX as appropriate.
+Keep the editable `.tex` source and write the final PDF to a stable output path
+such as `output/pdf/<chapter-slug>.pdf`.
+
+On Windows, a detected MiKTeX installation may expose `latexmk` while its Perl
+runtime is unavailable. If the `latexmk` wrapper fails for that reason, fall back
+to the installed `pdflatex`/`xelatex` executable and run it twice (or use the
+engine requested by the document) so cross-references and page layout settle.
+This is a compiler fallback, not permission to skip the PDF checks below.
+
+The compile step is successful only if all of the following hold:
+
+1. the compiler exits successfully and produces the expected PDF;
+2. the PDF can be reopened with `pypdf`/`pdfinfo`, is not encrypted, and has at
+   least one page;
+3. every page can be traversed without a fatal extraction error;
+4. representative pages, including the title/header, a dense formula or table,
+   and the final page, are rendered with Poppler (`pdftoppm`) and inspected for
+   clipping, overlap, missing glyphs, blank pages, and broken page breaks.
+
+If compilation is blocked by a missing compiler, unavailable package download, or
+permission/network failure, report the exact blocker and leave the `.tex` source
+available. Do not claim that a PDF was delivered, and do not silently substitute
+the source file for the requested PDF. After any LaTeX edit, repeat compilation
+and the representative-page inspection.
+
+### Step 9 — Deliver
 
 - Output the chapter as a single file, per the format preference from Step 0.
+- State the confirmed note language in the delivery summary and ensure the `.tex`, compiled
+  PDF, and any companion `progress.md` entry agree with it.
 - Present it with a short, structured summary: a page/section overview, and 2-4 sentences on
   the highest-value pattern found in this chapter (e.g. "this exact problem type recurred in
   3 of the last 4 sittings").
 - Do not narrate the writing process. Deliver the file and a compact summary, then stop.
 
-### Step 9 — Iterate across chapters
+### Step 10 — Iterate across chapters
 
 Repeat Steps 4-8 per chapter, in priority order from Step 3, generally one chapter per turn
 unless asked for more. Periodically resurface the remaining priority list so the learner can

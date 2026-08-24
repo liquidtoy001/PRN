@@ -1,0 +1,24 @@
+# LaTeX build intermediates (keep final .tex and .pdf files)
+**/*.aux
+**/*.fls
+**/*.fdb_latexmk
+**/*.log
+**/*.out
+**/*.synctex.gz
+
+# Local evaluation and rendering scratch
+pre-review-notes/tmp/
+pre-review-notes/evals/**/build/
+pre-review-notes/evals/**/build-zh/
+
+# Third-party course inputs are local test data, never repository assets
+examples/stat3007/slides/*.pdf
+
+# Python/editor/OS noise
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+Thumbs.db
+.vscode/

@@ -2,79 +2,76 @@
 
 **中文** | [English](./README.en.md)
 
-一个跨平台的 **Agent Skill（智能体技能包）**：把你自己的零散课程材料（讲义、习题、作业、往年卷、官方答案）转化成一套按**考试权重**排序、每个论断都**可溯源**的复习笔记。适用于任意学科（数理/CS/法学/医学/文科等）。
+一个跨平台的 **Agent Skill（智能体技能包）**：把你自己的课程材料（讲义、习题、作业、往年卷、官方答案）整理成按真实考核证据排序、每个重要判断都可溯源的复习笔记。适用于数学、CS、自然科学、医学、法学、语言和商科等课程。
 
-> 核心原则：笔记按考试校准，而不是按教材校准。重考的主题给完整章节和真题推导；只顺带提过的主题合并或跳过。所有"这个常考"的判断必须能追溯到课程材料里的真实依据。
+> 核心原则：笔记按考试校准，而不是按教材顺序校准。没有课程材料支持，就不编造“某年考过”或“这里很重要”的结论。
 
-👉 **各平台安装与使用方法见 [USAGE.md](./USAGE.md)**
+👉 安装与使用方法见 [USAGE.md](./USAGE.md)；人工评测方案见 [TESTING.md](./TESTING.md)。
 
 ## 仓库结构
 
+```text
+pre-review-notes/
+├── pre-review-notes/                 可安装的 skill 源目录（只含运行所需文件）
+│   ├── SKILL.md
+│   ├── template.tex                  数理/CS 章节 LaTeX 模板
+│   ├── markdown-template.md          文科章节 Markdown 模板
+│   ├── course-overview-template.svg  一页式课程全景图模板
+│   ├── calendar-template.ics         复习日历模板
+│   └── progress-template.md          跨会话进度模板
+├── examples/stat3007/                可复现的 STAT3007 示例与来源材料
+│   ├── slides/                       仅含来源说明和 manifest.csv；原始 PDF 不再分发
+│   └── notes/                        英文/中文 LaTeX、编译后的 PDF 和 progress.md
+├── GitHub Release                    提供可直接上传的 v0.0.2 skill ZIP
+├── README.md / README.en.md          双语项目说明
+├── USAGE.md                          安装与使用
+├── TESTING.md                        人工评测方案
+└── LICENSE                           MIT 许可
 ```
-pre-review-notes/                      技能源目录（可直接作为 skill 使用）
-├── SKILL.md                           技能主文件：方法论 + 反模式清单
-├── template.tex                       章节笔记 LaTeX 模板（数理/CS）
-├── markdown-template.md               章节笔记 Markdown 模板（文科）
-├── course-overview-template.svg       一页式课程全景图模板
-├── calendar-template.ics              复习日历模板（可导入任意日历 App）
-└── progress-template.md               跨会话进度追踪模板
-pre-review-notes-v0.0.1.zip            发布包（SKILL.md 在包根部，可直接上传 claude.ai / Qoder 等平台）
-USAGE.md                               各平台安装与使用方法
-TESTING.md                             人工测试实验方案（验证技能有效性）
-README.en.md                           英文版 README
-LICENSE                                MIT 许可
-```
 
-## 包内文件
+`pre-review-notes/` 是安装边界；课程 PDF、示例笔记和 LaTeX 构建中间文件不混入安装包。历史安装包由 GitHub Release 保存，不提交到 Git 历史。
 
-| 文件 | 用途 | 对应工作流步骤 |
-|---|---|---|
-| `SKILL.md` | 技能主文件：9 步方法论 + 反模式清单 | 全流程 |
-| `template.tex` | 章节笔记 LaTeX 模板（数理/CS 类课程） | Step 5 |
-| `markdown-template.md` | 章节笔记 Markdown 模板（法律/历史/语言等文科） | Step 5 |
-| `course-overview-template.svg` | 一页式课程全景图模板（彩色主题分区 + 考核结构区） | Step 3 |
-| `calendar-template.ics` | 复习日历模板：按权重分配学习时段，可导入任意日历 App | Step 3 |
-| `progress-template.md` | 跨会话进度追踪模板，新会话零成本接续 | Step 9 |
+## v0.0.2 的主要更新
 
-## 工作流一览（9 步）
+- 在 Step 0 明确确认笔记主语言：中文、English 或中英双语，并让 `.tex`、PDF、课程全景图和 `progress.md` 保持一致。
+- 中文笔记对特殊/易混淆术语保留英文：首次出现使用“中文（English, acronym）”，例如普通最小二乘法（Ordinary Least Squares, OLS）、岭回归（Ridge Regression）、1 近邻回归（1-Nearest-Neighbour Regression, 1-NN）。
+- 新增 Step 8：编译 LaTeX、检查 PDF 可读性，并用 Poppler 渲染代表页检查裁切、重叠、缺字和空白页；Windows MiKTeX 的 `latexmk` 不可用时回退到 `pdflatex`/`xelatex`。
+- 新增 `examples/stat3007/`：manifest 记录 34 个 lecture 行对应的 33 个唯一 slide 来源（Lecture 32/33 共用 `32-rl2.pdf`），并提供中英文 Regression 示例笔记和可直接观看的生成 PDF。原始 slides 仅用于本地测试。
 
-1. **Step 0** 确认输出偏好（LaTeX / Markdown、是否双语注释、一章一文件）
-2. **Step 1** 摸清考核结构：评分权重、考试形式、老师明示的重点
-3. **Step 2** 盘点手头全部材料
-4. **Step 3** 按考核权重 + 先修依赖排章节顺序，可渲染 SVG 全景图与你确认计划，并可导出 .ics 复习日历（倒推考试日期、按权重分配时段）
-5. **Step 4** 每章定向检索课程自己的例题、习题、真题
-6. **Step 5** 按统一模板起草：概念区 → 真题完整推导 → 陷阱框 → 速查卡 → 考核映射表
-7. **Step 6** 对照官方答案校准答题深度（不多写、不少写）
-8. **Step 7** 独立复算所有推导，不盲信任何来源
-9. **Step 8–9** 一次交付一章，按优先级迭代；进度写入 `progress.md`，换会话/换平台可无缝接续
+## 工作流一览（Step 0–10）
 
-## 按学科选模型（参考）
+1. **Step 0**：确认输出格式、编译 PDF 需求、笔记主语言、注释语言和章节粒度。
+2. **Step 1**：从真实材料摸清评分权重、考试形式和教师明示重点。
+3. **Step 2**：盘点讲义、习题、作业、真题和官方答案。
+4. **Step 3**：按考核权重与先修依赖确定章节顺序，可生成 SVG 全景图和 `.ics` 日历。
+5. **Step 4**：为每章检索课程自己的例题、习题、作业和真题。
+6. **Step 5**：按统一模板起草概念、完整推导、陷阱框、速查卡和考核映射。
+7. **Step 6**：对照官方答案校准答题深度。
+8. **Step 7**：独立复算所有数值、代数和逻辑推导。
+9. **Step 8**：编译 LaTeX 并完成 PDF 结构、文本和视觉检查。
+10. **Step 9**：交付一章，说明证据边界、语言和输出文件。
+11. **Step 10**：按优先级迭代后续章节，并更新 `progress.md`。
 
-| 学科 | 建议 | 理由 |
-|---|---|---|
-| 数理 / CS | DeepSeek-R1、GLM + Claude Code | Step 7 推导复算最可靠，可本地编译 LaTeX |
-| 法学 / 历史 / 语言 | Kimi | 长上下文，适合大量 prose 材料盘点 |
-| 医学 | Qwen 系、腾讯元宝 | 中英混杂指南处理好，双语注释可用 |
+## 示例：STAT3007
 
-## 常见问题
+示例材料来自课程公开页面：[STAT3007/STAT7007 Deep Learning](https://yenan.github.io/teach/stat3007/index.html)。`examples/stat3007/slides/README.md` 和 manifest 记录下载来源、页数、字节数和 SHA-256，但仓库不包含原始 slide PDF。用户在本地取得材料时仍须遵守原始页面的许可和教学用途限制。
 
-- **没有真实课程材料怎么办？** 本技能会明确拒绝编造"某年考过"之类的引用，只会提供通用笔记并声明缺少校准来源。
-- **中文支持？** 模板原生支持：SVG 内置中文字体栈，`template.tex` 预留 CJK 宏，Markdown 模板自带双语注释块。
-- **一次能生成整本笔记吗？** 不建议（见反模式"one-shot mega-files"）：默认一轮一章，先确认优先级计划再动笔。
-- **会出题考我吗？** 不会。本技能不做测验/刷题功能；真题以原文形式直接写进笔记的"完整推导"区，配满分答案风格的逐步解答。
+可以直接打开：
 
-## 有效性验证
+- [中文 Regression PDF](./examples/stat3007/notes/pdf/stat3007-regression-notes-zh.pdf)
+- [English Regression PDF](./examples/stat3007/notes/pdf/stat3007-regression-notes-en.pdf)
+- [中文 LaTeX 源文件](./examples/stat3007/notes/chapter-01-regression-zh.tex)
+- [English LaTeX 源文件](./examples/stat3007/notes/chapter-01-regression.tex)
 
-本技能配有一套可复现的人工测试实验方案（A/B 对照 + 盲评，5 条可证伪假设、5 个测试案例、6 维度量表，硬性指标"编造率 = 0"一票否决）。
+该示例只有 lecture slides 作为证据，因此没有虚构考试权重、题型或官方答案；`progress.md` 明确记录了这一边界。
 
-👉 **完整方案见 [TESTING.md](./TESTING.md)**
+## 许可证
+
+本 skill 代码和模板采用 [MIT](./LICENSE) 许可。第三方课程材料不属于本项目授权范围，也不随仓库或 Release 分发。
 
 ## 版本历史
 
 | 版本 | 日期 | 变更 |
 |---|---|---|
-| v0.0.1 | 2026-07 | 首个公开版本：SKILL.md 9 步方法论 + 5 个模板（LaTeX / Markdown / SVG 全景图 / .ics 日历 / 进度追踪），中英双版 README，独立 USAGE / TESTING 文档，GitHub Release 附可安装技能 zip |
-
-## 许可
-
-[MIT](./LICENSE)
+| v0.0.2 | 2026-08-13 | 重组 skill 与 examples；增加笔记语言确认、中文术语英文保留规则、LaTeX→PDF 编译与视觉 QA；加入 STAT3007 可复现实例和 33 个 slide 的 manifest；发布新的 skill zip。 |
+| v0.0.1 | 2026-07 | 首个公开版本：基础方法论、LaTeX/Markdown/SVG/ICS/进度模板和人工评测方案。 |

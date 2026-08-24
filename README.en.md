@@ -2,79 +2,76 @@
 
 [中文](./README.md) | **English**
 
-A cross-platform **Agent Skill**: turns your own scattered course materials (lecture slides, worksheets, assignments, past exams, official answer keys) into a set of revision notes ordered by **assessment weight**, with every claim **traceable to a real source**. Works for any discipline (maths / CS / law / medicine / humanities, etc.).
+A cross-platform **Agent Skill** that turns a learner's own course materials—slides, worksheets, assignments, past papers, and official solutions—into revision notes ordered by real assessment evidence. It works across maths, CS, natural sciences, medicine, law, languages, and business.
 
-> Core principle: notes are calibrated to the exam, not to the textbook. Heavily-assessed topics get full chapters with real-exam derivations; topics only mentioned in passing get merged or skipped. Every "this is frequently tested" claim must be traceable to real evidence in the course materials.
+> Core principle: calibrate notes to the course's actual assessment evidence, not to textbook order. Never invent an exam weighting or a “frequently tested” claim when the supplied materials do not support it.
 
-👉 **Installation and usage for each platform: see [USAGE.md](./USAGE.md)** (in Chinese)
+See [USAGE.md](./USAGE.md) for installation and platform usage (Chinese), and [TESTING.md](./TESTING.md) for the manual evaluation plan.
 
 ## Repository structure
 
+```text
+pre-review-notes/
+├── pre-review-notes/                 Installable skill source (runtime files only)
+│   ├── SKILL.md
+│   ├── template.tex                  LaTeX chapter template for maths/CS
+│   ├── markdown-template.md          Markdown chapter template for prose fields
+│   ├── course-overview-template.svg  One-page course overview template
+│   ├── calendar-template.ics         Revision calendar template
+│   └── progress-template.md          Cross-session progress template
+├── examples/stat3007/                Reproducible STAT3007 example and source set
+│   ├── slides/                       source metadata and manifest.csv only; no source PDFs
+│   └── notes/                        English/Chinese LaTeX, PDFs, and progress.md
+├── GitHub Release                    Uploadable v0.0.2 skill ZIP
+├── README.md / README.en.md          Bilingual project documentation
+├── USAGE.md                          Installation and usage
+├── TESTING.md                        Manual evaluation plan
+└── LICENSE                           MIT license
 ```
-pre-review-notes/                      Skill source directory (usable as-is)
-├── SKILL.md                           Main skill file: methodology + anti-pattern list
-├── template.tex                       Chapter-notes LaTeX template (maths/CS)
-├── markdown-template.md               Chapter-notes Markdown template (humanities)
-├── course-overview-template.svg       One-page course overview map template
-├── calendar-template.ics              Revision calendar template (importable into any calendar app)
-└── progress-template.md               Cross-session progress tracker template
-pre-review-notes-v0.0.1.zip            Release package (SKILL.md at zip root; upload directly to claude.ai / Qoder, etc.)
-USAGE.md                               Installation and usage per platform
-TESTING.md                             Manual evaluation plan (validates skill effectiveness)
-README.en.md                           This file
-LICENSE                                MIT license
-```
 
-## Files in the skill
+`pre-review-notes/` is the install boundary. Course PDFs, example notes, and LaTeX build intermediates remain outside the skill package. Historical installation archives belong in GitHub Releases rather than Git history.
 
-| File | Purpose | Workflow step |
-|---|---|---|
-| `SKILL.md` | Main skill file: 9-step methodology + anti-pattern list | All steps |
-| `template.tex` | Chapter-notes LaTeX template (maths/CS courses) | Step 5 |
-| `markdown-template.md` | Chapter-notes Markdown template (law/history/languages) | Step 5 |
-| `course-overview-template.svg` | One-page course overview map (colour-coded topic sections + assessment section) | Step 3 |
-| `calendar-template.ics` | Revision calendar: study blocks allocated by assessment weight, importable anywhere | Step 3 |
-| `progress-template.md` | Cross-session progress tracker — resume in a new session at zero cost | Step 9 |
+## What changed in v0.0.2
 
-## Workflow at a glance (9 steps)
+- Step 0 now confirms the main note language—Chinese, English, or bilingual—and keeps the `.tex`, PDF, course map, and `progress.md` consistent.
+- Chinese notes retain English for specialised or easily confused terms. On first use, write `中文（English, acronym）`, for example 普通最小二乘法 (Ordinary Least Squares, OLS), 岭回归 (Ridge Regression), and 1 近邻回归 (1-Nearest-Neighbour Regression, 1-NN).
+- Step 8 compiles LaTeX, validates PDF structure and text extraction, and renders representative pages with Poppler to catch clipping, overlap, missing glyphs, and blank pages. On Windows, MiKTeX `latexmk` failures fall back to `pdflatex`/`xelatex`.
+- `examples/stat3007/` records 33 unique slide sources for 34 lecture rows in a manifest (Lectures 32 and 33 share `32-rl2.pdf`) and provides English/Chinese generated Regression notes. The original slides are local test inputs only.
 
-1. **Step 0** Confirm output preferences (LaTeX / Markdown, bilingual annotations, one file per chapter)
-2. **Step 1** Map the assessment structure: mark weightings, exam format, teacher-flagged priorities
-3. **Step 2** Inventory all available materials
-4. **Step 3** Order chapters by assessment weight + prerequisite dependencies; optionally render an SVG overview map to confirm the plan, and export a .ics revision calendar (working backward from the exam date, blocks allocated by weight)
-5. **Step 4** Per chapter, retrieve the course's own worked examples, exercises and past-exam questions
-6. **Step 5** Draft against the shared template: concepts → full real-exam derivations → pitfall boxes → quick-reference card → assessment map
-7. **Step 6** Calibrate answer depth against official answer keys (no more, no less)
-8. **Step 7** Independently re-derive everything — trust no source blindly
-9. **Steps 8–9** Deliver one chapter per turn, iterating by priority; progress recorded in `progress.md` so a new session or a different tool can pick up seamlessly
+## Workflow at a glance (Steps 0–10)
 
-## Model suggestions by discipline (reference)
+1. **Step 0** — Confirm output format, PDF requirement, main note language, annotation language, and chapter granularity.
+2. **Step 1** — Map the real grading structure, exam format, and instructor priorities.
+3. **Step 2** — Inventory slides, exercises, assignments, past papers, and official solutions.
+4. **Step 3** — Order chapters by assessment weight and prerequisites; optionally render an SVG overview and `.ics` calendar.
+5. **Step 4** — Retrieve course-specific examples, worksheets, assignments, and exam questions for each chapter.
+6. **Step 5** — Draft concepts, complete derivations, trap boxes, quick-reference cards, and an assessment map from the shared template.
+7. **Step 6** — Calibrate answer depth against official solutions.
+8. **Step 7** — Independently re-derive numerical, algebraic, and logical work.
+9. **Step 8** — Compile LaTeX and complete PDF structural, textual, and visual QA.
+10. **Step 9** — Deliver one chapter with its evidence boundary, language, and output files.
+11. **Step 10** — Iterate through the remaining chapters in priority order and update `progress.md`.
 
-| Discipline | Suggestion | Why |
-|---|---|---|
-| Maths / CS | DeepSeek-R1, GLM + Claude Code | Most reliable for Step 7 re-derivation; can compile LaTeX locally |
-| Law / History / Languages | Kimi | Long context, good for large prose-material inventories |
-| Medicine | Qwen family, Tencent Yuanbao | Handles mixed Chinese-English guidelines; bilingual annotations |
+## Example: STAT3007
 
-## FAQ
+The example uses the public course page [STAT3007/STAT7007 Deep Learning](https://yenan.github.io/teach/stat3007/index.html). `examples/stat3007/slides/README.md` and the manifest record source URLs, page counts, byte sizes, and SHA-256 hashes, but the repository does not contain the original slide PDFs. Users who obtain them locally must follow the source's copyright and educational-use conditions.
 
-- **No real course materials?** The skill explicitly refuses to fabricate citations like "this appeared in year X"; it will only produce generic notes and state that calibration sources are missing.
-- **Chinese support?** Native: the SVG ships a CJK font stack, `template.tex` reserves CJK macros, and the Markdown template includes bilingual annotation blocks.
-- **Can it generate the whole notebook in one go?** Not recommended (see the "one-shot mega-files" anti-pattern): the default is one chapter per turn, with the priority plan confirmed before drafting.
-- **Will it quiz me?** No. The skill has no quiz/testing feature; past-exam questions go into the notes verbatim, in the "full derivations" section, with step-by-step model-answer-style solutions.
+Open the generated artifacts directly:
 
-## Effectiveness validation
+- [Chinese Regression PDF](./examples/stat3007/notes/pdf/stat3007-regression-notes-zh.pdf)
+- [English Regression PDF](./examples/stat3007/notes/pdf/stat3007-regression-notes-en.pdf)
+- [Chinese LaTeX source](./examples/stat3007/notes/chapter-01-regression-zh.tex)
+- [English LaTeX source](./examples/stat3007/notes/chapter-01-regression.tex)
 
-The skill ships with a reproducible manual evaluation plan (A/B comparison + blind scoring, 5 falsifiable hypotheses, 5 test cases, a 6-dimension rubric, and a hard "fabrication rate = 0" veto criterion).
+Only lecture slides were available for this example, so no exam weighting, question format, or official solution was fabricated; the boundary is recorded in `progress.md`.
 
-👉 **Full plan: see [TESTING.md](./TESTING.md)** (in Chinese)
+## License
+
+The skill code and templates are licensed under [MIT](./LICENSE). Third-party course materials are outside this licence and are not distributed in the repository or Releases.
 
 ## Version history
 
 | Version | Date | Changes |
 |---|---|---|
-| v0.0.1 | 2026-07 | First public release: SKILL.md 9-step methodology + 5 templates (LaTeX / Markdown / SVG overview map / .ics calendar / progress tracker), bilingual README, standalone USAGE / TESTING docs, installable skill zip attached to the GitHub Release |
-
-## License
-
-[MIT](./LICENSE)
+| v0.0.2 | 2026-08-13 | Separated installable skill from examples; added language confirmation, English terminology convention for Chinese notes, LaTeX-to-PDF compilation and visual QA; added the reproducible STAT3007 example, 33-slide manifest, and a new skill zip. |
+| v0.0.1 | 2026-07 | Initial public release with the core methodology, LaTeX/Markdown/SVG/ICS/progress templates, and manual evaluation plan. |

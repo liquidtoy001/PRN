@@ -31,8 +31,18 @@ Kimi（长上下文，适合一次传几十个课件）、腾讯元宝、豆包�
 
 ## 方式四：海外平台
 
-- **claude.ai / Claude Desktop**：设置 → Capabilities 中直接上传 `pre-review-notes-v0.0.1.zip`
+- **claude.ai / Claude Desktop**：设置 → Capabilities 中直接上传 `pre-review-notes-v0.0.2.zip`
 - **ChatGPT / Gemini**：同方式三，将 `SKILL.md` 贴入 Project Instructions 或 Gem 指令
+
+## 输出格式与语言
+
+使用时，先明确告诉模型三件事：
+
+1. 笔记主语言：中文、English 或中英双语；
+2. 是否需要可直接观看的 PDF；
+3. 数学/CS 课程是否保留可编辑的 LaTeX 源文件。
+
+如果选择中文，skill 会在首次出现时保留特殊术语的英文，例如“普通最小二乘法（Ordinary Least Squares, OLS）”和“岭回归（Ridge Regression）”。如果需要 PDF，模型必须先编译 `.tex`，再检查 PDF 页数、文本可提取性，并渲染代表页检查版式；只有通过这些检查才应报告 PDF 已交付。
 
 ## 检索端补强（可选）
 

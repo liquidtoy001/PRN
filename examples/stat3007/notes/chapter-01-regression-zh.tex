@@ -1,0 +1,230 @@
+% 中文试验章节：按 pre-review-notes skill 由 STAT3007 Lecture 2 slides 生成。
+\documentclass[UTF8,a4paper,10pt]{ctexart}
+
+\usepackage[left=2.2cm,right=1.2cm,top=1.2cm,bottom=1.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{everypage}
+
+\tcbuselibrary{skins,breakable}
+
+\definecolor{barblue}{HTML}{2E75B6}
+\definecolor{titleblue}{HTML}{2E75B6}
+\definecolor{redline}{HTML}{C0392B}
+\definecolor{yellowbg}{HTML}{FFF3CD}
+\definecolor{yellowtext}{HTML}{856404}
+\definecolor{lightblue}{HTML}{D6EAF8}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\hypersetup{colorlinks=true,linkcolor=titleblue,urlcolor=titleblue}
+
+\newcommand{\chaptertitle}[1]{{\large\bfseries\color{titleblue}#1}\\[2pt]}
+\newcommand{\pref}[1]{\colorbox{yellowbg}{\scriptsize\texttt{\color{yellowtext}#1}}}
+\newcommand{\subtitle}[1]{{\scriptsize\color{gray}\itshape#1}}
+\newcommand{\topicsection}[1]{%
+  \vspace{6pt}{\noindent\normalsize\bfseries\color{titleblue}#1}\\[-6pt]
+  {\color{barblue}\rule{\linewidth}{1.2pt}}\\[2pt]
+}
+\newtcolorbox{rc}{blanker,breakable,borderline west={2pt}{0pt}{redline},left=8pt,top=1pt,bottom=1pt,before skip=0pt,after skip=3pt}
+\newtcolorbox{keybox}{colback=lightblue,colframe=barblue,boxrule=0.8pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt,before skip=4pt,after skip=4pt}
+\newcommand{\step}[2]{{\small\color{redline}\bfseries#1}\;{\small#2}\\[1pt]}
+
+\AddEverypageHook{\tikz[remember picture,overlay]{\fill[barblue] ([yshift=0pt]current page.north west) rectangle ([yshift=-14pt]current page.north east);}}
+
+\begin{document}
+
+\vspace*{2pt}
+\chaptertitle{试验章节：回归（Regression）}
+\pref{02-regression.pdf 第 2--34 页}\quad
+\subtitle{中文笔记试验；仅依据讲义，不代表当前课程的考试权重。}
+
+\vspace{4pt}
+\begin{keybox}
+\small\textbf{证据边界。} 当前材料包只有 lecture slides，没有评分结构、考试形式、往年试卷、评分标准或官方答案。因此本文不声称回归是重点、常考内容，也不把讲义顺序当作考试排序。
+\end{keybox}
+
+\topicsection{1. 学习问题与回归设定}
+\pref{02-regression.pdf 第 2、7、14 页}
+\begin{rc}
+监督学习的数据由样本对 $(x_i,y_i)$ 组成。回归的目标 $y_i$ 是实数；分类的目标则是离散值。讲义把机器学习过程概括为四个相互连接的选择：
+\begin{enumerate}
+  \item 收集训练数据；
+  \item 选择假设类或模型类；
+  \item 选择衡量拟合程度的目标函数；
+  \item 优化目标函数，得到模型参数。
+\end{enumerate}
+训练集上的拟合不是最终目标，模型还应当在未见过的数据上表现良好。正则化（Regularization）可以编码先验结构，或抑制模型拟合样本中的不规则性。
+\begin{keybox}\centering\small\bfseries
+回归方法由模型类、目标函数、优化过程和泛化假设共同定义。
+\end{keybox}
+\end{rc}
+
+\topicsection{2. 普通最小二乘法（Ordinary Least Squares, OLS）}
+\pref{02-regression.pdf 第 16--19 页}
+\begin{rc}
+设设计矩阵 $X\in\mathbb{R}^{n\times d}$ 的第 $i$ 行为 $x_i^\top$，响应向量为 $y\in\mathbb{R}^n$。普通最小二乘法（Ordinary Least Squares, OLS）最小化
+\[
+R_n(\beta)=\sum_{i=1}^{n}(x_i^\top\beta-y_i)^2=\lVert X\beta-y\rVert_2^2.
+\]
+对应的正规方程为
+\[
+X^\top X\beta=X^\top y.
+\]
+当 $X^\top X$ 可逆时，唯一解为
+\[
+\widehat\beta_{\mathrm{OLS}}=(X^\top X)^{-1}X^\top y.
+\]
+如果 $X^\top X$ 奇异，就不能直接使用逆矩阵公式；正规方程可能有多个解。在固定方差的高斯条件噪声假设下，最大化条件似然与最小化平方误差得到相同的参数。
+\end{rc}
+
+\topicsection{推导：OLS 正规方程}
+\pref{02-regression.pdf 第 18 页}
+\begin{rc}
+\textbf{讲义中的问题：} 通过对平方误差求导，推导 OLS 的闭式解。
+
+\medskip
+\textbf{独立复算：}
+\step{\ding{192}}{展开二次型：$R_n(\beta)=\beta^\top X^\top X\beta-2y^\top X\beta+y^\top y$。}
+\step{\ding{193}}{由于 $X^\top X$ 对称，梯度为 $\nabla_\beta R_n(\beta)=2X^\top X\beta-2X^\top y$。}
+\step{\ding{194}}{令梯度为零，得到 $X^\top X\beta=X^\top y$。}
+\step{\ding{195}}{当 $X^\top X$ 可逆时，左乘其逆矩阵，得到 $\widehat\beta=(X^\top X)^{-1}X^\top y$。}
+\begin{keybox}\centering\small\bfseries
+逆矩阵闭式解需要设计矩阵满列秩；正规方程本身不需要这个条件。
+\end{keybox}
+\end{rc}
+
+\topicsection{3. 岭回归（Ridge Regression）与偏置项（bias/intercept term）}
+\pref{02-regression.pdf 第 20--25 页}
+\begin{rc}
+岭回归（Ridge Regression）在 OLS 目标中加入 $\ell_2$ 惩罚：
+\[
+\widehat\beta_{\mathrm{ridge}}=\arg\min_\beta\left(\lVert X\beta-y\rVert_2^2+\lambda\lVert\beta\rVert_2^2\right),\qquad \lambda>0,
+\]
+其解为
+\[
+\widehat\beta_{\mathrm{ridge}}=(X^\top X+\lambda I)^{-1}X^\top y.
+\]
+它是唯一解，因为对任意非零向量 $v$，有
+\[
+v^\top(X^\top X+\lambda I)v=\lVert Xv\rVert_2^2+\lambda\lVert v\rVert_2^2>0.
+\]
+因此 $X^\top X+\lambda I$ 正定。含截距 $b$ 时，讲义惩罚斜率系数但不惩罚 $b$：
+\[
+\min_{b,\beta}\sum_i(x_i^\top\beta+b-y_i)^2+\lambda\lVert\beta\rVert_2^2.
+\]
+将 $x_i,y_i$ 中心化后，可以先求无截距岭回归，再用 $\widehat b=\bar y-\bar x^\top\widehat\beta$ 恢复截距。
+\end{rc}
+
+\topicsection{4. 非线性与非参数回归}
+\pref{02-regression.pdf 第 26--32 页}
+\begin{rc}
+\textbf{基函数方法。} 将输入映射为 $(g_1(x),\ldots,g_k(x))$，再在变换后的特征上拟合线性模型。模型对新系数是线性的，但对原始输入可以是非线性的。
+
+\medskip
+\textbf{$k$ 近邻回归（$k$-Nearest-Neighbour Regression, $k$NN）。} 对查询点 $x$，预测为
+\[
+h_n(x)=\frac{1}{k}\sum_{x_i\in N_k(x)}y_i.
+\]
+模型表示会随存储数据增长，因此在讲义的定义下属于非参数方法；这不表示它没有可调选择。
+
+\medskip
+\textbf{核回归。} 使用相似度函数 $K$ 时，预测为
+\[
+h_n(x)=\frac{\sum_iK(x,x_i)y_i}{\sum_iK(x,x_i)}.
+\]
+近邻和核方法都能表示灵活函数，但讲义也指出它们会带来更高的数据和计算需求；近邻方法还会受到维数灾难影响。
+\end{rc}
+
+\topicsection{练习：1 近邻回归（1-Nearest-Neighbour Regression, 1-NN）预测函数}
+\pref{02-regression.pdf 第 27--29 页}
+\begin{rc}
+\textbf{题目（来自讲义）：} “Given three training examples with $(x,y)$ being $(1,1)$, $(2,2)$, $(4,4)$, draw the function learned by 1NN.”
+
+\medskip
+\textbf{独立复算：}
+\step{\ding{192}}{最近邻边界是相邻训练输入的中点，即 $1.5$ 和 $3$。}
+\step{\ding{193}}{在不考虑并列距离时，$x<1.5$ 时 $h(x)=1$，$1.5<x<3$ 时 $h(x)=2$，$x>3$ 时 $h(x)=4$。}
+\step{\ding{194}}{在 $x=1.5$ 和 $x=3$ 处存在两个等距样本，预测值取决于实现中的 tie rule。}
+\step{\ding{195}}{加入 $(5,5)$ 会新增边界 $4.5$；加入 $(3,3)$ 则会产生边界 $1.5,2.5,3.5$。}
+\begin{keybox}\centering\small\bfseries
+按第 27 页给出的定义，1-NN 回归是分段常数函数，变化位置是 Voronoi 边界。
+\end{keybox}
+\end{rc}
+
+\topicsection{\color{redline}\ding{72} 校验发现：讲义内部表述不一致}
+\pref{02-regression.pdf 第 27--28 页}
+\begin{rc}
+第 27 页将 1-NN 定义为“返回最近训练点的响应值”，这一规则得到分段常数函数；第 28 页却把图中的 1-NN 拟合描述为 piecewise-linear（分段线性）。除非存在未说明的插值规则，否则两种表述不一致。本章按第 27 页的明确公式计算，并保留该冲突记录。
+\begin{keybox}\centering\small\bfseries\color{redline}
+当文字描述与显示的定义冲突时，应从定义重新计算，并记录冲突，而不是默默照抄。
+\end{keybox}
+\end{rc}
+
+\topicsection{讲义末尾选择题：独立核对}
+\pref{02-regression.pdf 第 33 页}
+\begin{rc}
+讲义要求判断以下说法：
+\begin{itemize}
+  \item 岭回归应惩罚较大的 bias 项：\textbf{错误}；第 25 页的公式不惩罚截距。
+  \item 岭回归总有唯一解：\textbf{正确}，因为 $\lambda>0$ 时矩阵正定。
+  \item 非参数回归没有参数：\textbf{错误}；这里的“非参数”表示模型容量可随数据增长。
+  \item 机器学习中的模型学习通常可表述为优化问题：\textbf{正确}，这是第 7、14 页的课程框架。
+\end{itemize}
+因此正确选项是第二项和第四项。
+\end{rc}
+
+\topicsection{5. 速查卡}
+\pref{02-regression.pdf 第 34 页及前述页码}
+\begin{rc}
+\textbf{OLS 目标：} $\lVert X\beta-y\rVert_2^2$。
+
+\textbf{OLS 解：} $(X^\top X)^{-1}X^\top y$，前提是 $X^\top X$ 可逆。
+
+\textbf{岭回归（Ridge Regression）目标：} OLS $+\lambda\lVert\beta\rVert_2^2$，其中 $\lambda>0$。
+
+\textbf{岭回归（Ridge Regression）解：} $(X^\top X+\lambda I)^{-1}X^\top y$；当 $\lambda>0$ 时唯一。
+
+\textbf{截距：} OLS 可增加 dummy feature；本讲义的岭回归不惩罚截距。
+
+\textbf{基函数：} 先变换输入，再在新系数上拟合线性模型。
+
+\textbf{$k$NN：} 取 $k$ 个最近点的响应平均值。
+
+\textbf{核回归：} 用相似度加权所有观测响应。
+
+\begin{keybox}\centering\small\bfseries\color{redline}
+检查秩条件；区分截距与被惩罚的斜率；按明确的定义记住 1-NN 是分段常数。
+\end{keybox}
+\end{rc}
+
+\topicsection{6. 证据与练习映射}
+\begin{rc}
+\small
+\textbf{考核证据：} 下载的课件中没有评分或考试材料。因此下表只映射讲授和课堂练习，不是考试映射。
+
+\medskip
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}lp{10.2cm}@{}}
+\toprule
+\textbf{来源} & \textbf{本章用途} \\
+\midrule
+02-regression.pdf 第 18 页 & OLS 闭式解的讲义推导；已独立复算。 \\
+02-regression.pdf 第 29 页 & 1-NN 绘图练习；已处理并列距离。 \\
+02-regression.pdf 第 33 页 & 讲义选择题；逐项给出理由。 \\
+02-regression.pdf 第 34 页 & 讲义明确列出的 “What You Need to Know” 边界。 \\
+\bottomrule
+\end{tabular}
+
+\begin{keybox}\centering\small\bfseries
+在补充当前课程信息、评分权重、往年卷和官方答案之前，不应把任何内容称为“考试重点”。
+\end{keybox}
+\end{rc}
+
+\end{document}
