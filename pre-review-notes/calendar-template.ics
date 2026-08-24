@@ -1,0 +1,56 @@
+TEMPLATE NOTES (delete everything above the BEGIN:VCALENDAR line when
+delivering — the delivered file must start at BEGIN:VCALENDAR):
+
+Revision-calendar export for the pre-review-notes skill
+(Step 3 of SKILL.md). Turns the chapter priority order into study
+blocks the learner can import into any calendar app (Apple / Google /
+Outlook / phone calendars all accept .ics).
+
+Generation rules:
+ - One VEVENT per study block. Number of blocks per chapter is
+   proportional to its assessment weight (the 32/40-mark topic gets
+   the most sessions), ending with a final quick-review pass over
+   every chapter's quick-reference card in the last 1-2 days.
+ - Work BACKWARD from the assessment date. The exam date and the
+   learner's available days/hours must come from the learner or
+   their materials — never guess or invent them.
+ - Each DESCRIPTION says exactly what to do in that block (read
+   chapter X notes / re-derive the worked problem from [source] /
+   quick-reference pass), and cites the weight that justifies it.
+ - Use floating local times (no trailing Z) unless the learner's
+   timezone is known; for all-day blocks use DTSTART;VALUE=DATE.
+ - Every UID must be unique. DTSTAMP is the generation time (UTC).
+ - Output with CRLF line endings; fold lines longer than 75 octets
+   (continuation lines start with a single space) per RFC 5545.
+
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//pre-review-notes//revision-plan//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:[COURSE CODE] Revision Plan
+X-WR-CALDESC:[One line: assessment date + weighting basis, e.g. "Final exam [date] - 32/40 marks computability, plan weighted accordingly"]
+BEGIN:VEVENT
+UID:[course-code]-block-[n]@pre-review-notes
+DTSTAMP:[YYYYMMDD]T[HHMMSS]Z
+DTSTART:[YYYYMMDD]T[HHMMSS]
+DTEND:[YYYYMMDD]T[HHMMSS]
+SUMMARY:[COURSE CODE] · Ch.[X] [Topic] — block [n]/[total for this chapter]
+DESCRIPTION:[What to do: e.g. work through Ch.[X] notes sections [X.1]-[X.3]\, then re-derive [real problem + source tag] without looking]\n权重依据 Weight basis: [e.g. 32/40 exam marks · recurs in every past sitting]
+CATEGORIES:REVISION,[COURSE CODE]
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Revision block starting soon
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:[course-code]-final-pass@pre-review-notes
+DTSTAMP:[YYYYMMDD]T[HHMMSS]Z
+DTSTART;VALUE=DATE:[YYYYMMDD]
+DTEND;VALUE=DATE:[YYYYMMDD]
+SUMMARY:[COURSE CODE] · Final pass — all quick-reference cards
+DESCRIPTION:Last-minute review: read every chapter's quick-reference card and each "Must remember" box\, in priority order. Do not start new material.
+CATEGORIES:REVISION,[COURSE CODE]
+END:VEVENT
+END:VCALENDAR

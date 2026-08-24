@@ -1,0 +1,258 @@
+% ============================================================
+% PRE-REVIEW NOTES — REUSABLE TEMPLATE
+% ============================================================
+% Domain-agnostic. Fill in the placeholder content marked [LIKE THIS]
+% for any subject: math, CS, chemistry, law, medicine, history, etc.
+%
+% Design goals of this template:
+%  - One consistent visual language across every chapter of a course,
+%    so a learner's full notes set reads as one coherent book.
+%  - Every section can carry a "source tag" (\examref) showing exactly
+%    where in the course's own materials this content is tested —
+%    worksheet #, assignment #, past-exam year+question, lecture week.
+%  - A \note{} macro for optional inline glosses in a second language,
+%    left empty / unused if not needed.
+%  - Structural boxes for: derivations (\rc), memorable takeaways
+%    (\keybox), and numbered steps (\step) inside a derivation.
+% ============================================================
+
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[left=2.2cm, right=1.2cm, top=1.2cm, bottom=1.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath, amssymb}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{everypage}
+
+% OPTIONAL: bilingual annotation support.
+% Uncomment the next line (and the \cn / \note macros below that use it)
+% only if the learner wants inline glosses in a second language.
+% Requires a CJK-capable engine (xelatex/lualatex) or the CJK package
+% for Chinese/Japanese/Korean specifically.
+% \usepackage{CJKutf8}
+
+\tcbuselibrary{skins, breakable}
+
+% ---------- Colour palette (change freely per learner's taste) ----------
+\definecolor{barblue}{HTML}{2E75B6}
+\definecolor{titleblue}{HTML}{2E75B6}
+\definecolor{redline}{HTML}{C0392B}
+\definecolor{yellowbg}{HTML}{FFF3CD}
+\definecolor{yellowtext}{HTML}{856404}
+\definecolor{darktext}{HTML}{2C3E50}
+\definecolor{lightblue}{HTML}{D6EAF8}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% ---------- OPTIONAL bilingual gloss macro ----------
+% If CJK is enabled above, use: \begin{CJK}{UTF8}{gbsn}#1\end{CJK}
+% Otherwise this just renders the text in italics — safe default.
+\newcommand{\cn}[1]{\textit{#1}}
+
+% ---------- Structural macros ----------
+\newcommand{\chaptertitle}[1]{{\large\bfseries\color{titleblue} #1}\\[2pt]}
+% \pref: tag showing WHERE in the source materials this chapter/section
+% lives (e.g. "Lec W4", "Ch. 7", "Module 3"). Purely a locator, distinct
+% from \examref which tags WHERE it is ASSESSED.
+\newcommand{\pref}[1]{\colorbox{yellowbg}{\scriptsize\texttt{\color{yellowtext}#1}}}
+\newcommand{\subtitle}[1]{{\scriptsize\color{gray}\itshape #1}}
+
+\newcommand{\topicsection}[1]{%
+  \vspace{6pt}{\noindent\normalsize\bfseries\color{titleblue} #1}\\[-6pt]
+  {\color{barblue}\rule{\linewidth}{1.2pt}}\\[2pt]
+}
+
+% \examref: the assessment-mapping tag. Put worksheet numbers, assignment
+% numbers, exam year+question, or "Sample Solutions" here. This is the
+% single most important tag in the whole template — it is what lets a
+% learner instantly see "this concept is worth my time" and go find the
+% matching practice problem.
+\reversemarginpar
+\setlength{\marginparwidth}{1.8cm}
+\setlength{\marginparsep}{2pt}
+\newcommand{\examref}[1]{\marginpar{\raggedleft\tiny\bfseries\color{redline}\texttt{#1}}}
+
+% \rc: a worked-derivation / detailed-content box with a red left border.
+% Use for concept explanations AND for full worked derivations of real
+% past problems (Step 5 / item 3 of the workflow).
+\newtcolorbox{rc}{
+  blanker, breakable,
+  borderline west={2pt}{0pt}{redline},
+  left=8pt, top=1pt, bottom=1pt,
+  before skip=0pt, after skip=3pt,
+}
+
+% \keybox: a highlighted takeaway — the one sentence a learner should
+% remember from this section even if they forget everything else.
+\newtcolorbox{keybox}{
+  colback=lightblue, colframe=barblue,
+  boxrule=0.8pt, arc=2pt,
+  left=4pt, right=4pt, top=2pt, bottom=2pt,
+  before skip=4pt, after skip=4pt,
+}
+
+% \step{①}{text}: a numbered step inside a derivation. Use circled
+% numbers (Pifont \ding{192}-\ding{201} for ①-⑩) or bold digits.
+\newcommand{\step}[2]{{\small\color{redline}\bfseries #1}\;{\small #2}\\[1pt]}
+
+% \note{}: optional inline personal gloss (e.g. second-language
+% annotation, or a personal mnemonic). Leave unused if not needed.
+\newcommand{\note}[1]{{\footnotesize\color{titleblue}\itshape #1}\\[1pt]}
+
+% Coloured bar across the top of every page — purely cosmetic branding
+% for the notes set; delete the \AddEverypageHook block if unwanted.
+\AddEverypageHook{\tikz[remember picture, overlay]{
+  \fill[barblue] ([yshift=0pt]current page.north west) rectangle ([yshift=-14pt]current page.north east);
+}}
+
+\begin{document}
+
+% ============================================================
+% CHAPTER HEADER
+% ============================================================
+\vspace*{2pt}
+\chaptertitle{Chapter [X]: [Topic Name]}
+\pref{[e.g. Lec W4 / Ch. 7 / Module 3]} \quad
+\subtitle{[One line: why this chapter matters for assessment — e.g.
+"18 of 100 exam marks; recurs in every past sitting; official sample
+solution exists for Problem 3."]}
+
+\vspace{4pt}
+
+% ============================================================
+% CONCEPT SECTION — repeat this block for each core idea
+% ============================================================
+\topicsection{[X.1] [Concept Name]}
+\pref{[where taught]}\examref{[e.g. Worksheet 4 Q2 / Assignment 2 Q1 / 2023 exam Q5]}
+
+\begin{rc}
+{\small\bfseries [One plain-language framing sentence: what problem
+does this concept solve, or what question does it answer?]}
+
+\medskip
+{\small\bfseries Formal statement:}\;
+[Definition / theorem / rule / doctrine, in the course's own notation
+and phrasing — not a generic textbook restatement.]
+
+\medskip
+{\small\bfseries Short example:}\;
+[A minimal example illustrating the concept — this is NOT the full
+worked derivation; that goes in its own "Derivation" block below.]
+
+\begin{keybox}
+\centering\small\bfseries [The one sentence to remember from this section.]
+\end{keybox}
+\end{rc}
+
+% ============================================================
+% WORKED DERIVATION — the highest-value block in the whole template.
+% Use a REAL problem from the learner's own worksheets/assignments/
+% past exams here, not an invented analogue. Include every step a
+% full-credit answer would need, calibrated against any official
+% sample solution's depth and notation.
+% ============================================================
+\topicsection{Derivation: [Descriptive title, e.g. "2022 Exam Q4 Walkthrough"]}
+\pref{[source]}\examref{[exact source: exam year + Q#, or worksheet/assignment #]}
+
+\begin{rc}
+{\small\bfseries Problem statement:}\; [Restate the real problem concisely.]
+
+\medskip
+{\small\bfseries Solution:}
+\step{\ding{192}}{[First step of the derivation, with reasoning.]}
+\step{\ding{193}}{[Second step.]}
+\step{\ding{194}}{[Continue until the answer is reached — match the
+depth/notation of any official sample solution if one exists.]}
+
+\medskip
+{\small\bfseries Why this matters:}\;
+[One or two sentences on what makes this problem TYPE recur — e.g.
+"This exact reasoning pattern appears in 3 of the last 4 exam sittings."]
+
+\begin{keybox}
+\centering\small\bfseries [The reusable technique/pattern this
+derivation demonstrates — phrased so it transfers to similar problems.]
+\end{keybox}
+\end{rc}
+
+% ============================================================
+% TRAP BOX — a specific, sourced common mistake. Do not invent
+% generic "students often confuse X and Y" content — this must come
+% from real instructor emphasis, examiner-report language, or a
+% pattern actually observed across past assessments.
+% ============================================================
+\topicsection{\color{redline}\ding{72} Trap: [Name of the specific
+confusion or mistake]}
+\pref{[source of this warning — e.g. "Lecturer explicitly warned,
+Week 4" or "Examiner report 2022"]}
+
+\begin{rc}
+{\small\bfseries The trap:}\; [What learners commonly get wrong, and why
+it looks right at first.]
+
+\medskip
+{\small\bfseries The correct reasoning:}\; [What distinguishes the
+correct approach, stated precisely.]
+
+\begin{keybox}
+\centering\small\bfseries\color{redline} [A short, memorable
+correction — the thing to say to yourself in the exam.]
+\end{keybox}
+\end{rc}
+
+% ============================================================
+% QUICK REFERENCE CARD — one dense screen, every formula/definition/
+% technique in the chapter, for last-minute review.
+% ============================================================
+\topicsection{[X.N] Quick Reference Card}
+
+\begin{rc}
+{\small\bfseries [Concept 1]:}\; [one-line formula/definition]
+
+\medskip
+{\small\bfseries [Concept 2]:}\; [one-line formula/definition]
+
+\medskip
+{\small\bfseries [Technique/recipe, if applicable]:}
+\step{\ding{182}}{[step]}
+\step{\ding{183}}{[step]}
+
+\begin{keybox}
+\centering\small\bfseries\color{redline} Must remember: [the 2-4
+things that, if forgotten, would sink an otherwise-good answer.]
+\end{keybox}
+\end{rc}
+
+% ============================================================
+% ASSESSMENT-MAPPING TABLE — every real item touching this chapter.
+% This is what tells the learner exactly what to go practice next.
+% ============================================================
+\topicsection{[X.N+1] Assessment Mapping}
+
+\begin{rc}
+{\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lp{10.5cm}@{}}
+\toprule
+\textbf{Source} & \textbf{Topic / key technique tested} \\
+\midrule
+[e.g. 2021 exam Q3] & [what it tested, in one line] \\
+[e.g. Worksheet 4 Task 2] & [what it tested] \\
+[e.g. Assignment 2 Q1] & [what it tested] \\
+\bottomrule
+\end{tabular}}
+
+\begin{keybox}
+\centering\small\bfseries\color{redline} [One-sentence summary of the
+highest-probability item type for the next assessment, based on
+recurrence across the sources above.]
+\end{keybox}
+\end{rc}
+
+\end{document}

@@ -1,0 +1,150 @@
+<!--
+============================================================
+PRE-REVIEW NOTES — COURSE OVERVIEW MAP TEMPLATE
+============================================================
+A one-page visual map of an entire course: every topic block as a
+colour-coded section of cards, plus a final section for the assessment
+structure. Render it at the END of Step 3 of SKILL.md, as the visual
+form of the chapter plan you share with the learner — the learner sees
+coverage, timing, and assessment weight at a glance before any chapter
+is drafted.
+
+Calibration rules (same as the note templates):
+ - Card text carries only what the course materials actually say:
+   real week numbers, real topic names, real mark breakdowns.
+   No invented emphasis — the no-fabricated-relevance rule applies
+   to this map exactly as it does to the notes.
+ - The assessment section at the bottom is filled from Step 1
+   findings (grading breakdown, exam format, stated weightings).
+ - One colour family per topic block, in syllabus order top-to-bottom;
+   the LEGEND at the end maps colours back to week ranges.
+
+LAYOUT SYSTEM (all values in px; canvas width is fixed at 720):
+ - Section container: x=32, width=656, rx=14. Height = enough to hold
+   its rows + ~34px header + ~18px bottom padding.
+ - Content column: x=48. Two card widths only:
+     half card:  width=300, at x=48 (left) or x=364 (right)
+     full card:  width=616, at x=48
+ - Card height 46, corner rx=8. Rows advance by 54 (46 + 8 gap).
+ - Inside a card at y=Y: title text at Y+17, subtitle text at Y+33,
+   both centred on the card's horizontal midpoint.
+ - Section header: sec-title at boxY+22, sec-sub at boxY+38.
+   Optional sub-label (group heading inside a section) sits 20px
+   above its first card row.
+ - Gap between one section's bottom edge and the next box: 18.
+ - Total viewBox height = last element's bottom + ~40 footer margin.
+
+COLOUR FAMILIES — each is {card fill / card stroke / title text / sub text}:
+   purple  #3C3489 / #7F77DD / #EEEDFE / #AFA9EC
+   blue    #0C447C / #378ADD / #E6F1FB / #85B7EB
+   coral   #712B13 / #D85A30 / #FAECE7 / #F0997B
+   teal    #085041 / #1D9E75 / #E1F5EE / #5DCAA5
+   green   #27500A / #639922 / #EAF3DE / #97C459
+   pink    #72243E / #D4537E / #FBEAF0 / #ED93B1
+   amber   #633806 / #C98125 / #FBF0E2 / #E0A968
+   gray    #444441 / #888780 / #F1EFE8 / #B4B2A9   (reserve for assessment)
+ Matching section container tints (fill at fill-opacity 0.5 / stroke):
+   purple #f3f1fa/#bfb9e8 · blue #eaf2fb/#a9c8ea · coral #fbeee7/#e2b39c
+   teal #e8f5f0/#9ed3c0 · green #f0f6e6/#b3d46e · pink #fbeaf0/#e6a9c2
+   amber #fbf3e7/#e2c49c · gray #f2f1ee/#c5c3bb
+
+Delete this comment block after filling in the template.
+============================================================
+-->
+<svg width="100%" viewBox="0 0 720 [TOTAL HEIGHT]" xmlns="http://www.w3.org/2000/svg">
+<title>[COURSE CODE] [Course Name] Overview Map</title>
+<style>
+  svg { font-family: "SF Pro Display","Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+  .bg { fill: #f8f7f4; }
+  .title { font-size:17px; font-weight:600; fill:#2c2c2a; text-anchor:middle; }
+  .subtitle { font-size:12px; fill:#73726c; text-anchor:middle; }
+  .sec-title { font-size:13px; font-weight:600; }
+  .sec-sub { font-size:11px; fill:#888; }
+  .sub-label { font-size:11.5px; font-weight:600; }
+  .card-title { font-size:12.5px; font-weight:600; text-anchor:middle; dominant-baseline:central; }
+  .card-sub { font-size:10.3px; text-anchor:middle; dominant-baseline:central; }
+  .legend-label { font-size:11px; fill:#555; }
+  .note { font-size:10.5px; fill:#999; }
+  .card { cursor:default; }
+  .card:hover rect { filter:brightness(1.15); }
+</style>
+
+<rect class="bg" x="0" y="0" width="720" height="[TOTAL HEIGHT]" rx="0"/>
+
+<!-- ===== PAGE HEADER ===== -->
+<text class="title" x="360" y="30">[COURSE CODE] [Course Name] 全景图 / Overview</text>
+<text class="subtitle" x="360" y="48">[Topic block 1] · [Topic block 2] · [Topic block 3] · 共 [N] 周/单元</text>
+
+<!-- ============================================================
+     TOPIC SECTION — repeat one per topic block, in syllabus order.
+     Example below starts at boxY=64 and holds two card rows
+     (one half-card pair + one full card), so height =
+     34 (header) + 2*54 (rows) + 12 (padding) = 154ish; adjust to fit.
+     ============================================================ -->
+<g class="sec-box">
+  <rect x="32" y="64" width="656" height="[SECTION HEIGHT]" rx="14"
+        fill="[section tint]" stroke="[section tint stroke]" stroke-width="1" fill-opacity="0.5"/>
+  <text class="sec-title" x="48" y="86" fill="[card fill colour]">[Topic block name]</text>
+  <text class="sec-sub" x="48" y="102">[source / textbook / week range, e.g. "Sipser Ch.1–2 · W1–W4"]</text>
+</g>
+
+<!-- Optional group heading inside the section (20px above its card row) -->
+<text class="sub-label" x="48" y="[rowY - 20]" fill="[card fill colour]">[Sub-group name · week range]</text>
+
+<!-- Half-card pair: left at x=48, right at x=364, same rowY -->
+<g class="card">
+  <rect x="48" y="[rowY]" width="300" height="46" rx="8" stroke-width="0.7"
+        fill="[card fill]" stroke="[card stroke]"/>
+  <text class="card-title" x="198" y="[rowY + 17]" fill="[title text]">[Concept name]</text>
+  <text class="card-sub" x="198" y="[rowY + 33]" fill="[sub text]">[week · 2-6 word gloss from the course's own materials]</text>
+</g>
+<g class="card">
+  <rect x="364" y="[rowY]" width="300" height="46" rx="8" stroke-width="0.7"
+        fill="[card fill]" stroke="[card stroke]"/>
+  <text class="card-title" x="514" y="[rowY + 17]" fill="[title text]">[Concept name]</text>
+  <text class="card-sub" x="514" y="[rowY + 33]" fill="[sub text]">[week · gloss]</text>
+</g>
+
+<!-- Full-width card: for a concept that spans the row on its own -->
+<g class="card">
+  <rect x="48" y="[rowY + 54]" width="616" height="46" rx="8" stroke-width="0.7"
+        fill="[card fill]" stroke="[card stroke]"/>
+  <text class="card-title" x="356" y="[rowY + 54 + 17]" fill="[title text]">[Concept name]</text>
+  <text class="card-sub" x="356" y="[rowY + 54 + 33]" fill="[sub text]">[week · gloss]</text>
+</g>
+
+<!-- ...repeat TOPIC SECTION blocks for every topic block, each 18px
+     below the previous section's bottom edge, next colour family... -->
+
+<!-- ============================================================
+     ASSESSMENT SECTION — always last, always the gray family.
+     One full-width card per assessment component, filled from the
+     Step 1 assessment-landscape summary. Put the real mark split in
+     the card-sub line (e.g. "closed book · 10 Qs · 32/40 marks from
+     Topic X") — this line is what justifies the chapter order.
+     ============================================================ -->
+<g class="sec-box">
+  <rect x="32" y="[boxY]" width="656" height="[SECTION HEIGHT]" rx="14"
+        fill="#f2f1ee" stroke="#c5c3bb" stroke-width="1" fill-opacity="0.5"/>
+  <text class="sec-title" x="48" y="[boxY + 22]" fill="#444441">课程评估结构 / Assessment</text>
+  <text class="sec-sub" x="48" y="[boxY + 38]">[one line: how the course is graded overall]</text>
+</g>
+<g class="card">
+  <rect x="48" y="[rowY]" width="616" height="46" rx="8" stroke-width="0.7" fill="#444441" stroke="#888780"/>
+  <text class="card-title" x="356" y="[rowY + 17]" fill="#F1EFE8">[Component name (marks)]</text>
+  <text class="card-sub" x="356" y="[rowY + 33]" fill="#B4B2A9">[format · scope · stated topic weighting, verbatim from course materials]</text>
+</g>
+
+<!-- ===== LEGEND — one swatch per colour family used above.
+     Grid: 3 columns at x=48/248/448, rows advance by 24;
+     swatch 14x14 rx=4, label at swatch x+20, y+12. ===== -->
+<text class="note" x="48" y="[legendY]" font-weight="600" fill="#888">颜色图例 / Legend</text>
+<rect x="48" y="[legendY + 12]" width="14" height="14" rx="4" fill="[card fill]"/>
+<text class="legend-label" x="68" y="[legendY + 24]">[week range · topic block]</text>
+<!-- ...repeat per family, ending with gray = assessment... -->
+
+<!-- ===== FOOTER — provenance line: which syllabus/materials this map
+     is based on. Never omit; it is the map's source tag. ===== -->
+<text class="note" x="360" y="[TOTAL HEIGHT - 24]" text-anchor="middle">基于 [course code + semester] 课程大纲 · [primary materials used]</text>
+
+</svg>
