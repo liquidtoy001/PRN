@@ -7,8 +7,9 @@ assignments, past assessments, and official solutions into traceable, incrementa
 maintainable revision chapters. It prioritises topics and calibrates answer depth only when
 the course evidence supports those decisions.
 
-The current source version is **v0.1.0**. It contains the first engineering phase and is
-available from [GitHub Releases](https://github.com/liquidtoy001/PRN/releases/tag/v0.1.0).
+The current source version is **v0.2.0**. It contains the second-phase learning loop and
+resource measurement, and is available from
+[GitHub Releases](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.0).
 
 ## Capabilities
 
@@ -18,6 +19,8 @@ available from [GitHub Releases](https://github.com/liquidtoy001/PRN/releases/ta
 - Uses stable source IDs, precise locators, and material hashes.
 - Produces Markdown or editable LaTeX plus a structurally and visually checked PDF.
 - Stores resumable machine state in `study_state.json` and renders a readable `progress.md`.
+- Produces validated flashcards/quizzes, tracks errors, confidence and mastery, and schedules retests.
+- Checks material capacity and quality ceilings before generation and records token usage afterwards.
 
 ## Repository layout
 
@@ -26,9 +29,9 @@ pre-review-notes/
 ├── pre-review-notes/                  installable skill
 │   ├── SKILL.md                       concise entry point and routing
 │   ├── VERSION
-│   ├── assets/                        output templates
-│   ├── references/                    mode-specific workflow guidance
-│   └── scripts/                       deterministic workflow helpers
+│   ├── assets/                        output, learning-bank, state, and pricing templates
+│   ├── references/                    evidence, authoring, learning, capacity, and usage rules
+│   └── scripts/                       material, capacity, usage, learning, state, and PDF tools
 ├── examples/stat3007/notes/           generated example output, no source slides
 ├── tests/fixtures/stat3007/materials.csv
 ├── test-data/                         ignored local third-party test inputs
@@ -49,6 +52,19 @@ python pre-review-notes/scripts/inventory_materials.py `
   --output output/materials.json
 ```
 
+Check safe context fit and the concrete product ceiling before drafting:
+
+```powershell
+python pre-review-notes/scripts/assess_capacity.py `
+  output/materials.json `
+  --context-window 128000 `
+  --output output/capacity-report.json `
+  --markdown output/capacity-report.md
+```
+
+`128000` is only a command example. Replace it with a confirmed active model/platform limit;
+when unknown, omit it and use incremental retrieval instead of claiming full coverage.
+
 Initialise resumable state:
 
 ```powershell
@@ -58,7 +74,9 @@ python pre-review-notes/scripts/manage_state.py init `
   --course-title "Deep Learning" `
   --mode lightweight `
   --language zh `
-  --format latex-pdf
+  --format latex-pdf `
+  --learning-output flashcards `
+  --learning-output quiz
 ```
 
 See [USAGE.md](./USAGE.md) for installation and platform limitations.
@@ -78,8 +96,8 @@ python pre-review-notes/scripts/download_materials.py `
 The downloader verifies declared sizes and SHA-256 hashes; it does not determine whether a
 user is licensed to download or use the sources.
 
-> Migration note: the new repository republishes a clean v0.0.1, v0.0.2, and v0.1.0 commit
-> chain. The v0.0.2 feature snapshot and Release package are retained, but third-party slides
+> Migration note: the new repository continues v0.2.0 from a clean v0.0.1, v0.0.2, and v0.1.0
+> commit chain. The v0.0.2 feature snapshot and Release package are retained, but third-party slides
 > and the old Git objects that contained them were not migrated.
 
 ## Phase-one changes
@@ -93,10 +111,27 @@ user is licensed to download or use the sources.
 - LaTeX compilation, PDF traversal, representative rendering, and QA reports.
 - Deterministic flattened ZIP packaging for GitHub Releases.
 
+## Phase-two capabilities
+
+- `manage_learning.py` validates source-linked flashcard/quiz banks, records correctness,
+  confidence, mistake tags and mastery, and schedules staged retests.
+- Retest plans use the assessment date, explicit assessment evidence, mastery, due state, and
+  answer time. Items without assessment evidence remain labelled as learning priorities, not
+  exam-frequency predictions.
+- UTF-8 CSV and three-column Anki TSV export.
+- Conservative material token ranges plus context-fit, OCR/encryption, content-coverage,
+  exam-calibration, and answer-depth ceilings from `assess_capacity.py`.
+- Per-generation `usage_ledger.py` records distinguish provider-reported, manually-reported,
+  partial-estimate, and unavailable measurements. Monetary estimates require an explicit,
+  dated pricing profile.
+- Study-state schema 2 prevents new chapters from being verified/delivered without capacity
+  disclosure and usage accounting, while retaining honest legacy migrations.
+
 ## Version history
 
 | Version | Date | Changes |
 |---|---|---|
+| v0.2.0 | 2026-08-25 | Phase two: flashcards/quizzes, error/confidence/mastery tracking, dynamic retests, Anki/CSV, capacity and quality ceilings, and per-generation token/cost ledger. |
 | v0.1.0 | 2026-08-24 | Phase-one engineering: progressive skill, modes, local-only manifests, material/citation/state/PDF tools, incremental builds, and reproducible packaging. |
 | v0.0.2 | 2026-08-13 | Language confirmation, English terminology in Chinese notes, LaTeX-to-PDF workflow, and a STAT3007 test; the migrated tag retains the feature snapshot but excludes third-party slides. |
 | v0.0.1 | 2026-07 | Initial methodology, templates, and manual evaluation plan. |

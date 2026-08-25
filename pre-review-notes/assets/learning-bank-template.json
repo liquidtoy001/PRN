@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "course_id": "COURSE-ID",
+  "chapter_slug": "chapter-slug",
+  "language": "zh",
+  "generated_from": {
+    "chapter_input_digest": null,
+    "source_ids": [
+      "S001"
+    ]
+  },
+  "items": [
+    {
+      "id": "chapter-slug-Q001",
+      "kind": "short-answer",
+      "prompt": "[Question shown before the answer]",
+      "answer": "[Concise correct answer]",
+      "rationale": "[Why this answer is correct and the likely misconception]",
+      "choices": null,
+      "difficulty": 3,
+      "estimated_minutes": 3,
+      "tags": [
+        "chapter-slug"
+      ],
+      "source_refs": [
+        {
+          "source_id": "S001",
+          "locator": "PDF p. 1",
+          "type": "source"
+        }
+      ],
+      "assessment_weight": null,
+      "priority_evidence": []
+    }
+  ]
+}

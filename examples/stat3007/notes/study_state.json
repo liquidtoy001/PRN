@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "course": {
     "id": "STAT3007",
     "title": "Deep Learning"
@@ -9,7 +9,8 @@
     "language": "zh",
     "format": "latex-pdf",
     "assessment_date": null,
-    "study_hours_available": null
+    "study_hours_available": null,
+    "learning_outputs": []
   },
   "materials": {
     "inventory_path": "tests/fixtures/stat3007/materials.csv",
@@ -41,12 +42,38 @@
         "citations": "pass",
         "reasoning": "pass",
         "pdf_structure": "pass",
-        "visual": "pass"
+        "visual": "pass",
+        "capacity_disclosure": "not-applicable",
+        "usage_accounting": "not-applicable",
+        "learning_assets": "not-applicable"
       },
-      "updated_at": "2026-08-24T13:45:57Z"
+      "updated_at": "2026-08-24T13:45:57Z",
+      "legacy_generation": true
     }
   ],
-  "last_action": "Rebuilt and visually verified the Chinese Regression chapter with v0.1.0 tooling.",
-  "next_action": "Request assessment evidence before producing an exam-priority ranking.",
-  "updated_at": "2026-08-24T13:45:57Z"
+  "last_action": "Migrated study state from schema 1 to schema 2",
+  "next_action": "Run a capacity check before the next generation and start the usage ledger afterwards",
+  "updated_at": "2026-08-25T06:32:59.044621Z",
+  "capacity": {
+    "report_path": null,
+    "status": "not-checked",
+    "quality_ceiling": null,
+    "last_checked_at": null
+  },
+  "usage": {
+    "ledger_path": null,
+    "generation_count": 0,
+    "last_generation_id": null,
+    "last_measurement": null,
+    "updated_at": null
+  },
+  "learning": {
+    "bank_paths": [],
+    "state_path": null,
+    "last_plan_path": null,
+    "attempted_items": 0,
+    "mastery_average": 0.0,
+    "next_retest_at": null,
+    "updated_at": null
+  }
 }

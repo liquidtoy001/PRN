@@ -17,6 +17,10 @@ using; everything below the line is the actual template.
 e.g. "18 of 100 marks; recurs in every past sitting; official model answer exists for
 Essay Question 3." If unsupported, state that the priority is unknown.]
 
+> **Quality ceiling.** [Capacity status; source IDs used and omitted;
+> OCR/encryption/chunking limits; whether exam priority and answer depth are verified,
+> limited, or unavailable; and the next evidence/check that would improve this artifact.]
+
 ---
 
 ## [X.1] [Concept Name]
@@ -98,6 +102,16 @@ combination appeared in 3 of the last 4 exam sittings."]
 
 > 🔴 [One-sentence summary of the highest-probability item type for the next
 > assessment, based on recurrence across the sources above.]
+
+---
+
+## [X.N+2] Practice and Staged Retest
+
+**Learning bank:** [path / item IDs]
+
+- **Next attempt:** [named item or problem, before viewing its answer]
+- **Retest:** [date from learning state]
+- **Uncovered:** [items omitted by the current time budget]
 
 ---
 

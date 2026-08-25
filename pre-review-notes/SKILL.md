@@ -1,6 +1,6 @@
 ---
 name: pre-review-notes
-description: Build source-grounded revision notes for a specific course from the learner's own slides, assignments, practice material, past assessments, and official solutions. Use when the learner wants assessment-calibrated study notes, a revision chapter, a cheat sheet, or an editable LaTeX and verified PDF deliverable. Do not use for a generic concept explanation with no course material.
+description: Build source-grounded revision notes and active-learning plans for a specific course from the learner's own slides, assignments, practice material, past assessments, and official solutions. Use for assessment-calibrated notes, revision chapters, cheat sheets, source-linked flashcards/quizzes, staged retests, or editable LaTeX and verified PDF deliverables. Do not use for a generic concept explanation with no course material.
 ---
 
 # Pre-Review Notes
@@ -30,14 +30,19 @@ chapter at a time and can resume safely across sessions.
 6. **Deliver incrementally.** Avoid a one-shot whole-course document. Establish the plan,
    complete one representative or highest-priority chapter, obtain useful feedback, then
    continue.
+7. **Measure capacity and generation cost honestly.** Check the supplied material volume
+   before substantial generation. After every model-generated artifact, append a token-usage
+   record. Provider-reported usage, manual counts, partial estimates, and unavailable values
+   must never be presented as equivalent.
 
-## Start by resolving four preferences
+## Start by resolving five preferences
 
 Do not re-ask anything the learner has already specified. Resolve only what is missing:
 
 - mode: **lightweight**, **full**, or **exam-cram**;
 - main note language: **Chinese**, **English**, or **bilingual Chinese-English**;
 - deliverable: Markdown, editable LaTeX, compiled PDF, or a combination;
+- active-learning companion: none, flashcards, quiz, or both;
 - deadline and available study time when they affect prioritisation.
 
 Read [references/modes.md](references/modes.md) before choosing or applying a mode. If the
@@ -70,6 +75,12 @@ Use the resulting source IDs as the citation ledger. Inspect any `needs_ocr` or
 [references/evidence-workflow.md](references/evidence-workflow.md) for source roles,
 assessment evidence, OCR handling, manifest downloads, and thin-sample rules.
 
+Before substantial generation, read
+[references/measurement-and-capacity.md](references/measurement-and-capacity.md) and run
+`scripts/assess_capacity.py`. Share the capacity status, source coverage, and preliminary
+quality ceiling. If material does not safely fit, switch to cited chapter subsets and retain
+an explicit uncovered-source list; a large upload must not silently become partial coverage.
+
 ### 2. Map assessment and topic priority
 
 Identify the grading structure, exam format, explicit instructor guidance, assessed items,
@@ -101,6 +112,12 @@ invented textbook analogues. Use:
 Read [references/authoring.md](references/authoring.md) while drafting. Every assessment
 claim and non-trivial sourced claim must carry a stable source ID and locator.
 
+When flashcards or quizzes are requested, or included by the selected mode, read
+[references/active-learning.md](references/active-learning.md). Generate a separate learning
+bank from verified chapter content, validate it with `scripts/manage_learning.py`, and record
+attempts, confidence, mistakes, mastery, and staged retests in local learner state. Do not
+assign an assessment weight without direct priority evidence.
+
 ### 5. Validate evidence and reasoning
 
 Run the citation validator when local files are available:
@@ -121,8 +138,15 @@ compiler exit and structural check do not by themselves prove the page layout is
 ### 7. Deliver and update state
 
 Deliver the chapter source and every requested rendered artifact. State the note language,
-mode, source boundary, highest-value supported pattern, and any unresolved limitation.
-Update `study_state.json` only after observable validation; then refresh `progress.md`.
+mode, source boundary, highest-value supported pattern, capacity status, and the concrete
+quality ceiling for this artifact. Immediately append one record to `usage-ledger.jsonl` with
+`scripts/usage_ledger.py`: prefer provider-reported usage; otherwise record a labelled partial
+estimate or an explicit unavailable reason. Monetary cost requires a dated user/provider
+pricing profile and remains an estimate rather than an invoice.
+
+For schema-version 2 state, do not mark a newly generated chapter verified or delivered until
+`capacity_disclosure` and `usage_accounting` QA pass. Update `study_state.json` only after
+observable validation; then refresh `progress.md` and any requested retest plan.
 
 ## Included resources
 
@@ -131,5 +155,7 @@ Update `study_state.json` only after observable validation; then refresh `progre
 - `references/authoring.md` - chapter structure, language rules, and source-grounded writing.
 - `references/pdf-workflow.md` - compilation, structural checks, rendering, and visual QA.
 - `references/state-and-incremental.md` - resumable state and incremental rebuild behavior.
+- `references/active-learning.md` - flashcards, quizzes, mastery, dynamic plans, and exports.
+- `references/measurement-and-capacity.md` - context fit, quality ceilings, and usage ledger.
 - `assets/` - LaTeX, Markdown, SVG, calendar, progress, and state templates.
-- `scripts/` - deterministic inventory, download, citation, state, and PDF helpers.
+- `scripts/` - deterministic inventory, capacity, usage, learning, citation, state, and PDF helpers.

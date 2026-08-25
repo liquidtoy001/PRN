@@ -102,6 +102,16 @@
   before skip=4pt, after skip=4pt,
 }
 
+% \qualitybox: a concrete, artifact-specific ceiling. Name omitted source
+% IDs, OCR/context limits, assessment-evidence gaps, and what would raise
+% the ceiling. Do not replace it with a generic AI disclaimer.
+\newtcolorbox{qualitybox}{
+  colback=yellowbg, colframe=yellowtext,
+  boxrule=0.7pt, arc=2pt,
+  left=5pt, right=5pt, top=3pt, bottom=3pt,
+  before skip=4pt, after skip=4pt,
+}
+
 % \step{①}{text}: a numbered step inside a derivation. Use circled
 % numbers (Pifont \ding{192}-\ding{201} for ①-⑩) or bold digits.
 \newcommand{\step}[2]{{\small\color{redline}\bfseries #1}\;{\small #2}\\[1pt]}
@@ -130,6 +140,13 @@ solution exists for Problem 3." If unsupported, state that the priority
 is unknown rather than filling this placeholder with a generic claim.]}
 
 \vspace{4pt}
+
+\begin{qualitybox}
+{\small\bfseries Quality ceiling:}\;
+[Capacity status; source IDs used and omitted; OCR/encryption/chunking limits;
+whether exam priority and answer depth are verified, limited, or unavailable;
+and the next evidence/check that would improve this artifact.]
+\end{qualitybox}
 
 % ============================================================
 % CONCEPT SECTION — repeat this block for each core idea
@@ -258,6 +275,23 @@ things that, if forgotten, would sink an otherwise-good answer.]
 highest-probability item type for the next assessment, based on
 recurrence across the sources above.]
 \end{keybox}
+\end{rc}
+
+% ============================================================
+% ACTIVE-LEARNING HANDOFF — include when flashcards/quizzes were requested.
+% Keep the validated JSON bank and learner state outside the PDF; this block
+% only tells the learner what to attempt and when to retest.
+% ============================================================
+\topicsection{[X.N+2] Practice and Staged Retest}
+
+\begin{rc}
+{\small\bfseries Learning bank:}\; [path / item IDs]\
+
+\medskip
+{\small\bfseries Next attempt:}\; [named item or problem, before viewing its answer]\
+
+\medskip
+{\small\bfseries Retest:}\; [date from learning state; note uncovered items if time-limited]
 \end{rc}
 
 \end{document}

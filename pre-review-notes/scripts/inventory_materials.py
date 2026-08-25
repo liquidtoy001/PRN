@@ -13,21 +13,35 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from token_estimation import estimate_file_tokens, extrapolate_sample_estimate
+
 
 DEFAULT_EXTENSIONS = {
+    ".c",
+    ".cpp",
     ".csv",
     ".doc",
     ".docx",
+    ".h",
     ".html",
     ".htm",
     ".ipynb",
+    ".java",
+    ".js",
+    ".json",
     ".md",
     ".pdf",
     ".ppt",
     ".pptx",
+    ".py",
+    ".r",
+    ".sql",
     ".tex",
+    ".ts",
     ".txt",
     ".xlsx",
+    ".yaml",
+    ".yml",
 }
 
 ROLE_PATTERNS = [
@@ -72,27 +86,53 @@ def inspect_pdf(path: Path, sample_pages: int) -> tuple[dict[str, Any], list[str
             return {"status": "encrypted", "encrypted": True}, [f"{path.name}: encrypted PDF"]
         page_count = len(reader.pages)
         sampled = min(page_count, max(1, sample_pages))
+        if sampled <= 1:
+            sample_indices = [0] if page_count else []
+        else:
+            sample_indices = sorted(
+                {
+                    round(index * (page_count - 1) / (sampled - 1))
+                    for index in range(sampled)
+                }
+            )
         characters = 0
         extraction_errors = 0
-        for page in reader.pages[:sampled]:
+        extracted_parts: list[str] = []
+        for index in sample_indices:
             try:
-                characters += len(page.extract_text() or "")
+                text = reader.pages[index].extract_text() or ""
+                characters += len(text)
+                extracted_parts.append(text)
             except Exception:
                 extraction_errors += 1
-        threshold = sampled * 20
+        threshold = len(sample_indices) * 20
         needs_ocr = page_count > 0 and characters < threshold
         if needs_ocr:
             warnings.append(f"{path.name}: little extractable text; OCR may be required")
         if extraction_errors:
             warnings.append(f"{path.name}: text extraction failed on {extraction_errors} sampled page(s)")
+        token_estimate = extrapolate_sample_estimate(
+            "\n".join(extracted_parts),
+            sampled_pages=max(0, len(sample_indices) - extraction_errors),
+            total_pages=page_count,
+        )
+        if needs_ocr:
+            token_estimate = {
+                "status": "unavailable",
+                "method": None,
+                "confidence": "none",
+                "reason": "sampled PDF text is insufficient; OCR is required before sizing",
+            }
         return {
             "status": "checked",
             "encrypted": False,
             "pages": page_count,
-            "sampled_pages": sampled,
+            "sampled_pages": len(sample_indices),
+            "sampled_page_indices": [index + 1 for index in sample_indices],
             "sampled_text_characters": characters,
             "sample_extraction_errors": extraction_errors,
             "needs_ocr": needs_ocr,
+            "token_estimate": token_estimate,
         }, warnings
     except Exception as exc:
         return {"status": "error", "reason": str(exc)}, [f"{path.name}: PDF inspection failed: {exc}"]
@@ -216,8 +256,26 @@ def main(argv: list[str] | None = None) -> int:
         }
         if path.suffix.lower() == ".pdf" and not args.no_pdf_metadata:
             metadata, pdf_warnings = inspect_pdf(path, args.sample_pages)
+            item["token_estimate"] = metadata.pop(
+                "token_estimate",
+                {
+                    "status": "unavailable",
+                    "method": None,
+                    "confidence": "none",
+                    "reason": metadata.get("reason", "PDF text estimate unavailable"),
+                },
+            )
             item["pdf"] = metadata
             warnings.extend(f"{relative}: {warning}" for warning in pdf_warnings)
+        elif path.suffix.lower() == ".pdf":
+            item["token_estimate"] = {
+                "status": "unavailable",
+                "method": None,
+                "confidence": "none",
+                "reason": "PDF metadata and text estimation were disabled",
+            }
+        else:
+            item["token_estimate"] = estimate_file_tokens(path)
         materials.append(item)
 
     result = {

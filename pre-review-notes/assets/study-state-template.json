@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "course": {
     "id": "COURSE-ID",
     "title": "Course title"
@@ -9,7 +9,8 @@
     "language": "zh",
     "format": "latex-pdf",
     "assessment_date": null,
-    "study_hours_available": null
+    "study_hours_available": null,
+    "learning_outputs": []
   },
   "materials": {
     "inventory_path": null,
@@ -20,6 +21,28 @@
     "past_assessments": "unknown",
     "official_solutions": "unknown",
     "notes": []
+  },
+  "capacity": {
+    "report_path": null,
+    "status": "not-checked",
+    "quality_ceiling": null,
+    "last_checked_at": null
+  },
+  "usage": {
+    "ledger_path": null,
+    "generation_count": 0,
+    "last_generation_id": null,
+    "last_measurement": null,
+    "updated_at": null
+  },
+  "learning": {
+    "bank_paths": [],
+    "state_path": null,
+    "last_plan_path": null,
+    "attempted_items": 0,
+    "mastery_average": 0.0,
+    "next_retest_at": null,
+    "updated_at": null
   },
   "chapters": [],
   "last_action": null,

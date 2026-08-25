@@ -20,13 +20,19 @@ mathematical layout onto every discipline.
 
 Each chapter should contain, when supported by the sources:
 
-1. a header with the evidence boundary and supported priority statement;
+1. a header with the evidence boundary, capacity status, concrete quality ceiling, and
+   supported priority statement;
 2. concept sections using the course's notation and framing;
 3. complete solutions or derivations for two to four high-value real problem types;
 4. sourced misconception or trap boxes;
 5. a compact quick-reference card;
 6. an assessment mapping table with stable source IDs and locators;
 7. a short practice-next list.
+
+The quality ceiling is not a generic "AI may be wrong" disclaimer. State which source IDs were
+used and omitted, whether OCR or chunking limited coverage, whether exam weighting is
+supported, whether official solutions calibrated answer depth, and the next material or check
+that would improve the result.
 
 For prose fields, a worked derivation becomes a fully reasoned application to a real course
 problem, case, passage, clinical vignette, or argument. Preserve the evidence structure even

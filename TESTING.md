@@ -17,6 +17,10 @@ python C:\path\to\skill-creator\scripts\quick_validate.py pre-review-notes
 python tools/package_skill.py
 ```
 
+当前 v0.2.0 单元测试同时覆盖：容量溢出与质量上限、provider-reported 与
+partial-estimate token 账本、显式定价计算、题库来源校验、错题/信心/掌握度、动态重测、
+Anki/CSV 导出、schema 1→2 迁移，以及容量/usage 门禁。
+
 使用本地 STAT3007 测试资料时，先确认 33 个第三方 PDF 位于 Git 忽略的
 `test-data/stat3007/slides/`，再离线校验 manifest：
 
@@ -34,7 +38,7 @@ python pre-review-notes/scripts/download_materials.py `
 
 ## 1. 要验证的核心主张（Hypotheses）
 
-技能的价值主张拆成 5 条可证伪的假设：
+技能的价值主张拆成 8 条可证伪的假设：
 
 | 编号 | 假设 | 若不成立说明 |
 |---|---|---|
@@ -44,6 +48,8 @@ python pre-review-notes/scripts/download_materials.py `
 | H4 | **反模式合规**：不出现 one-shot 巨文件、不按教材顺序硬写、不编造引用、不省略推导复算。 | 违反 SKILL.md 明令禁止项。 |
 | H5 | **可用性**：真实用户在真实平台上能顺利触发并完成一章交付，主观有用性评分高于基线。 | 流程门槛过高或产出不解决问题。 |
 | H6 | **可恢复性**：材料未变化时可复用已验证章节；来源或配置变化时能标记需要重建。 | 状态退化成不可验证的聊天记录或手工进度。 |
+| H7 | **主动学习闭环**：卡片/quiz 有来源，错题和信心会改变掌握度与重测计划，导出可用。 | 只是把笔记切成卡片，没有反馈闭环。 |
+| H8 | **资源与质量诚实度**：每次生成都有精度标签明确的 token 记录；容量、未读来源和质量上限在成品中可见。 | 把字符估算冒充精确用量，或大资料只读一部分却声称完整。 |
 
 ---
 
@@ -104,8 +110,12 @@ python pre-review-notes/scripts/download_materials.py `
 3. B 组权重-篇幅 Spearman 相关系数 ≥ 0.6 且高于 A 组。
 4. H5 主观有用性 B 组均分 ≥ 3.0。
 5. 评委间一致性（如 Cohen's κ 或均分差）在可接受范围（κ ≥ 0.6 或维度均分差 ≤ 1）。
+6. 新生成章节的 `capacity_disclosure` 与 `usage_accounting` 均为 `pass`，且对应报告/账本
+   实际存在；provider usage 不可用时必须标为 `partial-estimate` 或 `unavailable`。
+7. 学习题库中每个 item 至少有一个有效 source ID + locator；任何
+   `assessment_weight` 都必须有 `priority_evidence`。
 
-任一硬性项（第 2 条编造率）不达标 → 判定为不通过，需回改 SKILL.md 相应纪律条款。
+任一硬性项（第 2、6、7 条）不达标 → 判定为不通过，需回改 SKILL.md 或确定性脚本。
 
 ---
 
@@ -161,6 +171,8 @@ D6 原题引用
 - 若 D3 不达标 → 强化 `references/authoring.md` 的官方答案校准与独立复算规则。
 - 若 D1 不达标 → 检查 topic-priority 流程是否被忽略，考虑在模板中前置"考核映射表"。
 - 若 D5 不达标 → 回看 USAGE.md 使用门槛与触发说明，可能是平台/提示方式问题而非方法论问题。
+- 若 H7 不达标 → 检查 learning bank 来源、attempt 记录、重测调度和导出格式。
+- 若 H8 不达标 → 强化 capacity/usage QA 门禁；不得通过增加泛化免责声明掩盖处理缺口。
 - 每次实验结论与版本号挂钩，追加到 README 版本历史。
 
 ---

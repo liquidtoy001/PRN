@@ -15,9 +15,21 @@ from typing import Any
 MODES = {"lightweight", "full", "exam-cram"}
 LANGUAGES = {"zh", "en", "bilingual"}
 FORMATS = {"markdown", "latex", "latex-pdf", "markdown-pdf"}
+LEARNING_OUTPUTS = {"flashcards", "quiz"}
 STATUSES = {"planned", "drafting", "verified", "delivered", "stale", "blocked"}
 QA_VALUES = {"pending", "pass", "fail", "not-applicable", "unavailable"}
+QA_FIELDS = {
+    "citations",
+    "reasoning",
+    "pdf_structure",
+    "visual",
+    "capacity_disclosure",
+    "usage_accounting",
+    "learning_assets",
+}
 DIGEST_PATTERN = re.compile(r"[0-9a-f]{64}")
+CURRENT_SCHEMA_VERSION = 2
+SUPPORTED_SCHEMA_VERSIONS = {1, CURRENT_SCHEMA_VERSION}
 
 
 def utc_now() -> str:
@@ -40,10 +52,15 @@ def write_state(path: Path, state: dict[str, Any]) -> None:
 
 def validate_state(state: dict[str, Any]) -> list[str]:
     errors: list[str] = []
-    if state.get("schema_version") != 1:
-        errors.append("schema_version must be 1")
+    schema_version = state.get("schema_version")
+    if schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+        errors.append(f"schema_version must be one of {sorted(SUPPORTED_SCHEMA_VERSIONS)}")
     course = state.get("course")
-    if not isinstance(course, dict) or not str(course.get("id", "")).strip() or not str(course.get("title", "")).strip():
+    if (
+        not isinstance(course, dict)
+        or not str(course.get("id", "")).strip()
+        or not str(course.get("title", "")).strip()
+    ):
         errors.append("course.id and course.title are required")
     preferences = state.get("preferences")
     if not isinstance(preferences, dict):
@@ -56,8 +73,22 @@ def validate_state(state: dict[str, Any]) -> list[str]:
         if preferences.get("format") not in FORMATS:
             errors.append(f"preferences.format must be one of {sorted(FORMATS)}")
         study_hours = preferences.get("study_hours_available")
-        if study_hours is not None and (not isinstance(study_hours, (int, float)) or study_hours < 0):
+        if study_hours is not None and (
+            not isinstance(study_hours, (int, float))
+            or isinstance(study_hours, bool)
+            or study_hours < 0
+        ):
             errors.append("preferences.study_hours_available must be a non-negative number or null")
+        if schema_version == 2:
+            learning_outputs = preferences.get("learning_outputs")
+            if (
+                not isinstance(learning_outputs, list)
+                or not all(isinstance(value, str) for value in learning_outputs)
+                or not set(learning_outputs).issubset(LEARNING_OUTPUTS)
+            ):
+                errors.append(
+                    f"preferences.learning_outputs must be a list using {sorted(LEARNING_OUTPUTS)}"
+                )
     materials_state = state.get("materials")
     if not isinstance(materials_state, dict):
         errors.append("materials must be an object")
@@ -65,6 +96,24 @@ def validate_state(state: dict[str, Any]) -> list[str]:
         digest = materials_state.get("inventory_digest")
         if digest is not None and not DIGEST_PATTERN.fullmatch(str(digest)):
             errors.append("materials.inventory_digest must be a SHA-256 digest or null")
+    if schema_version == 2:
+        capacity = state.get("capacity")
+        if not isinstance(capacity, dict):
+            errors.append("capacity must be an object in schema_version 2")
+        usage = state.get("usage")
+        if not isinstance(usage, dict):
+            errors.append("usage must be an object in schema_version 2")
+        else:
+            generation_count = usage.get("generation_count")
+            if (
+                not isinstance(generation_count, int)
+                or isinstance(generation_count, bool)
+                or generation_count < 0
+            ):
+                errors.append("usage.generation_count must be a non-negative integer")
+        learning = state.get("learning")
+        if not isinstance(learning, dict):
+            errors.append("learning must be an object in schema_version 2")
     chapters = state.get("chapters")
     if not isinstance(chapters, list):
         errors.append("chapters must be a list")
@@ -98,6 +147,26 @@ def validate_state(state: dict[str, Any]) -> list[str]:
             required = {"citations": "pass", "reasoning": "pass"}
             if isinstance(preferences, dict) and "pdf" in str(preferences.get("format", "")):
                 required.update({"pdf_structure": "pass", "visual": "pass"})
+            if schema_version == 2 and not chapter.get("legacy_generation", False):
+                required.update(
+                    {"capacity_disclosure": "pass", "usage_accounting": "pass"}
+                )
+                capacity_state = state.get("capacity")
+                if not isinstance(capacity_state, dict) or not capacity_state.get("report_path"):
+                    errors.append(
+                        f"chapter {slug or index} requires a recorded capacity report"
+                    )
+                usage_state = state.get("usage")
+                if (
+                    not isinstance(usage_state, dict)
+                    or not usage_state.get("ledger_path")
+                    or not usage_state.get("last_generation_id")
+                    or not isinstance(usage_state.get("generation_count"), int)
+                    or usage_state.get("generation_count", 0) < 1
+                ):
+                    errors.append(
+                        f"chapter {slug or index} requires at least one usage-ledger record"
+                    )
             missing = [name for name, expected in required.items() if qa.get(name) != expected]
             if missing:
                 errors.append(f"chapter {slug or index} required QA not passed: {', '.join(missing)}")
@@ -115,7 +184,7 @@ def command_init(args: argparse.Namespace) -> int:
         print(f"state already exists: {args.output}; pass --force to replace it", file=sys.stderr)
         return 2
     state = {
-        "schema_version": 1,
+        "schema_version": CURRENT_SCHEMA_VERSION,
         "course": {"id": args.course_id, "title": args.course_title},
         "preferences": {
             "mode": args.mode,
@@ -123,6 +192,7 @@ def command_init(args: argparse.Namespace) -> int:
             "format": args.format,
             "assessment_date": args.assessment_date,
             "study_hours_available": args.study_hours,
+            "learning_outputs": sorted(set(args.learning_output)),
         },
         "materials": {"inventory_path": args.inventory, "inventory_digest": args.inventory_digest},
         "evidence_boundary": {
@@ -130,6 +200,28 @@ def command_init(args: argparse.Namespace) -> int:
             "past_assessments": "unknown",
             "official_solutions": "unknown",
             "notes": [],
+        },
+        "capacity": {
+            "report_path": None,
+            "status": "not-checked",
+            "quality_ceiling": None,
+            "last_checked_at": None,
+        },
+        "usage": {
+            "ledger_path": None,
+            "generation_count": 0,
+            "last_generation_id": None,
+            "last_measurement": None,
+            "updated_at": None,
+        },
+        "learning": {
+            "bank_paths": [],
+            "state_path": None,
+            "last_plan_path": None,
+            "attempted_items": 0,
+            "mastery_average": 0.0,
+            "next_retest_at": None,
+            "updated_at": None,
         },
         "chapters": [],
         "last_action": "Initialised study state",
@@ -143,6 +235,71 @@ def command_init(args: argparse.Namespace) -> int:
         return 2
     write_state(args.output, state)
     print(f"state initialised: {args.output}")
+    return 0
+
+
+def migrate_v1_to_v2(state: dict[str, Any]) -> dict[str, Any]:
+    if state.get("schema_version") != 1:
+        raise ValueError("only schema_version 1 can be migrated")
+    migrated = json.loads(json.dumps(state))
+    migrated["schema_version"] = 2
+    migrated.setdefault("preferences", {})["learning_outputs"] = []
+    migrated["capacity"] = {
+        "report_path": None,
+        "status": "not-checked",
+        "quality_ceiling": None,
+        "last_checked_at": None,
+    }
+    migrated["usage"] = {
+        "ledger_path": None,
+        "generation_count": 0,
+        "last_generation_id": None,
+        "last_measurement": None,
+        "updated_at": None,
+    }
+    migrated["learning"] = {
+        "bank_paths": [],
+        "state_path": None,
+        "last_plan_path": None,
+        "attempted_items": 0,
+        "mastery_average": 0.0,
+        "next_retest_at": None,
+        "updated_at": None,
+    }
+    for chapter in migrated.get("chapters", []):
+        if not isinstance(chapter, dict):
+            continue
+        chapter["legacy_generation"] = True
+        qa = chapter.setdefault("qa", {})
+        qa.setdefault("capacity_disclosure", "not-applicable")
+        qa.setdefault("usage_accounting", "not-applicable")
+        qa.setdefault("learning_assets", "not-applicable")
+    migrated["last_action"] = "Migrated study state from schema 1 to schema 2"
+    migrated["next_action"] = (
+        "Run a capacity check before the next generation and start the usage ledger afterwards"
+    )
+    migrated["updated_at"] = utc_now()
+    return migrated
+
+
+def command_migrate(args: argparse.Namespace) -> int:
+    try:
+        state = read_state(args.state)
+        if state.get("schema_version") == CURRENT_SCHEMA_VERSION:
+            print(f"state is already schema_version {CURRENT_SCHEMA_VERSION}: {args.state}")
+            return 0
+        migrated = migrate_v1_to_v2(state)
+        errors = validate_state(migrated)
+        if errors:
+            raise ValueError("; ".join(errors))
+        output = args.output or args.state
+        if output.exists() and output != args.state and not args.force:
+            raise ValueError(f"output already exists: {output}; pass --force to replace it")
+        write_state(output, migrated)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"state migration error: {exc}", file=sys.stderr)
+        return 2
+    print(f"state migrated: schema=2 output={output}")
     return 0
 
 
@@ -174,6 +331,7 @@ def command_update_chapter(args: argparse.Namespace) -> int:
             "slug": args.slug,
             "title": args.title,
             "status": "planned",
+            "legacy_generation": False,
             "priority_basis": None,
             "source_ids": [],
             "input_digest": None,
@@ -183,6 +341,9 @@ def command_update_chapter(args: argparse.Namespace) -> int:
                 "reasoning": "pending",
                 "pdf_structure": "not-applicable",
                 "visual": "not-applicable",
+                "capacity_disclosure": "pending",
+                "usage_accounting": "pending",
+                "learning_assets": "not-applicable",
             },
             "updated_at": utc_now(),
         }
@@ -200,7 +361,7 @@ def command_update_chapter(args: argparse.Namespace) -> int:
         chapter["artifacts"] = sorted(set(chapter.get("artifacts", [])) | set(args.artifact))
 
     qa = chapter.setdefault("qa", {})
-    for field in ("citations", "reasoning", "pdf_structure", "visual"):
+    for field in sorted(QA_FIELDS):
         value = getattr(args, f"qa_{field}")
         if value is not None:
             qa[field] = value
@@ -210,6 +371,10 @@ def command_update_chapter(args: argparse.Namespace) -> int:
             required = {"citations": "pass", "reasoning": "pass"}
             if "pdf" in state.get("preferences", {}).get("format", ""):
                 required.update({"pdf_structure": "pass", "visual": "pass"})
+            if state.get("schema_version") == 2 and not chapter.get("legacy_generation", False):
+                required.update(
+                    {"capacity_disclosure": "pass", "usage_accounting": "pass"}
+                )
             missing = [name for name, expected in required.items() if qa.get(name) != expected]
             if missing:
                 print(
@@ -270,6 +435,9 @@ def command_render_progress(args: argparse.Namespace) -> int:
     course = state["course"]
     pref = state["preferences"]
     materials = state.get("materials", {})
+    capacity = state.get("capacity", {})
+    usage = state.get("usage", {})
+    learning = state.get("learning", {})
     lines = [
         f"# {course['id']} - {course['title']} Progress",
         "",
@@ -279,6 +447,14 @@ def command_render_progress(args: argparse.Namespace) -> int:
         f"- Assessment date: `{pref.get('assessment_date') or 'not provided'}`",
         f"- Material inventory: `{materials.get('inventory_path') or 'not generated'}`",
         f"- Inventory digest: `{materials.get('inventory_digest') or 'unknown'}`",
+        f"- Capacity status: `{capacity.get('status') or 'legacy-not-checked'}`",
+        f"- Capacity report: `{capacity.get('report_path') or 'not generated'}`",
+        f"- Recorded generations: `{usage.get('generation_count', 0)}`",
+        f"- Usage ledger: `{usage.get('ledger_path') or 'not generated'}`",
+        f"- Learning outputs: `{', '.join(pref.get('learning_outputs', [])) or 'none'}`",
+        f"- Attempted learning items: `{learning.get('attempted_items', 0)}`",
+        f"- Average mastery: `{learning.get('mastery_average', 0.0)}`",
+        f"- Next retest: `{learning.get('next_retest_at') or 'not scheduled'}`",
         "",
         "## Chapters",
         "",
@@ -308,7 +484,7 @@ def command_render_progress(args: argparse.Namespace) -> int:
 
 
 def add_qa_arguments(parser: argparse.ArgumentParser) -> None:
-    for name in ("citations", "reasoning", "pdf_structure", "visual"):
+    for name in sorted(QA_FIELDS):
         parser.add_argument(f"--qa-{name.replace('_', '-')}", choices=sorted(QA_VALUES))
 
 
@@ -325,10 +501,22 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--format", choices=sorted(FORMATS), required=True)
     init.add_argument("--assessment-date")
     init.add_argument("--study-hours", type=float)
+    init.add_argument(
+        "--learning-output",
+        choices=sorted(LEARNING_OUTPUTS),
+        action="append",
+        default=[],
+    )
     init.add_argument("--inventory")
     init.add_argument("--inventory-digest")
     init.add_argument("--force", action="store_true")
     init.set_defaults(handler=command_init)
+
+    migrate = subparsers.add_parser("migrate", help="migrate schema_version 1 state to 2")
+    migrate.add_argument("state", type=Path)
+    migrate.add_argument("--output", type=Path)
+    migrate.add_argument("--force", action="store_true")
+    migrate.set_defaults(handler=command_migrate)
 
     validate = subparsers.add_parser("validate", help="validate an existing state file")
     validate.add_argument("state", type=Path)

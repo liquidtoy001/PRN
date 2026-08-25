@@ -77,3 +77,9 @@ Before fixing the chapter order, report which evidence classes are present and m
 particular, explicitly say when there are no grading weights, past papers, official solutions,
 or current-course confirmation. That boundary must survive into the note header, progress
 report, and delivery summary.
+
+Run the material-capacity report after inventory. Its filename-derived role counts are only a
+preliminary signal; confirm whether apparent assessment files actually contain current
+weights, questions, solutions, or marking guidance. The final quality ceiling must name both
+evidence gaps and processing gaps such as OCR failures, encrypted files, or source IDs omitted
+from the current chapter subset.

@@ -11,6 +11,9 @@ study_state.json 是机器可读的事实来源。本文件是面向学习者的
 **模式:** [lightweight / full / exam-cram] · **考试日期:** [date / 未提供]
 **笔记格式:** [LaTeX / Markdown] · **笔记语言:** [中文 / English / 中英双语] · **输出目录:** [path]
 **状态文件:** [study_state.json path] · **材料清单摘要:** [inventory digest / 未生成]
+**容量检查:** [fits-estimate / chunking-required / unknown] · **质量上限报告:** [path]
+**Token 账本:** [usage-ledger.jsonl path] · **已记录生成次数:** [count]
+**主动学习:** [none / flashcards / quiz / both] · **平均掌握度:** [0–1] · **下次重测:** [date]
 **考核结构摘要:** [assessment mapping 结论一行,例如"期末 40 分:32 可计算性 + 6 复杂度 + 2 量子 · 闭卷 120 分钟"]
 **权重证据基础:** [例如"3 份往年卷 + 官方样卷答案" / "仅 1 份样卷 — 薄样本,以大纲权重声明为准"]
 
@@ -31,6 +34,13 @@ study_state.json 是机器可读的事实来源。本文件是面向学习者的
 ## 下一步
 
 - [约定的下一章或动作]
+
+## 成品质量上限
+
+- **内容覆盖:** [能否全量读取；若需分块，说明尚未覆盖的材料]
+- **考试校准:** [strong / limited / unavailable，并说明证据类型]
+- **答题深度:** [是否有官方答案/评分标准可供校准]
+- **测量精度:** [token provider-reported / manually-reported / partial-estimate / unavailable]
 
 ## 备注
 
