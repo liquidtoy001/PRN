@@ -36,6 +36,34 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+def validate_note_configuration(configuration: Any) -> list[str]:
+    """Validate optional 0.2.7 settings without invalidating legacy state."""
+    if not isinstance(configuration, dict):
+        return ["preferences.note_configuration must be an object"]
+    errors: list[str] = []
+    choices = {
+        "purpose": {"knowledge", "exam"},
+        "depth": {"standard-detailed", "extended"},
+        "layout_density": {"comfortable", "compact"},
+    }
+    for key, allowed in choices.items():
+        value = configuration.get(key)
+        if not isinstance(value, str) or value not in allowed:
+            errors.append(f"note_configuration.{key} must be one of {sorted(allowed)}")
+    for key in ("scope", "page_size"):
+        value = configuration.get(key)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"note_configuration.{key} must be a nonempty string")
+    outputs = configuration.get("deliverables")
+    if (not isinstance(outputs, list) or not outputs
+            or not all(isinstance(value, str) and value in {"pdf", "latex", "markdown"}
+                       for value in outputs)):
+        errors.append("note_configuration.deliverables must contain pdf, latex or markdown")
+    if not isinstance(configuration.get("confirmed"), bool):
+        errors.append("note_configuration.confirmed must be boolean")
+    return errors
+
+
 def read_state(path: Path) -> dict[str, Any]:
     raw = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(raw, dict):
@@ -73,6 +101,9 @@ def validate_state(state: dict[str, Any]) -> list[str]:
         if preferences.get("format") not in FORMATS:
             errors.append(f"preferences.format must be one of {sorted(FORMATS)}")
         study_hours = preferences.get("study_hours_available")
+        configuration = preferences.get("note_configuration")
+        if configuration is not None:
+            errors.extend(validate_note_configuration(configuration))
         if study_hours is not None and (
             not isinstance(study_hours, (int, float))
             or isinstance(study_hours, bool)
@@ -228,6 +259,14 @@ def command_init(args: argparse.Namespace) -> int:
         "next_action": "Inventory materials and establish the evidence boundary",
         "updated_at": utc_now(),
     }
+    if args.note_configuration:
+        try:
+            state["preferences"]["note_configuration"] = json.loads(
+                args.note_configuration.read_text(encoding="utf-8")
+            )
+        except (OSError, ValueError) as exc:
+            print(f"configuration error: {exc}", file=sys.stderr)
+            return 2
     errors = validate_state(state)
     if errors:
         for error in errors:
@@ -442,6 +481,7 @@ def command_render_progress(args: argparse.Namespace) -> int:
         f"# {course['id']} - {course['title']} Progress",
         "",
         f"- Mode: `{pref['mode']}`",
+        f"- Note configuration: `{json.dumps(pref.get('note_configuration'), ensure_ascii=False)}`",
         f"- Language: `{pref['language']}`",
         f"- Format: `{pref['format']}`",
         f"- Assessment date: `{pref.get('assessment_date') or 'not provided'}`",
@@ -500,6 +540,7 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--language", choices=sorted(LANGUAGES), required=True)
     init.add_argument("--format", choices=sorted(FORMATS), required=True)
     init.add_argument("--assessment-date")
+    init.add_argument("--note-configuration", type=Path)
     init.add_argument("--study-hours", type=float)
     init.add_argument(
         "--learning-output",

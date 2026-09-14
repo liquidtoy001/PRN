@@ -5,11 +5,20 @@ description: Build source-grounded revision notes and active-learning plans for 
 
 # Pre-Review Notes
 
+Version: 0.2.7. Resolve this directory and read `VERSION`
+before starting; disclose which copy is used when multiple installations exist.
+
 Turn scattered course materials into maintainable revision notes whose priorities, worked
 examples, and assessment claims can be traced to the course itself. The skill produces one
 chapter at a time and can resume safely across sessions.
 
 ## Non-negotiable rules
+
+**Coverage before compression.** Default to teaching notes that preserve every distinct
+knowledge point in the selected scope, including qualifications, figure conclusions and
+small remarks. Lightweight reduces the batch size, not explanation depth. A quick-reference
+card is a companion, not a substitute for the chapter; explicit cheat-sheet requests may
+use condensed output with omissions disclosed.
 
 1. **Calibrate to evidence, not textbook convention.** Never call a topic important,
    frequent, or exam-style without a source that supports the claim. If assessment evidence
@@ -35,7 +44,25 @@ chapter at a time and can resume safely across sessions.
    record. Provider-reported usage, manual counts, partial estimates, and unavailable values
    must never be presented as equivalent.
 
-## Start by resolving five preferences
+## Start with the complete configuration intake
+
+Read [references/configuration.md](references/configuration.md) before generation.
+Present the complete configuration in the learner's language, showing already specified
+values and recommended defaults. Ask once for all missing choices; allow a single reply
+accepting defaults. Do not silently treat the recommendations as confirmed preferences.
+If the user already specified everything or explicitly delegated choices, proceed without
+another confirmation. Resume saved settings and ask only about unresolved or changed choices.
+
+Purpose is independent of mode: `knowledge` (知识巩固版) teaches source knowledge with
+proportionate expansion and no generated questions by default; `exam` (考试复习版) adds
+evidence-based assessment preparation. Source examples remain in both. Purpose and explicit
+companion choices override mode defaults, including full-mode learning-bank generation.
+
+The complete intake includes purpose, mode, source scope, depth, language, deliverable set,
+page size, layout density, learning companions and relevant deadline/study time. Save the
+resolved settings in study state even for a single chapter, following configuration.md.
+
+### Existing preference semantics
 
 Do not re-ask anything the learner has already specified. Resolve only what is missing:
 
@@ -102,6 +129,16 @@ input digests, and rebuild rules.
 
 ### 4. Research and draft one chapter
 
+First read [references/coverage-and-depth.md](references/coverage-and-depth.md).
+Inspect every selected physical page, group true duplicate/animation pages, and create
+`coverage.md` using `assets/coverage-template.md`. Map each distinct point to a note section.
+If the selected scope is too large, split it into chapters and keep remaining points pending.
+
+For source figures, charts and tables, read
+[references/source-visuals.md](references/source-visuals.md). Prefer reusing informative
+original visuals near their explanation; record their disposition in the coverage ledger.
+Text coverage alone is insufficient when a figure carries essential relationships or examples.
+
 Retrieve the course's own theory, instructor examples, practice problems, assessed work,
 past questions, and explicit guidance for the selected topic. Prefer real course problems to
 invented textbook analogues. Use:
@@ -119,6 +156,12 @@ attempts, confidence, mistakes, mastery, and staged retests in local learner sta
 assign an assessment weight without direct priority evidence.
 
 ### 5. Validate evidence and reasoning
+
+Reconcile the coverage ledger against the original pages and the final note, then write
+`review.md` using `assets/review-template.md`. Citation syntax, semantic support, coverage,
+independent reasoning and visual layout are separate checks. Automated citation validation
+does not certify correctness or completeness. Unresolved substantive points prevent a claim
+of complete coverage; report partial delivery explicitly.
 
 Run the citation validator when local files are available:
 

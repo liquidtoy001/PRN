@@ -14,6 +14,33 @@ for visual uniformity.
 
 ## Chapter structure
 
+Apply the confirmed purpose in `configuration.md`. Knowledge consolidation has no generated
+question sections by default; retain source exercises as explained examples. Exam revision
+uses assessment evidence and the selected companions. Omit inapplicable template blocks.
+
+For informative source figures and tables, follow `source-visuals.md`: reuse them where useful,
+place them beside the explanation, and explain how to read them and reach the stated conclusion.
+
+Apply `coverage-and-depth.md` before using the template. The template is expandable:
+repeat concept blocks for all ledger points, not just a few headline topics. Two to four
+worked problems is a starting guideline, never a cap that drops source exercises. Retain
+every exercise in the selected scope with a solution, a deferred solution locator, or an
+explicit restriction for active graded work. Do not call deferred work fully explained.
+
+For each concept, explain its purpose and intuition, formal content, notation and conditions,
+then the steps or example needed to use it. A short factual remark need not become a full
+essay. Add prerequisite bridges and justified derivations where slides skip reasoning.
+Label original illustrative examples and supplementary explanations; do not attribute them
+to the lecturer. External additions require their own sources when used. Do not expand into
+unrelated advanced topics merely to increase length.
+
+For mathematics, check dimensions, parameter domains, normalization, signs, equivalent
+objective scaling, boundaries and tie cases. For diagrams, account for all regions and
+transitions. Verify overlay page numbers against physical PDF pages. If a source is wrong,
+preserve the locator and explain the discrepancy rather than copying or silently fixing it.
+Record the actual independent calculation in `review.md`; a declaration of correctness is
+not a calculation. Keep terse assessed answers separate from explanatory teaching prose.
+
 Use `assets/template.tex` for quantitative material or
 `assets/markdown-template.md` for prose-heavy material. Adapt the slots rather than forcing a
 mathematical layout onto every discipline.

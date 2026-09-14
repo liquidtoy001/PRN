@@ -7,7 +7,10 @@ assignments, past assessments, and official solutions into traceable, incrementa
 maintainable revision chapters. It prioritises topics and calibrates answer depth only when
 the course evidence supports those decisions.
 
-The current source version is **v0.2.0**. It contains the second-phase learning loop and
+The current source version is **v0.2.7**. It adds knowledge-consolidation and exam-revision
+purposes, complete configuration intake and persisted settings, building on coverage and
+source-visual improvements. Run `python tools/package_skill.py` for the current ZIP.
+The earlier v0.2.0 release contains the second-phase learning loop and
 resource measurement, and is available from
 [GitHub Releases](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.0).
 

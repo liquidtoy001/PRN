@@ -6,8 +6,9 @@
 官方答案整理成可溯源、可增量维护的复习章节。它的重点不是“总结得像一本教材”，而是
 只根据真实课程证据决定优先级、例题和答题深度。
 
-当前源代码版本为 **v0.2.0**。本版本完成第二阶段学习闭环与资源测量，可从
-[GitHub Releases](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.0) 获取安装包。
+当前源代码版本为 **v0.2.7**。新增知识巩固版／考试复习版，以及一次性完整配置询问与状态保存；包含 0.2.5 的知识覆盖和 0.2.6 的原始图表复用改进。
+运行 `python tools/package_skill.py` 生成 `dist/pre-review-notes-v0.2.7.zip`。
+历史安装包见 [GitHub Releases](https://github.com/liquidtoy001/PRN/releases)。
 
 ## 它解决什么问题
 

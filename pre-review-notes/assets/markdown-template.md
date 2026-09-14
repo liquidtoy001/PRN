@@ -25,6 +25,9 @@ Essay Question 3." If unsupported, state that the priority is unknown.]
 
 ## [X.1] [Concept Name]
 
+<!-- Repeat for every distinct coverage-ledger point, including small conditions and
+figure conclusions. Expand explanation to learning depth; quick reference comes later. -->
+
 **Source tag:** [source:S001|PDF p. 18] · **Tested in:**
 [assessment:S004|2023 final Q2(b)]
 
@@ -36,6 +39,14 @@ question does it answer?]
 
 **Example.** [A minimal illustrative example — the full worked derivation goes in its
 own section below, not here.]
+
+**Notation and conditions.** [Define symbols and state when the claim applies.]
+
+**Why and how.** [Explain omitted steps; label supplementary reasoning or original examples.]
+
+<!-- When an informative source visual supports this concept, embed its local derivative
+here. Add a caption, source citation, transformation label and reading explanation.
+Record its V ID and path in coverage.md; follow references/source-visuals.md. -->
 
 > 💡 **Remember:** [the one sentence to carry out of this section]
 

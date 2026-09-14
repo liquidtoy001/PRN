@@ -11,6 +11,10 @@ it never relaxes citation, uncertainty, privacy, or verification rules.
 
 ## Selection rules
 
+- Apply `configuration.md` first. Purpose and explicit companion choices override this
+  document's learning-bank defaults: knowledge mode produces no generated questions or
+  learning bank unless requested, including when the work mode is full.
+
 - Default to `lightweight` for an initial trial or slides-only source set.
 - Recommend `full` only when the learner wants sustained multi-chapter work and source access
   is sufficient.
@@ -24,6 +28,13 @@ it never relaxes citation, uncertainty, privacy, or verification rules.
 ## Mode-specific planning
 
 ### Lightweight
+
+This is a small-batch teaching mode, not a compression mode. Within the selected pages,
+preserve all distinct knowledge points and explain them at a usable learning depth. Split
+large selections into smaller chapters rather than shortening every concept to a sentence.
+Read `coverage-and-depth.md`; produce a coverage ledger and review record for each batch.
+An explicit request for a concise cheat sheet overrides the default teaching format, but
+must disclose omissions and must not claim to replace complete notes.
 
 Inventory all supplied files, but deeply inspect only the sources needed for the chosen
 chapter. Produce a short source-coverage table. If assessment evidence is absent, call the

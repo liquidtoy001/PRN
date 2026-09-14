@@ -1,0 +1,9 @@
+{
+  "purpose": "knowledge",
+  "scope": "all supplied materials, delivered in batches",
+  "depth": "standard-detailed",
+  "deliverables": ["pdf"],
+  "page_size": "A4",
+  "layout_density": "comfortable",
+  "confirmed": false
+}

@@ -59,6 +59,12 @@ means rebuild it.
 
 ## Computing an input digest
 
+For 0.2.5 generations, include `coverage.md` and `review.md` as chapter artifacts and record
+their outcomes in the human-readable progress report. The existing schema-2 validator does
+not enforce semantic coverage: check those sidecars before setting verified/delivered.
+Include the skill VERSION and coverage policy in the input digest, so an older compressed
+chapter is not reused as a coverage-complete 0.2.5 generation without review.
+
 Hash the canonical combination of:
 
 - selected source IDs and their current SHA-256 values;

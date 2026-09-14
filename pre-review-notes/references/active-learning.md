@@ -1,5 +1,9 @@
 # Active learning and staged retesting
 
+Respect `configuration.md` first: knowledge consolidation and an explicit `none` companion
+choice suppress automatic question/bank generation in every mode. Existing source exercises
+may still be explained as examples. Never infer a quiz request merely from full mode.
+
 Use this workflow when the learner requests flashcards or quizzes, or when `full` or
 `exam-cram` mode includes active-learning outputs. Notes remain the source-grounded teaching
 artifact; a learning bank is a separate, machine-checkable practice layer.
