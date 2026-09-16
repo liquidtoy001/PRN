@@ -1,5 +1,6 @@
 {
   "purpose": "knowledge",
+  "paper_enrichment": "reading-list",
   "scope": "all supplied materials, delivered in batches",
   "depth": "standard-detailed",
   "deliverables": ["pdf"],

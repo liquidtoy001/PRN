@@ -46,6 +46,8 @@ def validate_note_configuration(configuration: Any) -> list[str]:
         "depth": {"standard-detailed", "extended"},
         "layout_density": {"comfortable", "compact"},
     }
+    if "paper_enrichment" in configuration:
+        choices["paper_enrichment"] = {"off", "reading-list", "integrated"}
     for key, allowed in choices.items():
         value = configuration.get(key)
         if not isinstance(value, str) or value not in allowed:

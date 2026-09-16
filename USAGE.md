@@ -26,7 +26,7 @@ npx skills add https://github.com/liquidtoy001/PRN
 python tools/package_skill.py
 ```
 
-将 `dist/pre-review-notes-v0.2.7.zip` 上传到支持 skill ZIP 导入的平台。`dist/` 被 Git
+将 `dist/pre-review-notes-v0.2.8.zip` 上传到支持 skill ZIP 导入的平台。`dist/` 被 Git
 忽略，正式包应作为 GitHub Release asset 发布，而不是提交进仓库。
 
 ## 2. 准备课程资料

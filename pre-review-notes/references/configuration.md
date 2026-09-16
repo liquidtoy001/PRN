@@ -1,4 +1,4 @@
-# Configuration intake (0.2.7)
+# Configuration intake (0.2.8)
 
 ## Ask once, then persist
 
@@ -16,6 +16,7 @@ prompt is not confirmation. Skip redundant confirmation when all choices are kno
 | Mode | lightweight / full / exam-cram | lightweight |
 | Source scope | all supplied / named files or page ranges | requested scope; otherwise all supplied in batches |
 | Explanation depth | standard detailed / extended | standard detailed |
+| Paper enrichment | 关闭 (off) / 推荐阅读 (reading-list) / 整合讲解 (integrated) | reading-list |
 | Language | Chinese / English / bilingual | Chinese unless context indicates otherwise |
 | Deliverables | PDF / Markdown / LaTeX / any combination | PDF |
 | Page size | A4 / A5 / custom dimensions | A4; not applicable to Markdown-only |
@@ -43,6 +44,12 @@ exam-cram is selected, explain the tension between exhaustive expansion and time
 resolve the intended scope before drafting, without silently changing either preference.
 
 ## State and continuation
+
+Paper enrichment is independent of purpose, mode and depth. Both knowledge and exam notes
+can use any setting. Read `paper-enrichment.md` before research/drafting when enabled.
+Save `paper_enrichment` in note_configuration. For older state missing this key, ask only
+about this unresolved preference; do not interpret its absence as permission for research.
+Existing states without the key remain valid. Include its resolved value in input digests.
 
 Persist the complete resolved intake in `preferences.note_configuration` using the object
 shown in `assets/note-configuration.json`. Populate actual values; the asset is a recommendation,

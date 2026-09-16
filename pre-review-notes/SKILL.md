@@ -5,7 +5,7 @@ description: Build source-grounded revision notes and active-learning plans for 
 
 # Pre-Review Notes
 
-Version: 0.2.7. Resolve this directory and read `VERSION`
+Version: 0.2.8. Resolve this directory and read `VERSION`
 before starting; disclose which copy is used when multiple installations exist.
 
 Turn scattered course materials into maintainable revision notes whose priorities, worked
@@ -59,7 +59,7 @@ evidence-based assessment preparation. Source examples remain in both. Purpose a
 companion choices override mode defaults, including full-mode learning-bank generation.
 
 The complete intake includes purpose, mode, source scope, depth, language, deliverable set,
-page size, layout density, learning companions and relevant deadline/study time. Save the
+page size, layout density, paper enrichment, learning companions and relevant deadline/study time. Save the
 resolved settings in study state even for a single chapter, following configuration.md.
 
 ### Existing preference semantics
@@ -129,6 +129,9 @@ input digests, and rebuild rules.
 
 ### 4. Research and draft one chapter
 
+Before research, apply the confirmed paper-enrichment setting using
+[references/paper-enrichment.md](references/paper-enrichment.md) when enabled.
+
 First read [references/coverage-and-depth.md](references/coverage-and-depth.md).
 Inspect every selected physical page, group true duplicate/animation pages, and create
 `coverage.md` using `assets/coverage-template.md`. Map each distinct point to a note section.
@@ -156,6 +159,10 @@ attempts, confidence, mistakes, mastery, and staged retests in local learner sta
 assign an assessment weight without direct priority evidence.
 
 ### 5. Validate evidence and reasoning
+
+When paper enrichment is `reading-list` or `integrated`, read
+[references/paper-enrichment.md](references/paper-enrichment.md). Verify papers before
+recommending or incorporating them; record access limitations and precise source locators.
 
 Reconcile the coverage ledger against the original pages and the final note, then write
 `review.md` using `assets/review-template.md`. Citation syntax, semantic support, coverage,

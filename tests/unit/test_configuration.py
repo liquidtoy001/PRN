@@ -24,6 +24,18 @@ class ConfigurationTests(unittest.TestCase):
             saved = json.loads(state.read_text(encoding='utf-8'))
             self.assertEqual(saved['preferences']['note_configuration'], configuration)
             self.assertEqual(run_script('manage_state.py', 'validate', state).returncode, 0)
+            for value in ('off', 'reading-list', 'integrated'):
+                saved['preferences']['note_configuration']['paper_enrichment'] = value
+                state.write_text(json.dumps(saved), encoding='utf-8')
+                self.assertEqual(run_script('manage_state.py', 'validate', state).returncode, 0)
+            saved['preferences']['note_configuration']['paper_enrichment'] = ['invalid']
+            state.write_text(json.dumps(saved), encoding='utf-8')
+            result = run_script('manage_state.py', 'validate', state)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn('paper_enrichment', result.stderr)
+            del saved['preferences']['note_configuration']['paper_enrichment']
+            state.write_text(json.dumps(saved), encoding='utf-8')
+            self.assertEqual(run_script('manage_state.py', 'validate', state).returncode, 0)
             del saved['preferences']['note_configuration']
             state.write_text(json.dumps(saved), encoding='utf-8')
             self.assertEqual(run_script('manage_state.py', 'validate', state).returncode, 0)
