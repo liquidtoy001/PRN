@@ -5,7 +5,7 @@ description: Build source-grounded revision notes and active-learning plans for 
 
 # Pre-Review Notes
 
-Version: 0.2.8. Resolve this directory and read `VERSION`
+Version: 0.2.9. Resolve this directory and read `VERSION`
 before starting; disclose which copy is used when multiple installations exist.
 
 Turn scattered course materials into maintainable revision notes whose priorities, worked
@@ -180,6 +180,10 @@ Independently recompute or re-derive worked examples. Compare with official solu
 after the independent attempt, then match their notation and rewarded depth without padding.
 
 ### 6. Build and inspect requested artifacts
+
+For each included visual, pass extraction-completeness and final-page-layout reviews
+separately using `references/source-visuals.md`. A complete image file does not prove
+the final PDF displays it without obstruction. Record both checks by V ID in review.md.
 
 For LaTeX/PDF delivery, read [references/pdf-workflow.md](references/pdf-workflow.md), run
 `scripts/build_note.py`, and visually inspect its rendered representative pages. A successful

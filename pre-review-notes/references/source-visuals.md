@@ -57,6 +57,48 @@ material boundary to both originals and crops; do not include course images in t
 
 ## Verify the rendered result
 
+### Gate 1: extraction completeness
+
+Before insertion, compare the derivative with the original page. Check all four edges,
+axes, tick labels, units, legends, arrows, panel labels and relevant footnotes. Leave a
+small visible safety margin appropriate to the figure instead of cropping tightly against
+marks. For composite diagrams, render the full page and crop if object extraction loses
+text or vector layers. Never call a partial bitmap extraction the complete figure.
+
+Record V ID, source physical page, extraction method, derivative path, and crop rectangle
+with units, coordinate origin and page dimensions (or full-page/no crop). Include rotation
+or scaling when relevant. Keep original inputs intact. Mark the gate pass/fail/pending with
+actual observations; repair or disclose incomplete essential figures before delivery.
+
+### Gate 2: final-page layout
+
+Default to a standalone image block in normal document flow, with caption and source kept
+together. Reserve the entire block height. Avoid text wrapping, absolute positioning,
+negative spacing and overlays for ordinary teaching figures. Custom layouts require explicit
+inspection for collisions. Do not add translated labels over original content.
+
+In LaTeX, use a normal `figure` with `[htbp]`, `\centering` and `\includegraphics`.
+Bound width by `\linewidth`, retain aspect ratio, and budget height for the image PLUS
+caption, source and spacing. Avoid forced `[H]` placement into insufficient space. Do not
+apply a second `trim`/`clip` unless intentional and separately verified. In HTML/PDF use
+normal-flow image blocks with proportional sizing; avoid fixed-height clipped containers.
+
+Move oversized blocks to a figure page, use landscape, or split into labelled panels with
+shared legends preserved. Do not shrink dense labels until unreadable. If an image already
+includes its caption, avoid duplicate captions while retaining source attribution.
+
+Render and inspect EVERY final page containing a figure at normal reading size and zoom in
+to verify edges and labels. Check body text, captions, headers and footers do not cover the
+figure; verify its correct explanation and caption are adjacent. Record final PDF page,
+PDF hash/build and fresh render path per V ID. After edits, rebuild and recheck all affected
+pages, including pages shifted by reflow. Old renders cannot certify a new PDF.
+
+Geometry/text-overlap detection may flag candidates, but labels inside a figure are valid
+overlaps and cannot be treated as automatic failures. Compiler success and automated bounds
+checks cannot replace visual review. Both gates must pass before declaring a visual complete;
+unresolved clipping, obstruction or unreadability stays fail/pending, with the specific limit
+disclosed. These are manual review requirements, not new automated guarantees.
+
 Compare source and derivative, then inspect the final PDF pages containing reused or adapted
 visuals at readable size. Check legibility, clipping, aspect ratio, values, labels, placement,
 caption association and source locator. Check the explanation against what the figure actually

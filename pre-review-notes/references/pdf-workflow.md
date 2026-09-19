@@ -37,6 +37,11 @@ pass.
 For reused/adapted source figures and tables, apply `source-visuals.md` and inspect every final
 page containing them. Verify fidelity against the original as well as readability in the note.
 
+Apply the two visual gates in `source-visuals.md`: first inspect extraction completeness,
+then final placement. Use standalone blocks with enough space for image, caption and source;
+avoid forced placement or unnecessary second clipping. Inspect all figure pages even when
+the build helper renders only a representative subset; render missing pages separately.
+
 Use textbook-style teaching pages: a readable body font (normally 11--12 pt), approximately
 20 mm margins, moderate line spacing, a clear heading hierarchy and page numbers. Chinese
 requires a detected CJK-capable font and engine; do not hard-code a Windows font on other

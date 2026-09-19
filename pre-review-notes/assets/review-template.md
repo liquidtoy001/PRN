@@ -28,6 +28,10 @@ Source visual fidelity: [V IDs; original-to-derivative comparison of labels, val
 Final visual pages inspected: [page numbers; legibility, captions, locators and explanation checked]
 Pending essential visuals: [IDs and limitations or none]
 
+| V ID | Source page / method / crop coordinates and units | Derivative path | Extraction completeness and observations | Final PDF page / fresh render | Final layout and observations |
+|---|---|---|---|---|---|
+| [ID] | [origin, dimensions, rotation; or no crop] | [path] | [pass/fail/pending with evidence] | [page and render bound to PDF identity above] | [pass/fail/pending: edges, text collisions, readability, caption] |
+
 ## Delivery status
 
 [complete for selected scope / partial, with remaining work]
