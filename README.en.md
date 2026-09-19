@@ -1,4 +1,4 @@
-# Pre-Review Notes · Evidence-Driven Course Revision
+# Pre-Review Notes · Source-Grounded Learning and Revision
 
 [中文](./README.md) | **English**
 
@@ -7,15 +7,22 @@ assignments, past assessments, and official solutions into traceable, incrementa
 maintainable revision chapters. It prioritises topics and calibrates answer depth only when
 the course evidence supports those decisions.
 
-The current source version is **v0.2.8**. It adds optional verified paper enrichment
+The current source version is **v0.2.9**. It requires separate extraction-completeness and
+final-page-layout reviews, with crop records and fresh per-figure render evidence. These
+are workflow requirements, not an automatic overlap detector. It retains verified paper enrichment
 (off, reading-list, integrated) to persisted intake settings. It retains knowledge-consolidation and exam-revision
 purposes, complete configuration intake and persisted settings, building on coverage and
 source-visual improvements. Run `python tools/package_skill.py` for the current ZIP.
-The earlier v0.2.0 release contains the second-phase learning loop and
-resource measurement, and is available from
-[GitHub Releases](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.0).
+Download the ZIP and checksum from the
+[v0.2.9 Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.9).
 
 ## Capabilities
+
+- Collects purpose, mode, scope, depth, language, deliverables, page size, density, paper
+  enrichment, companions and time constraints in one intake and persists resolved choices.
+- Knowledge consolidation defaults to no generated questions; source examples remain explained.
+- Tracks page-level knowledge coverage and source visuals; lightweight reduces batch size,
+  not teaching depth. Optional paper enrichment requires verified sources.
 
 - Confirms `lightweight`, `full`, or `exam-cram` mode and Chinese, English, or bilingual output.
 - Labels slides-only output as lecture-driven instead of inventing exam relevance.
@@ -23,8 +30,27 @@ resource measurement, and is available from
 - Uses stable source IDs, precise locators, and material hashes.
 - Produces Markdown or editable LaTeX plus a structurally and visually checked PDF.
 - Stores resumable machine state in `study_state.json` and renders a readable `progress.md`.
-- Produces validated flashcards/quizzes, tracks errors, confidence and mastery, and schedules retests.
+- When selected, produces validated flashcards/quizzes, tracks errors, confidence and mastery, and schedules retests.
 - Checks material capacity and quality ceilings before generation and records token usage afterwards.
+
+## Intended domains and validation limits
+
+The material-based workflow is not AI-specific, but actual generation experience has been
+concentrated in AI/ML coursework and the repository course fixture is STAT3007. Even these
+trials exposed content and layout defects. Cross-domain teaching quality is not established.
+Script tests verify tool behavior, not factual correctness or learning outcomes. Course samples
+are evaluation/iteration inputs; editing this skill does not train or fine-tune the base model.
+
+Math, statistics, algorithms and other CS courses are plausible nearby applications, requiring
+checks of assumptions, proofs, notation and code. Physics/engineering need unit, approximation
+and diagram checks. Biology and other visual subjects need detailed label/process review.
+Prose-heavy humanities/social sciences have a Markdown template but need argument, attribution,
+context and assessment-rubric evaluation. These are design assessments, not tested guarantees.
+Medical/legal course notes need domain review and are not professional decision guidance.
+
+Before broadening support claims, evaluate a small chapter from each material type: mathematical
+derivation, code/algorithm, layered diagram and extended argument. Compare with the original
+for omissions, errors, supplementary-source quality and readability.
 
 ## Repository layout
 
@@ -135,6 +161,9 @@ user is licensed to download or use the sources.
 
 | Version | Date | Changes |
 |---|---|---|
+| v0.2.9 | 2026-09-19 | Separate figure extraction and final-layout reviews; crop and per-figure render evidence. |
+| v0.2.8 | 2026-09-16 | Paper-enrichment configuration and verified paper/figure integration. |
+| v0.2.7 | 2026-09-15 | Note purposes and persisted complete intake; includes 0.2.5 coverage and 0.2.6 source-visual improvements. |
 | v0.2.0 | 2026-08-25 | Phase two: flashcards/quizzes, error/confidence/mastery tracking, dynamic retests, Anki/CSV, capacity and quality ceilings, and per-generation token/cost ledger. |
 | v0.1.0 | 2026-08-24 | Phase-one engineering: progressive skill, modes, local-only manifests, material/citation/state/PDF tools, incremental builds, and reproducible packaging. |
 | v0.0.2 | 2026-08-13 | Language confirmation, English terminology in Chinese notes, LaTeX-to-PDF workflow, and a STAT3007 test; the migrated tag retains the feature snapshot but excludes third-party slides. |
