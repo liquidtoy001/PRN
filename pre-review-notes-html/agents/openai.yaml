@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pre-Review Notes HTML"
+  short_description: "Source-grounded HTML notes with optional folded answers"
+  default_prompt: "Use $pre-review-notes-html to turn my course materials into complete HTML study notes and confirm the note settings first."

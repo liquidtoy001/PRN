@@ -414,13 +414,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--reserved-output-tokens", type=int, default=8192)
     parser.add_argument("--overhead-tokens", type=int, default=8192)
     parser.add_argument("--safety-margin", type=float, default=0.15)
-    parser.add_argument("--study-state", type=Path)
+    parser.add_argument("--study-state", type=Path, help="print-entry schema-2 state integration only")
     parser.add_argument("--chapter-slug")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.study_state and not Path(__file__).with_name("manage_state.py").is_file():
+        print("--study-state is unavailable in this entry; save the report and update HTML state separately", file=sys.stderr)
+        return 2
     if args.context_window is not None and args.context_window <= 0:
         print("--context-window must be positive", file=sys.stderr)
         return 2

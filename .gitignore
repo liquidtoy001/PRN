@@ -8,11 +8,13 @@
 
 # Local evaluation and rendering scratch
 pre-review-notes/tmp/
+pre-review-notes-html/tmp/
 pre-review-notes/evals/**/build/
 pre-review-notes/evals/**/build-zh/
 
 # User-owned and third-party source material stays local
 test-data/
+datafortest/
 downloads/
 examples/stat3007/slides/*.pdf
 

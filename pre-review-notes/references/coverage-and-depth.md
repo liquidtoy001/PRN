@@ -37,13 +37,9 @@ Count raw selected pages and effective content units separately. An effective un
 substantive slide or a verified animation group with its intermediate changes preserved.
 State the grouping decisions; never report an opaque automatic estimate as verified.
 
-For ordinary teaching notes from roughly 100 content-bearing slides, fewer than 10 substantive
-A4 note pages should trigger an over-compression review. Use approximately one note page per
-ten effective content units as a warning baseline, not a ceiling or universal minimum.
-Dense mathematics may require substantially more. Many true duplicate frames or sparse
-visual slides may justify fewer; record that reasoning in `review.md` after checking coverage.
-Exclude covers, contents, audit appendices and blank pages from note-body counts. Judge length
-at readable typography. Do not inflate fonts, margins, repeated prose or page breaks to pass.
+Read `coverage-length.md` for the active format's length diagnostic. Screen height and
+printed page count are not interchangeable. Length is a warning signal, never a substitute
+for reconciling the actual knowledge points. Do not pad content to meet an artificial quota.
 Explicit cheat sheets and exam-cram triage use their agreed scope and disclosed omissions.
 
 ## Completion gate
@@ -57,7 +53,7 @@ Compare the final note with original pages, not only with the ledger (the ledger
 ideas). Check that conditions, fine-print caveats, examples and figure conclusions survive.
 Resolve all pending substantive points before claiming complete coverage of the selected scope.
 For partial batches, name the completed page ranges and pending K IDs. Keep coverage and
-reasoning evidence in sidecars; the student-facing PDF needs only a short boundary and useful
+reasoning evidence in sidecars; the student-facing note needs only a short boundary and useful
 source locators, not pages of operational audit text.
 
 The ledger is an agent-authored audit trail, not proof of exhaustive semantic understanding.

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from html.parser import HTMLParser
 import csv
 import json
 import re
@@ -18,7 +19,16 @@ LATEX_CITATION = re.compile(
 MARKDOWN_CITATION = re.compile(
     r"\[(?P<kind>source|assessment):(?P<id>[^|\]]+)\|(?P<locator>[^\]]+)\]"
 )
-PLACEHOLDER_MARKERS = ("[", "]", "e.g.", "example", "source id", "locator")
+PLACEHOLDER_LOCATOR = re.compile(
+    r"\b(?:TODO|TBD)\b|[<>\[\]]|^(?:unknown|source id|locator|example|e\.g\.|[?？]+)$"
+    r"|\b(?:p|pp|page|pages)\.?\s*[?？]+$",
+    re.I,
+)
+
+
+def locator_is_placeholder(locator: str) -> bool:
+    """Reject unresolved slots without rejecting real locators such as Example 3.2."""
+    return not locator.strip() or bool(PLACEHOLDER_LOCATOR.search(locator.strip()))
 
 
 def load_inventory(path: Path) -> tuple[dict[str, dict[str, Any]], list[str]]:
@@ -53,6 +63,11 @@ def load_inventory(path: Path) -> tuple[dict[str, dict[str, Any]], list[str]]:
 
 
 def find_citations(text: str, suffix: str) -> list[dict[str, str]]:
+    if suffix.lower() in {".html", ".htm"}:
+        parser = HTMLCitations(text)
+        parser.feed(text)
+        parser.close()
+        return parser.citations
     pattern = LATEX_CITATION if suffix.lower() == ".tex" else MARKDOWN_CITATION
     citations: list[dict[str, str]] = []
     for match in pattern.finditer(text):
@@ -70,13 +85,40 @@ def find_citations(text: str, suffix: str) -> list[dict[str, str]]:
     return citations
 
 
+class HTMLCitations(HTMLParser):
+    """Find visible text-node citations, preserving approximate original source offsets."""
+
+    def __init__(self, text: str):
+        super().__init__(convert_charrefs=True)
+        self.hidden = 0
+        self.citations: list[dict[str, str]] = []
+        self.lines = text.splitlines(keepends=True)
+
+    def handle_starttag(self, tag, attrs):
+        if tag in {"script", "style", "template"}:
+            self.hidden += 1
+
+    def handle_endtag(self, tag):
+        if tag in {"script", "style", "template"} and self.hidden:
+            self.hidden -= 1
+
+    def handle_data(self, data):
+        if self.hidden:
+            return
+        line, column = self.getpos()
+        base = sum(map(len, self.lines[:line - 1])) + column
+        for citation in find_citations(data, ".md"):
+            citation["offset"] = str(base + int(citation["offset"]))
+            self.citations.append(citation)
+
+
 def line_number(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("note", type=Path, help="generated .tex or .md note")
+    parser.add_argument("note", type=Path, help="generated .tex, .md or .html note")
     parser.add_argument("--inventory", type=Path, required=True)
     parser.add_argument("--materials-root", type=Path, help="optionally verify inventoried files exist")
     parser.add_argument("--allow-empty", action="store_true", help="allow a note with no source references")
@@ -103,15 +145,18 @@ def main(argv: list[str] | None = None) -> int:
         locator = citation["locator"]
         if identifier not in inventory:
             errors.append(f"line {location}: unknown source id {identifier}")
-        lower_locator = locator.casefold()
-        if not locator or any(marker in lower_locator for marker in PLACEHOLDER_MARKERS):
+        if locator_is_placeholder(locator):
             errors.append(f"line {location}: unresolved or empty locator for {identifier}")
 
     if args.materials_root:
         root = args.materials_root.resolve()
         for identifier in sorted({citation["id"] for citation in citations if citation["id"] in inventory}):
             relative = inventory[identifier].get("path")
-            if not isinstance(relative, str) or not (root / relative).is_file():
+            if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+                errors.append(f"inventory source {identifier} must have a relative path under {root}")
+                continue
+            target = (root / relative).resolve()
+            if not target.is_relative_to(root) or not target.is_file():
                 errors.append(f"inventory source {identifier} is missing under {root}")
 
     report = {

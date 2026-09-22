@@ -64,9 +64,8 @@ Use the inventory ID, such as `S001`, together with the most precise locator ava
 - HTML/Markdown: heading or section anchor;
 - code/notebook: filename plus cell or symbol.
 
-LaTeX uses `\sourceref{S001}{PDF p. 18}` for teaching content and
-`\assessref{S004}{2023 final Q2(b)}` for assessment evidence. Markdown uses
-`[source:S001|PDF p. 18]` and `[assessment:S004|2023 final Q2(b)]`.
+Read `citation-format.md` for the active entry's citation syntax. Keep source identity
+and locator semantics unchanged across formats.
 
 Do not cite a filename alone when a page, question, or section exists. If the source itself is
 internally inconsistent, cite both locations and explain the discrepancy.

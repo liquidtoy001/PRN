@@ -332,6 +332,9 @@ def update_study_state(
 
 
 def command_record(args: argparse.Namespace) -> int:
+    if args.study_state and not Path(__file__).with_name("manage_state.py").is_file():
+        print("--study-state is unavailable in this entry; record usage without it and update HTML state separately", file=sys.stderr)
+        return 2
     if args.chapter_slug and not args.study_state:
         print("--chapter-slug requires --study-state", file=sys.stderr)
         return 2
@@ -441,7 +444,7 @@ def build_parser() -> argparse.ArgumentParser:
     record.add_argument("--pricing-file", type=Path)
     record.add_argument("--artifact", type=Path, action="append", default=[])
     record.add_argument("--note", action="append", default=[])
-    record.add_argument("--study-state", type=Path)
+    record.add_argument("--study-state", type=Path, help="print-entry schema-2 state integration only")
     record.add_argument("--chapter-slug")
     record.set_defaults(handler=command_record)
 

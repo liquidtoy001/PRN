@@ -10,16 +10,23 @@
 在仓库根目录运行：
 
 ```powershell
-python -m compileall -q pre-review-notes/scripts tools tests/unit
+python tools/sync_shared.py --check
+python -m compileall -q pre-review-notes/scripts pre-review-notes-html/scripts shared/scripts tools tests/unit
 python -m unittest discover -s tests/unit -v
 $env:PYTHONUTF8 = '1'
 python C:\path\to\skill-creator\scripts\quick_validate.py pre-review-notes
+python C:\path\to\skill-creator\scripts\quick_validate.py pre-review-notes-html
 python tools/package_skill.py
+python tools/package_skill.py --skill-dir pre-review-notes-html
 ```
 
-当前 v0.2.0 单元测试同时覆盖：容量溢出与质量上限、provider-reported 与
+单元测试覆盖：容量溢出与质量上限、provider-reported 与
 partial-estimate token 账本、显式定价计算、题库来源校验、错题/信心/掌握度、动态重测、
 Anki/CSV 导出、schema 1→2 迁移，以及容量/usage 门禁。
+
+v0.2.10 另测 HTML 配置隔离、真正的 CLI 构建、答案初始状态、无题模式、非法输入与旧文件
+保护、双包可复现构建、共享漂移门禁和解压后独立运行。自编 HTML fixture 不含第三方材料。
+本轮具体证据与尚未完成的浏览器验收见 [TESTING-0.2.10.md](./TESTING-0.2.10.md)。
 
 使用本地 STAT3007 测试资料时，先确认 33 个第三方 PDF 位于 Git 忽略的
 `test-data/stat3007/slides/`，再离线校验 manifest：

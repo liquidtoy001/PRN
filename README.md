@@ -6,9 +6,21 @@
 官方答案整理成可溯源、可增量维护的学习章节。知识巩固版重视知识覆盖与适度拓展；
 考试复习版根据真实课程证据组织优先级、例题和答题深度。
 
-当前源代码版本为 **v0.2.9**。图片分别进行提取完整性和最终页面布局检查，记录裁剪范围、最终页码及最新渲染证据，减少遮挡、截断和标签不可读问题。这是工作流程要求，并非自动遮挡检测器。
-运行 `python tools/package_skill.py` 生成 `dist/pre-review-notes-v0.2.9.zip`。
-安装包见 [v0.2.9 Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.9)。
+当前版本为 **v0.2.10**，同一仓库提供两个可独立安装的入口：
+
+| Skill | 定位 | 专属能力 |
+|---|---|---|
+| `pre-review-notes` | 可打印笔记 | PDF / LaTeX / Markdown、纸张与分页、逐图最终页面检查 |
+| `pre-review-notes-html` | 屏幕阅读 | 离线 HTML、章节导航、可选折叠问答、阅读宽度/密度/主题 |
+
+两者共享知识覆盖、来源证据、论文拓展及图片提取规则，但分别使用配置、模板、状态和布局验收。
+HTML 版不默认把讲解变成题目；知识巩固版默认无新题，显式启用自测后才增加折叠问答。
+浏览器打印不是经过验证的 PDF 产品，也不会在 PDF 中模拟折叠。
+
+安装包及各自 SHA-256 校验文件见 [v0.2.10 Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.10)。
+原版安装目录名不变；HTML 版可单独安装，也可与原版并存。
+本轮已验证 CLI、配置隔离与独立 ZIP 构建；浏览器本地页面访问被运行环境策略阻止，
+因此宽窄屏、真实键盘交互和公式视觉验收仍待完成，不宣称 HTML 教学效果已验证。
 
 ## 它解决什么问题
 
@@ -55,6 +67,9 @@ pre-review-notes/
 │   ├── assets/                        输出、学习题库、状态和定价配置模板
 │   ├── references/                    写作、证据、学习闭环、容量与测量规则
 │   └── scripts/                       材料、容量、token、学习、状态和 PDF 工具
+├── pre-review-notes-html/             独立 HTML skill，不依赖原版目录
+├── shared/                            格式无关资源的唯一开发源
+├── tools/sync_shared.py               同步共享副本，--check 检查漂移
 ├── examples/stat3007/notes/           本项目生成的示例输出，不含原始 slides
 ├── tests/
 │   ├── fixtures/stat3007/materials.csv  本地测试资料 manifest
@@ -68,6 +83,22 @@ pre-review-notes/
 ```
 
 ## 快速开始
+
+HTML 请求示例：
+
+> 用 pre-review-notes-html 处理我的课程 slides，中文、知识巩固版、lightweight，先做第 1 章。
+> 需要完整讲解和可选折叠自测，其他配置先一次给我确认；输出离线 HTML 文件夹。
+
+维护共享规则时只编辑 `shared/`，然后执行 `python tools/sync_shared.py`。安装目录中的
+对应文件是随包携带的副本，打包会拒绝漂移。分别构建：
+
+```powershell
+python tools/sync_shared.py --check
+python tools/package_skill.py
+python tools/package_skill.py --skill-dir pre-review-notes-html
+```
+
+下面的命令示例属于原版打印工作流；不要把它的状态配置用于 HTML 版。
 
 将自己的课程资料放在一个本地目录，然后生成可引用的材料清单：
 
@@ -159,6 +190,7 @@ python pre-review-notes/scripts/download_materials.py `
 
 | 版本 | 日期 | 变更 |
 |---|---|---|
+| v0.2.10 | 2026-09-22 | 独立 HTML 入口、可选折叠问答与离线构建；共享资源防漂移、双包发布，保留原版打印定位。 |
 | v0.2.9 | 2026-09-19 | 图片提取完整性与最终布局双重检查，裁剪和逐图渲染记录。 |
 | v0.2.8 | 2026-09-16 | 论文拓展配置、文献核验和论文内容/图表整合规则。 |
 | v0.2.7 | 2026-09-15 | 知识巩固版/考试复习版、完整配置询问和保存；包含 0.2.5 知识覆盖、0.2.6 图表复用改进。 |

@@ -1,16 +1,22 @@
 ---
 name: pre-review-notes
-description: Build source-grounded revision notes and active-learning plans for a specific course from the learner's own slides, assignments, practice material, past assessments, and official solutions. Use for assessment-calibrated notes, revision chapters, cheat sheets, source-linked flashcards/quizzes, staged retests, or editable LaTeX and verified PDF deliverables. Do not use for a generic concept explanation with no course material.
+description: Build source-grounded, print-first course notes in PDF, editable LaTeX or Markdown, with optional revision plans and source-linked practice. Use with the learner's slides, exercises and assessment materials. For interactive HTML notes or collapsible answers use pre-review-notes-html instead; not for generic explanations without course material.
 ---
 
 # Pre-Review Notes
 
-Version: 0.2.9. Resolve this directory and read `VERSION`
+Version: 0.2.10. Resolve this directory and read `VERSION`
 before starting; disclose which copy is used when multiple installations exist.
 
 Turn scattered course materials into maintainable revision notes whose priorities, worked
 examples, and assessment claims can be traced to the course itself. The skill produces one
 chapter at a time and can resume safely across sessions.
+
+This is the print-first entry. Load only its local references and templates; do not import
+another entry's rendering rules. Keep its output separate from other formats (recommended
+`output/pdf/` for new projects; preserve existing project paths on resume). Reuse a verified
+source/K/V ledger when both formats are requested, but do not overwrite configuration or
+artifact state across entries. Browser print output is not a replacement for this workflow.
 
 ## Non-negotiable rules
 

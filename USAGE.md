@@ -7,6 +7,10 @@
 
 ## 1. 安装完整 skill
 
+v0.2.10 提供两个入口：打印选 `pre-review-notes`，屏幕阅读与可选折叠答案选
+`pre-review-notes-html`。两个包都自带共享资源，可独立安装；同时安装时保留各自目录名。
+HTML 包不使用原版的 LaTeX/PDF 配置、A4/A5 选项或 `manage_state.py`。
+
 ### 从源码目录安装
 
 把整个 `pre-review-notes/` 目录复制到目标 Agent 的 skills 目录。不要只复制
@@ -24,12 +28,20 @@ npx skills add https://github.com/liquidtoy001/PRN
 
 ```powershell
 python tools/package_skill.py
+python tools/package_skill.py --skill-dir pre-review-notes-html
 ```
 
-将 `dist/pre-review-notes-v0.2.8.zip` 上传到支持 skill ZIP 导入的平台。`dist/` 被 Git
+将 `dist/pre-review-notes-v0.2.10.zip` 或 `dist/pre-review-notes-html-v0.2.10.zip`
+上传到支持 skill ZIP 导入的平台。`dist/` 被 Git
 忽略，正式包应作为 GitHub Release asset 发布，而不是提交进仓库。
 
 ## 2. 准备课程资料
+
+后续原有命令示例属于打印版。HTML 版使用其本地 `SKILL.md` 的工作流，输出到独立的
+`output/html/`，并集中确认阅读宽度、密度、主题和可选折叠问答。知识巩固版默认不出新题。
+接收 HTML 成品时保存整个文件夹，再打开 `index.html`；不能只搬走 HTML 而漏掉图片。
+模板和脚本不依赖 CDN；公式与实际浏览器兼容性仍需逐次检查。不要将浏览器打印视为
+已通过打印版验收的 PDF。发布/托管笔记需要另外明确授权。
 
 课程材料默认属于本地输入，不属于 skill、Git 仓库或 Release。推荐结构：
 

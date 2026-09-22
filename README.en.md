@@ -7,14 +7,24 @@ assignments, past assessments, and official solutions into traceable, incrementa
 maintainable revision chapters. It prioritises topics and calibrates answer depth only when
 the course evidence supports those decisions.
 
-The current source version is **v0.2.9**. It requires separate extraction-completeness and
-final-page-layout reviews, with crop records and fresh per-figure render evidence. These
-are workflow requirements, not an automatic overlap detector. It retains verified paper enrichment
-(off, reading-list, integrated) to persisted intake settings. It retains knowledge-consolidation and exam-revision
-purposes, complete configuration intake and persisted settings, building on coverage and
-source-visual improvements. Run `python tools/package_skill.py` for the current ZIP.
-Download the ZIP and checksum from the
-[v0.2.9 Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.9).
+Version **v0.2.10** provides two independently installable entries in this repository:
+
+| Skill | Purpose | Format-specific features |
+|---|---|---|
+| `pre-review-notes` | Print-first notes | PDF / LaTeX / Markdown, page layout and per-figure review |
+| `pre-review-notes-html` | Screen reading | Offline HTML, navigation, optional folded answers, reading width/density/theme |
+
+They share coverage, evidence, paper enrichment and image-extraction rules, with separate
+configuration, templates, state and layout reviews. Knowledge mode still defaults to no new
+questions. Explicit self-test selection adds a companion, not a replacement for teaching prose.
+Browser print is not the verified print-first PDF product.
+
+Download both ZIPs and their SHA-256 files from the
+[v0.2.10 Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.10).
+The original install name is unchanged; either package can be installed alone or alongside the other.
+CLI behavior, configuration isolation and standalone ZIP builds were tested. Browser local-file
+access was blocked by the runtime security policy, so viewport, keyboard and visual math
+acceptance remain pending. Engineering checks do not establish HTML teaching efficacy.
 
 ## Capabilities
 
@@ -62,6 +72,9 @@ pre-review-notes/
 │   ├── assets/                        output, learning-bank, state, and pricing templates
 │   ├── references/                    evidence, authoring, learning, capacity, and usage rules
 │   └── scripts/                       material, capacity, usage, learning, state, and PDF tools
+├── pre-review-notes-html/             independently installable HTML entry
+├── shared/                            canonical format-neutral development resources
+├── tools/sync_shared.py               materialise shared copies; --check detects drift
 ├── examples/stat3007/notes/           generated example output, no source slides
 ├── tests/fixtures/stat3007/materials.csv
 ├── test-data/                         ignored local third-party test inputs
@@ -73,6 +86,19 @@ pre-review-notes/
 ```
 
 ## Local source workflow
+
+For HTML, request `pre-review-notes-html`, specify your material scope, and confirm the bundled
+intake. The output is an offline folder with index.html and local assets. Edit shared resources
+only under `shared/`, then run `python tools/sync_shared.py`. Committed copies keep each skill
+self-contained. Packaging rejects drift:
+
+```powershell
+python tools/sync_shared.py --check
+python tools/package_skill.py
+python tools/package_skill.py --skill-dir pre-review-notes-html
+```
+
+The commands below are for the print entry; do not pass its state configuration to the HTML entry.
 
 Create a citation-ready inventory:
 
@@ -161,6 +187,7 @@ user is licensed to download or use the sources.
 
 | Version | Date | Changes |
 |---|---|---|
+| v0.2.10 | 2026-09-22 | Independent offline HTML entry with optional folded answers; shared-resource drift checks and two release packages. |
 | v0.2.9 | 2026-09-19 | Separate figure extraction and final-layout reviews; crop and per-figure render evidence. |
 | v0.2.8 | 2026-09-16 | Paper-enrichment configuration and verified paper/figure integration. |
 | v0.2.7 | 2026-09-15 | Note purposes and persisted complete intake; includes 0.2.5 coverage and 0.2.6 source-visual improvements. |

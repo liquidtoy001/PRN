@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="$language" data-theme="$theme" data-density="$density" data-width="$width">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$title</title>
+  <style>
+    :root { color-scheme: light; --bg:#f5f3ed; --paper:#fffefa; --ink:#252c2a; --muted:#596963; --line:#d4ddd4; --accent:#246455; }
+    html[data-theme="dark"] { color-scheme:dark; --bg:#171e1c; --paper:#202a26; --ink:#e5ece6; --muted:#b4c3b8; --line:#42564b; --accent:#9bd6bb; }
+    @media (prefers-color-scheme:dark) { html[data-theme="auto"] { color-scheme:dark; --bg:#171e1c; --paper:#202a26; --ink:#e5ece6; --muted:#b4c3b8; --line:#42564b; --accent:#9bd6bb; } }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.85 system-ui,"Microsoft YaHei",sans-serif; overflow-wrap:anywhere; }
+    .shell { display:grid; grid-template-columns:15rem minmax(0,1fr); gap:2.5rem; max-width:80rem; margin:auto; padding:2rem; }
+    nav { align-self:start; min-width:0; font-size:.9rem; }
+    nav ol { padding-left:1.4rem; }
+    nav li { margin:.65rem 0; }
+    main { min-width:0; width:100%; max-width:52rem; padding:2.4rem; background:var(--paper); border:1px solid var(--line); border-radius:14px; }
+    html[data-width="wide"] .shell { max-width:100rem; }
+    html[data-width="wide"] main { max-width:72rem; }
+    html[data-density="compact"] body { line-height:1.65; }
+    html[data-density="compact"] main { padding:1.6rem; }
+    h1 { font-size:2rem; line-height:1.35; margin:0 0 1rem; }
+    h2 { font-size:1.45rem; line-height:1.5; margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--line); }
+    h3 { font-size:1.1rem; margin-top:1.6rem; }
+    a { color:var(--accent); text-underline-offset:.2em; }
+    :focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+    .skip { display:block; padding:.5rem 1rem; }
+    .boundary, figcaption, .citation { color:var(--muted); font-size:.9em; }
+    figure { margin:1.6rem 0; }
+    figure img { display:block; max-width:100%; height:auto; margin:auto; background:white; }
+    figcaption { margin-top:.65rem; }
+    pre, .table-scroll, .equation { max-width:100%; overflow-x:auto; padding:1rem; border:1px solid var(--line); border-radius:6px; }
+    pre { overflow-wrap:normal; font-size:.88em; }
+    table { border-collapse:collapse; width:100%; }
+    th, td { border-bottom:1px solid var(--line); padding:.65rem; text-align:left; }
+    math[display="block"] { margin:.8rem 0; }
+    details.qa { margin:1rem 0; border:1px solid var(--line); border-radius:8px; padding:1rem 1.2rem; }
+    summary { cursor:pointer; font-weight:650; }
+    details[open] summary { margin-bottom:1rem; }
+    button { font:inherit; color:var(--accent); border:1px solid var(--line); background:var(--paper); border-radius:6px; padding:.4rem .8rem; margin:.2rem; cursor:pointer; }
+    .toolbar[hidden] { display:none; }
+    footer { margin-top:2rem; font-size:.85em; color:var(--muted); }
+    @media (max-width:800px) { .shell { display:block; padding:1rem; } nav { margin-bottom:1.5rem; } main { padding:1.25rem; } h1 { font-size:1.6rem; } }
+    @media print { .skip, nav, .toolbar { display:none; } body { background:white; color:black; } .shell { display:block; padding:0; } main { border:0; max-width:none; padding:0; } }
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">$skip_label</a>
+<div class="shell">
+  <nav aria-label="$toc_label"><strong>$toc_label</strong><ol>$toc</ol></nav>
+  <main id="main">
+    <header><h1>$title</h1><p class="boundary">$subtitle</p></header>
+    $controls
+    $body
+    <footer>$footer</footer>
+  </main>
+</div>
+$enhancement
+</body>
+</html>

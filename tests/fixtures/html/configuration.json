@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "format": "html",
+  "preferences": {
+    "mode": "lightweight",
+    "language": "zh",
+    "assessment_date": null,
+    "study_hours_available": null,
+    "note_configuration": {
+      "purpose": "knowledge",
+      "scope": "自编工程验收样本 · 均值与平方损失",
+      "depth": "standard-detailed",
+      "paper_enrichment": "off",
+      "deliverables": ["html"],
+      "reading_width": "standard",
+      "layout_density": "comfortable",
+      "theme": "light",
+      "self_test": "folded-qa",
+      "answers_initial": "closed",
+      "confirmed": true
+    }
+  }
+}

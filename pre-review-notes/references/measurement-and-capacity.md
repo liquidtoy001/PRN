@@ -62,7 +62,7 @@ If the platform exposes a response JSON with usage:
 ```text
 python scripts/usage_ledger.py record --ledger output/usage-ledger.jsonl \
   --operation chapter-generation --provider openai --model <exact-model-id> \
-  --usage-file output/response.json --artifact output/chapter.tex
+  --usage-file output/response.json --artifact <generated-note-file>
 ```
 
 If the platform exposes only visible files, create a partial estimate:
@@ -70,7 +70,7 @@ If the platform exposes only visible files, create a partial estimate:
 ```text
 python scripts/usage_ledger.py record --ledger output/usage-ledger.jsonl \
   --operation chapter-generation --input-file output/selected-source.txt \
-  --output-file output/chapter.tex
+  --output-file <generated-note-file>
 ```
 
 If neither is possible, still record `--unavailable-reason`. Never substitute a character

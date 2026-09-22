@@ -1,0 +1,29 @@
+<p class="boundary">工程验收样本，不是完整课程笔记。只覆盖自编的三个观测值；没有考核权重、历年卷或官方解答，因此不能推断考试频率。</p>
+<section id="mean">
+  <h2 id="mean-heading">01 · 均值与平方损失</h2>
+  <p>平方损失（Squared loss）衡量预测常数与观测值的偏差。对于三个等权观测值 1、2、3，选择一个实数 c，使平均平方损失最小。等权和平方这两个条件都不能遗漏。<a class="citation" href="#source-S001">[source:S001|section Mean and squared error]</a></p>
+  <div class="equation" tabindex="0" role="region" aria-label="平方损失公式">
+    <math display="block"><mrow><mi>L</mi><mo>(</mo><mi>c</mi><mo>)</mo><mo>=</mo><mfrac><mrow><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>c</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mn>2</mn><mo>−</mo><mi>c</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mn>3</mn><mo>−</mo><mi>c</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow><mn>3</mn></mfrac></mrow></math>
+  </div>
+  <p>其中 c 是待选常数，分母 3 是样本数。独立求导得到 L′(c)=2c−4，二阶导数恒为 2，大于零，所以 c=2 是唯一的全局最小点；代回原式，损失为 2/3。</p>
+  <figure id="V001">
+    <img src="assets/loss.svg" alt="等权平方损失对比：c为1和3时均为5/3，c为2时为2/3。" width="720" height="320">
+    <figcaption>V001 · 自编示意图，比较三个候选常数；坐标、数值与正文推导一致。<a href="assets/loss.svg">打开原尺寸图</a>。<a class="citation" href="#source-S001">[source:S001|section Mean and squared error]</a></figcaption>
+  </figure>
+  <p>图中横轴是常数 c，纵轴是平均平方损失 L(c)。中间柱更低说明这三个候选中 c=2 更好；连续实数域上的唯一最小性则由上面的二阶导数证明，不能仅靠三个柱子证明。</p>
+</section>
+<section id="conditions">
+  <h2 id="conditions-heading">02 · 条件与边界</h2>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="条件比较表"><table><thead><tr><th scope="col">条件</th><th scope="col">推导中作用</th><th scope="col">改变后的边界</th></tr></thead><tbody><tr><td>等权观测</td><td>每项贡献相同</td><td>权重改变时应重新推导</td></tr><tr><td>平方损失</td><td>产生线性一阶导数</td><td>绝对损失不能套用这份求导</td></tr></tbody></table></div>
+  <p>不能把这份证明原样用于绝对损失。这不是考试陷阱预测，而是由目标函数不同直接得到的适用边界。<a class="citation" href="#source-S001">[source:S001|section Mean and squared error]</a></p>
+  <pre><code>loss = sum((observation - candidate_constant) ** 2 for observation in [1, 2, 3]) / 3</code></pre>
+</section>
+<section id="practice">
+  <h2 id="practice-heading">03 · 可选自测</h2>
+  <details class="qa" id="Q001" data-k-ids="K001 K002"><summary>Q001 · 最优常数是什么？怎样证明是唯一最小点？</summary><p>c=2。令 2c−4=0，且二阶导数为正；再代回原式核验损失为 2/3。<a href="#mean-heading">回看推导</a>。<a class="citation" href="#source-S001">[source:S001|section Mean and squared error]</a></p></details>
+  <details class="qa" id="Q002" data-k-ids="K003"><summary>Q002 · 能把这份求导直接用于绝对损失吗？</summary><p>不能。目标函数改变，导数及其适用条件需要重新分析。<a href="#conditions-heading">回看适用条件</a>。<a class="citation" href="#source-S001">[source:S001|section Mean and squared error]</a></p></details>
+</section>
+<section id="sources">
+  <h2 id="sources-heading">04 · 资料来源</h2>
+  <p id="source-S001">S001 · Original engineering fixture: mean and squared error。本项目自编，仅用于渲染与交互验收。</p>
+</section>

@@ -5,9 +5,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import re
 import sys
 import zipfile
 from pathlib import Path
+
+from sync_shared import REPOSITORY, SKILLS, sync
 
 
 EXCLUDED_PARTS = {"__pycache__", "tmp", "evals"}
@@ -49,6 +52,15 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     skill_dir = args.skill_dir.resolve()
     output_dir = args.output_dir.resolve()
+    protected = [skill_dir, REPOSITORY / "shared", *(REPOSITORY / name for name in SKILLS)]
+    if any(output_dir.is_relative_to(path.resolve()) for path in protected):
+        print("output directory must be outside skill and shared-source directories", file=sys.stderr)
+        return 2
+    if skill_dir in {(REPOSITORY / name).resolve() for name in SKILLS}:
+        stale = sync(REPOSITORY, check=True)
+        if stale:
+            print("shared resources are stale; run tools/sync_shared.py", file=sys.stderr)
+            return 2
     skill_file = skill_dir / "SKILL.md"
     version_file = skill_dir / "VERSION"
     repository_license = Path(__file__).resolve().parents[1] / "LICENSE"
@@ -56,16 +68,22 @@ def main(argv: list[str] | None = None) -> int:
         print("skill directory must contain SKILL.md and VERSION", file=sys.stderr)
         return 2
     version = version_file.read_text(encoding="utf-8").strip()
-    if not version or any(character.isspace() for character in version):
+    if not re.fullmatch(r"\d+\.\d+\.\d+", version):
         print(f"invalid VERSION value: {version!r}", file=sys.stderr)
         return 2
+
+    name_match = re.search(r"^name: ([a-z0-9-]+)$", skill_file.read_text(encoding="utf-8"), re.M)
+    if not name_match or name_match.group(1) != skill_dir.name:
+        print("skill directory and frontmatter name must match", file=sys.stderr)
+        return 2
+    skill_name = name_match.group(1)
 
     files = included_files(skill_dir)
     if skill_file not in files:
         print("SKILL.md was excluded unexpectedly", file=sys.stderr)
         return 2
     output_dir.mkdir(parents=True, exist_ok=True)
-    archive = output_dir / f"pre-review-notes-v{version}.zip"
+    archive = output_dir / f"{skill_name}-v{version}.zip"
     temporary = archive.with_name(archive.name + ".tmp")
     temporary.unlink(missing_ok=True)
 

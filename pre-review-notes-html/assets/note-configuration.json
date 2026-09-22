@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "format": "html",
+  "preferences": {
+    "mode": "lightweight",
+    "language": "zh",
+    "assessment_date": null,
+    "study_hours_available": null,
+    "note_configuration": {
+      "purpose": "knowledge",
+      "scope": "all supplied materials, delivered in batches",
+      "depth": "standard-detailed",
+      "paper_enrichment": "reading-list",
+      "deliverables": ["html"],
+      "reading_width": "standard",
+      "layout_density": "comfortable",
+      "theme": "light",
+      "self_test": "none",
+      "answers_initial": null,
+      "confirmed": false
+    }
+  }
+}
