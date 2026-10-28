@@ -12,7 +12,8 @@ git clone https://github.com/liquidtoy001/PRN.git pre-review-notes-dev
 cd pre-review-notes-dev
 ```
 
-CI checks out into `repository/` for the same reason.
+CI downloads the tested commit's source archive into a non-reserved directory under the
+runner's temporary directory; even GitHub's default workspace parents contain `PRN`.
 
 ## Shared resources
 
