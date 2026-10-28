@@ -1,0 +1,23 @@
+name: Checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python tools/sync_shared.py --check
+      - run: python -m unittest discover -s tests/unit -v
+      - run: python -m compileall -q pre-review-notes/scripts pre-review-notes-html/scripts shared/scripts tools
+      - run: python tools/package_skill.py
+      - run: python tools/package_skill.py --skill-dir pre-review-notes-html

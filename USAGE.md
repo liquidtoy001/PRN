@@ -1,238 +1,133 @@
-# 使用方法 · USAGE
+# 小白使用指南
 
-完整功能需要一个能够读取 skill 目录、访问课程材料、运行本地脚本并写出文件的 Agent。
-只有对话框或知识库的平台仍可使用核心方法，但无法自动获得材料哈希、增量状态和 PDF QA。
-精确 token 也只有在平台返回 usage 时可得；否则 v0.2.0 会记录明确标注的部分估算或
-`unavailable`，不会把字符数估算冒充账单。
+这份指南面向第一次使用 Skill 的人。不需要先学 Git、Python 或 LaTeX。
 
-## 1. 安装完整 skill
+## 1. 先确认你在用什么
 
-v0.2.10 提供两个入口：打印选 `pre-review-notes`，屏幕阅读与可选折叠答案选
-`pre-review-notes-html`。两个包都自带共享资源，可独立安装；同时安装时保留各自目录名。
-HTML 包不使用原版的 LaTeX/PDF 配置、A4/A5 选项或 `manage_state.py`。
+你需要一个支持 Skill、可以读取资料和创建文件的 AI Agent。普通聊天框能否完成整个流程，
+取决于它有没有文件处理和运行工具。Skill 是给 Agent 的工作说明，不是独立软件，
+也不包含课程资料或 AI 模型。
 
-### 从源码目录安装
+## 2. 下载：只选一个 ZIP 就能开始
 
-把整个 `pre-review-notes/` 目录复制到目标 Agent 的 skills 目录。不要只复制
-`SKILL.md`，因为 v0.2.0 会按需读取 `references/`、复用 `assets/` 并运行 `scripts/`。
+打开 [最新版本下载页](https://github.com/liquidtoy001/PRN/releases/latest)，找到 **Assets**。
 
-如果目标环境支持 `skills` CLI，可以从仓库安装：
+- 想得到能打印的笔记：下载 **pre-review-notes-v0.2.10.zip**。
+- 想得到浏览器里阅读的笔记：下载 **pre-review-notes-html-v0.2.10.zip**。
 
-```bash
-npx skills add https://github.com/liquidtoy001/PRN
-```
+不要选择 `Source code` 或 `.sha256` 作为 Skill 安装包。后者只是用来核对下载是否完整。
+两种笔记可以都要，第一次建议先选一种、做一章，确认效果。
 
-### 从 Release ZIP 安装
+## 3. 安装：根据平台选择一种方法
 
-运行下面的命令会在本地 `dist/` 生成扁平 ZIP；`SKILL.md` 位于 ZIP 根目录：
+**平台提供“导入 Skill / 上传技能包”：** 在对应位置上传下载的 ZIP。
+入口名称随平台而异；如果明确不支持 ZIP 导入，请使用下面的文件夹方法。
 
-```powershell
-python tools/package_skill.py
-python tools/package_skill.py --skill-dir pre-review-notes-html
-```
+**Agent 使用本地 Skill 文件夹：**
 
-将 `dist/pre-review-notes-v0.2.10.zip` 或 `dist/pre-review-notes-html-v0.2.10.zip`
-上传到支持 skill ZIP 导入的平台。`dist/` 被 Git
-忽略，正式包应作为 GitHub Release asset 发布，而不是提交进仓库。
+1. 解压下载的 ZIP。
+2. PDF 版的外层文件夹命名为 `pre-review-notes`，HTML 版命名为 `pre-review-notes-html`。
+3. 确认打开这个文件夹就能看到 `SKILL.md`、`assets`、`references`、`scripts`。
+   不要多套一层同名目录，也不要只留下 `SKILL.md`。
+4. 把整个文件夹放到 Agent 支持的技能目录，再按该平台要求重新加载技能或开启新会话。
 
-## 2. 准备课程资料
-
-后续原有命令示例属于打印版。HTML 版使用其本地 `SKILL.md` 的工作流，输出到独立的
-`output/html/`，并集中确认阅读宽度、密度、主题和可选折叠问答。知识巩固版默认不出新题。
-接收 HTML 成品时保存整个文件夹，再打开 `index.html`；不能只搬走 HTML 而漏掉图片。
-模板和脚本不依赖 CDN；公式与实际浏览器兼容性仍需逐次检查。不要将浏览器打印视为
-已通过打印版验收的 PDF。发布/托管笔记需要另外明确授权。
-
-课程材料默认属于本地输入，不属于 skill、Git 仓库或 Release。推荐结构：
+不知道技能目录在哪，可以把解压文件夹位置发给 Agent：
 
 ```text
-my-course-project/
-├── materials/             自己的 slides、作业、往年题、答案
-├── output/                inventory、state、笔记和 PDF
-└── .gitignore             忽略 materials/ 中不可公开的文件
+请把这个完整 Skill 文件夹安装到你支持的本地技能目录，
+然后确认能找到并读取其中的 SKILL.md。文件夹位置是：[填这里]。
 ```
 
-生成材料清单：
+平台不支持 Skill 时，仍可让能读文件的 Agent 读取完整 Skill 目录并照其流程执行，
+但自动发现、脚本运行和成品生成能力需要另行确认。
 
-```powershell
-python path/to/pre-review-notes/scripts/inventory_materials.py `
-  materials `
-  --output output/materials.json
-```
+## 4. 准备：把资料交给 Agent
 
-脚本会生成稳定 source ID、相对路径、角色提示、大小和 SHA-256。安装了 `pypdf` 时，
-还会抽样检查 PDF 文本、标记可能需要 OCR 的扫描件，并生成保守 token 区间。角色分类、
-OCR 标记和 token 区间都是路由/容量提示，不是课程事实或模型精确计数。
-
-生成正文前必须运行容量检查：
-
-```powershell
-python path/to/pre-review-notes/scripts/assess_capacity.py `
-  output/materials.json `
-  --context-window 128000 `
-  --reserved-output-tokens 16000 `
-  --output output/capacity-report.json `
-  --markdown output/capacity-report.md `
-  --language zh
-```
-
-上下文上限未知时省略 `--context-window`。报告会标记 `unknown`，工作流应改为逐章选取
-source IDs，并在成品中列出尚未处理的材料。`fits-estimate` 也不等于模型一定完整理解材料。
-
-如果资料由 URL manifest 管理：
-
-```powershell
-python path/to/pre-review-notes/scripts/download_materials.py `
-  materials.csv `
-  --output-dir local-materials
-```
-
-## 3. 发起任务
-
-一个足够完整的请求示例：
+建立一个课程文件夹，把要处理的 slides、讲义或习题放进去。可以通过平台附件功能提供，
+也可以告诉本地 Agent 资料文件夹的完整位置。
 
 ```text
-使用 pre-review-notes 处理 STAT3007。
-模式使用 lightweight，主语言中文，专业术语首次出现保留英文。
-先完成 Regression 一章，交付可编辑 LaTeX 和经过检查的 PDF。
-同时生成带来源的 flashcards 和 quiz，并安排阶段性重测。
-材料目录是 ./materials，输出放在 ./output。
+我的资料在：D:/学习资料/课程A
+请先确认你能读到文件，再开始处理。
 ```
 
-如果没有提供模式、语言、格式或影响排序的考试时间，skill 会只确认缺失项，不会重复询问
-已经明确的偏好。
+路径只是示例，请换成自己的实际位置。第一次选一章或一份文件即可。
+如果选考试复习版，往年卷、评分标准和官方答案能帮助校准；只有 slides 也可以做，
+Agent 应说明哪些考试信息仍然未知。
 
-### 三种模式
+## 5. 开始：复制一段消息
 
-| 模式 | 适合场景 | 主要结果 |
+**想打印：**
+
+```text
+使用 pre-review-notes 处理我提供的课程资料。
+中文，知识巩固版，lightweight，先做 [文件名或页码范围]，交付 PDF。
+知识点要充分讲解，保留原有例题和有帮助的图表。
+其他设置请一次列出推荐值让我确认。
+```
+
+**想在屏幕上读：**
+
+```text
+使用 pre-review-notes-html 处理我提供的课程资料。
+中文，知识巩固版，lightweight，先做 [文件名或页码范围]。
+保留完整讲解，并加可折叠答案的自测题。
+交付可以离线打开的整个 HTML 文件夹，其他设置请一次让我确认。
+```
+
+如果不想要题目，把 HTML 示例中的自测句子换成“不要生成自测题”。
+
+## 6. 选项怎么选
+
+| 选项 | 白话解释 | 第一次建议 |
 |---|---|---|
-| `lightweight` | 第一次试用、只做一章、只有 slides | 容量/证据边界、临时 topic map、代表章节；卡片/quiz 按需 |
-| `full` | 多种资料齐全、准备长期维护 | 完整 assessment map、状态、逐章交付、题库、掌握度和增量更新 |
-| `exam-cram` | 考试临近且时间预算明确 | 证据驱动取舍、计时 quiz、动态重测和明确未覆盖风险 |
+| 知识巩固版 | 把内容讲清楚，默认不额外出题 | 平时学习选这个 |
+| 考试复习版 | 根据课程考核资料组织复习，练习可选 | 有复习目标时选 |
+| lightweight | 先做一小批，讲解仍要充分 | 先选这个 |
+| full | 规划整门课程，逐章推进 | 熟悉流程后再选 |
+| exam-cram | 按实际剩余时间缩小复习范围 | 临近考试且能给出时间预算时选 |
+| 论文拓展关闭 | 仅使用已提供的资料 | 想先检验课件覆盖时选 |
+| 推荐阅读 | 附上经过核验的相关论文 | 想进一步阅读时选 |
+| 整合讲解 | 把相关论文内容穿插到笔记里 | 接受更长内容时选 |
+| PDF 页面与密度 | 纸张大小、阅读疏密 | A4、舒适 |
+| HTML 外观 | 阅读宽度、疏密和主题 | 标准宽度、舒适、浅色 |
 
-## 4. 输出语言与专业术语
+已经说过的选项应直接沿用。恢复之前的任务时，让 Agent 读取原来的进度和配置。
 
-主语言可以是中文、English 或中英双语。中文笔记首次出现专业或易混淆术语时使用：
+## 7. 生成后，到哪里看
 
-```text
-普通最小二乘法（Ordinary Least Squares, OLS）
-岭回归（Ridge Regression）
-1-最近邻（1-Nearest Neighbour, 1-NN）
-```
+请 Agent 在结束时给出成品路径或下载链接。
 
-代码标识符、公式、论文标题和原文引用保留规范形式。双语正文与中文正文加少量英文术语不是
-同一种输出，skill 会保持已确认的主语言一致。
+- **PDF：** 打开 `.pdf`；先看公式、图表、分页和字体，再决定打印。
+- **HTML：** 保存整个输出文件夹，打开其中的 `index.html`。图片文件也要一起保存。
+  若选择了自测，点击题目展开答案。
+- **LaTeX / Markdown：** 是可编辑的源文件；只拿到这些并不表示 PDF 已生成。
 
-## 5. 引用、状态和增量更新
-
-LaTeX 使用：
-
-```tex
-\sourceref{S002}{PDF p. 18}
-\assessref{S014}{2023 final Q2(b)}
-```
-
-Markdown 使用：
+你可以这样继续：
 
 ```text
-[source:S002|PDF p. 18]
-[assessment:S014|2023 final Q2(b)]
+先保留现有成品和进度。第 2 节的解释太短，请对照原资料补全条件和推导，
+重新检查受影响的公式与图表，给我更新后的文件。
 ```
 
-验证引用：
+## 8. 常见问题
 
-```powershell
-python path/to/pre-review-notes/scripts/validate_citations.py `
-  output/chapter.tex `
-  --inventory output/materials.json
-```
+**没看到 Skill？** 确认目录名、`SKILL.md` 所在层级和平台是否需要重新加载，
+或者直接提供完整 Skill 目录让 Agent 读取。
 
-多章节任务使用 `study_state.json` 记录真实状态，`progress.md` 只是可读摘要。输入 digest
-没有变化且章节已经 verified/delivered 时，可以跳过重建。
+**缺 Python、PDF 工具或 LaTeX？** 先让 Agent 报告缺少什么、为什么需要、安装大小及可行替代方案。
+PDF 排版通常需要 LaTeX 环境，PDF 读取可能需要 pypdf，页面渲染可能需要 Poppler。
+这些由你实际的 Agent 环境决定，不需要盲目安装全部工具。
 
-旧的 schema 1 状态可迁移；历史章节会标为 `legacy_generation`，不会伪造旧 token 数据：
+**中文变方块、图片缺失或遮挡？** 让 Agent 修复字体或资源路径，并查看重新生成的成品。
+构建命令成功不能说明页面看起来正确。
 
-```powershell
-python path/to/pre-review-notes/scripts/manage_state.py migrate output/study_state.json
-```
+**为什么一直问配置？** 回复“接受上面推荐值”，或逐项指出要改的选项。
+如果你已经确认过，提醒它读取保存的配置。
 
-## 6. Flashcards、Quiz、掌握度与重测
+**能保证没有遗漏或错误吗？** 不能。流程要求覆盖核对和来源检查，
+仍需抽查原始材料，特别是条件、数字、单位和推导。跨学科效果尚待验证。
 
-模型按 `assets/learning-bank-template.json` 生成题库后，先校验来源：
+## 开发者入口
 
-```powershell
-python path/to/pre-review-notes/scripts/manage_learning.py validate-bank `
-  output/learning-bank.json `
-  --inventory output/materials.json
-python path/to/pre-review-notes/scripts/manage_learning.py init `
-  --bank output/learning-bank.json `
-  --output output/learning_state.json `
-  --assessment-date 2026-11-10
-```
-
-每次作答记录正确/错误、1–5 信心和错题类型；再按考试日期和可用时间生成重测计划：
-
-```powershell
-python path/to/pre-review-notes/scripts/manage_learning.py record-attempt `
-  --bank output/learning-bank.json `
-  --state output/learning_state.json `
-  --item-id regression-Q001 --correct no --confidence 5 `
-  --mistake-tag objective-confusion
-python path/to/pre-review-notes/scripts/manage_learning.py plan `
-  --bank output/learning-bank.json `
-  --state output/learning_state.json `
-  --available-minutes 45 `
-  --output output/retest-plan.json
-```
-
-用 `manage_learning.py export --format csv` 生成普通表格，或 `--format anki` 生成 UTF-8
-三列 TSV（front、back、tags）。掌握度是近几次作答的调度信号，不是考试通过保证。
-
-## 7. 每次生成后的 Token 与可选费用记录
-
-OpenAI Responses API 的 `usage` 可包含 input、output、total 以及缓存/推理 token 明细，
-但其他平台或普通聊天界面未必暴露这些字段。能取得 response JSON 时：
-
-```powershell
-python path/to/pre-review-notes/scripts/usage_ledger.py record `
-  --ledger output/usage-ledger.jsonl `
-  --operation chapter-generation `
-  --provider openai --model exact-model-id `
-  --usage-file output/response.json `
-  --artifact output/chapter.tex
-```
-
-只有文件可见时，使用 `--input-file` 和 `--output-file` 得到 `partial-estimate`；两者都拿不到
-时使用 `--unavailable-reason` 留下审计记录。费用计算必须显式传入基于
-`assets/pricing-template.json` 的定价文件。API 价格、订阅套餐、积分、工具调用和长上下文加价
-不能互相替代；结果不是发票。官方 usage 字段见
-[OpenAI Responses API](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)。
-
-## 8. LaTeX 和 PDF
-
-```powershell
-python path/to/pre-review-notes/scripts/build_note.py `
-  output/chapter.tex `
-  --output-dir output/pdf
-```
-
-脚本会编译、重新打开 PDF、遍历页面并用 Poppler 渲染代表页。它会把视觉状态保留为
-`pending`；Agent 或用户必须真正查看最新 PNG，确认没有裁切、重叠、乱码或空白页后，才能
-把章节标记为 delivered。缺少编译器、`pypdf` 或 Poppler 时必须明确报告，不能把 `.tex`
-冒充已完成的 PDF。
-
-## 9. 仅支持文本指令的平台
-
-无法加载目录的网页版可以粘贴 `SKILL.md`，再按任务附上相应 reference 和模板。例如做中文
-LaTeX/PDF 时至少附上：
-
-- `references/modes.md`；
-- `references/evidence-workflow.md`；
-- `references/authoring.md`；
-- `references/pdf-workflow.md`；
-- `references/measurement-and-capacity.md`；
-- `references/active-learning.md`（若需要题库）；
-- `assets/template.tex`。
-
-这种方式没有自动脚本、稳定状态和渐进式资源加载，也通常拿不到完整 input token；是兼容性
-降级方案，不等同于完整安装。
+脚本、测试、打包和资料 manifest 的说明见 [DEVELOPMENT.md](./DEVELOPMENT.md)。
