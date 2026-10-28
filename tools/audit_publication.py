@@ -16,7 +16,7 @@ PATTERNS = {
     "private-key": re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
     "github-token": re.compile(rb"\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,})\b"),
     "provider-key": re.compile(rb"\b(?:sk-(?:proj-|ant-)?[A-Za-z0-9_-]{32,}|AIza[A-Za-z0-9_-]{30,}|AKIA[A-Z0-9]{16})\b"),
-    "personal-path": re.compile(rb"(?:[A-Z]:[\\/]Users[\\/]|/Users/|/home/)(?!<|example|user[\\/])[^\s/\\<>\"']+", re.I),
+    "personal-path": re.compile(rb"(?:[A-Z]:[\\/]Users[\\/]|/Users/|/home/)(?!example[\\/]|user[\\/])[A-Za-z0-9][A-Za-z0-9._-]*[\\/]", re.I),
 }
 
 
@@ -67,6 +67,10 @@ def main() -> int:
         blob_count += 1
         for category, pattern in PATTERNS.items():
             for match in pattern.finditer(body):
+                if category == "personal-path" and name == "tools/audit_publication.py":
+                    source_line = body.splitlines()[body[:match.start()].count(b"\n")]
+                    if b'"personal-path": re.compile' in source_line:
+                        continue  # Regex definitions are not a user's filesystem path.
                 findings.append({"category": category, "object": oid, "path": name,
                                  "line": body[:match.start()].count(b"\n") + 1})
     artifacts = sorted({name for name in objects.values()

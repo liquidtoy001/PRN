@@ -26,6 +26,8 @@ in this preparation commit. Repository visibility is intentionally unchanged (pr
   configuration, results and common problems. Development commands moved to DEVELOPMENT.md.
 - Added a changelog, a repeatable heuristic publication audit, and a Windows/Linux CI matrix
   for Python 3.10/3.12. The remote CI result must be checked separately after push.
+  Initial Windows checkout exposed the reserved device name `PRN`; checkout and run paths
+  now use `repository/`. Local clone instructions also specify a non-reserved directory.
 - Kept v0.2.10 as recommended current release and v0.2.9 as the last print-only rollback.
   Removed redundant Release pages/assets for v0.0.1, v0.0.2, v0.1.0, v0.2.0, v0.2.7 and v0.2.8
   after a verified local backup. All Git version tags remain; no history rewrite is involved.

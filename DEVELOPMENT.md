@@ -5,6 +5,15 @@ PDF metadata and traversal require `pypdf`; PDF compilation requires an availabl
 and representative rendering requires Poppler. These are optional for HTML-only generation.
 Read [USAGE.md](./USAGE.md) for the learner workflow.
 
+On Windows, `PRN` is a reserved device name. Choose a normal local clone directory:
+
+```text
+git clone https://github.com/liquidtoy001/PRN.git pre-review-notes-dev
+cd pre-review-notes-dev
+```
+
+CI checks out into `repository/` for the same reason.
+
 ## Shared resources
 
 Edit canonical files in `shared/`, then materialise and check the copies:
