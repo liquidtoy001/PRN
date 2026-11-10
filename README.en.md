@@ -8,9 +8,8 @@ knowledge consolidation or exam revision**, then choose printable PDF or screen-
 This is an Agent Skill: instructions and supporting tools for an AI agent that can read files
 and create artifacts. It is not a standalone application.
 
-**Version status: v0.3.0 is being prepared for release.** This page describes v0.3.0. The
-currently published version is still [v0.2.10](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.10),
-which does not contain the new workflow.
+**Current version: [v0.3.0](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0).**
+This page introduces its three learning presets and complete workflow.
 
 ## Choose a purpose: which preset fits?
 
@@ -48,16 +47,16 @@ structure, question frequency or this year's emphasis.
 
 | Reading context | v0.3.0 package | Skill name |
 |---|---|---|
-| Printable PDF; optional Markdown / LaTeX | pre-review-notes-v0.3.0.zip (pending release) | pre-review-notes |
-| Offline HTML with optional folded answers | pre-review-notes-html-v0.3.0.zip (pending release) | pre-review-notes-html |
+| Printable PDF; optional Markdown / LaTeX | [pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip) | pre-review-notes |
+| Offline HTML with optional folded answers | [pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip) | pre-review-notes-html |
 
 **All three presets work with either entry.** Preview can use PDF; exam revision can use HTML.
 Install either package or both. When requesting both outputs, each keeps its own configuration
 and artifacts.
 
-After v0.3.0 is published, select the appropriate ZIP under Assets on the
-[Release page](https://github.com/liquidtoy001/PRN/releases/latest). Before publication, use
-the complete skill folder from this repository. Follow the [beginner installation guide](./USAGE.md).
+Use the download links above, or select the appropriate ZIP under Assets on the
+[v0.3.0 Release page](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0).
+Follow the [beginner installation guide](./USAGE.md).
 The `.sha256` file checks integrity; GitHub's automatic Source code download is the repository
 archive. Neither is the named skill installation ZIP.
 
@@ -164,7 +163,7 @@ The [MIT License](./LICENSE) covers project code and original templates, not thi
 
 ## Versions and development
 
-The prepared version is **v0.3.0**; see [release notes and upgrade guidance](./RELEASE-0.3.0.md).
+The current version is **v0.3.0**; see [release notes and upgrade guidance](./RELEASE-0.3.0.md).
 Both v0.2.10 entries keep their names and accept existing knowledge/exam configurations.
 Preserve old outputs and progress before using the new workflow for subsequent chapters.
 Historical chapters are never automatically credited with passing the new review.

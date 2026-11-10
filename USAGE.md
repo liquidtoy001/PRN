@@ -2,8 +2,8 @@
 
 这份指南面向第一次使用 Skill 的人。不需要先学 Git、Python 或 LaTeX。
 
-本指南对应正在准备发布的 **v0.3.0**。GitHub 当前已发布版本仍为 v0.2.10；
-等 Release 出现 v0.3.0 后，选择下面的新版安装包，旧包不包含三预设和新的复核流程。
+本指南对应 **[v0.3.0](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0)**。
+请选择下面的新版安装包；旧版 v0.2.10 不包含三预设和新的复核流程。
 
 ## 1. 先确认你在用什么
 
@@ -13,10 +13,10 @@
 
 ## 2. 下载：只选一个 ZIP 就能开始
 
-打开 [最新版本下载页](https://github.com/liquidtoy001/PRN/releases/latest)，找到 **Assets**。
+打开 [v0.3.0 下载页](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0)，找到 **Assets**，或直接点击下面的链接。
 
-- 想得到能打印的笔记：下载 **pre-review-notes-v0.3.0.zip**。
-- 想得到浏览器里阅读的笔记：下载 **pre-review-notes-html-v0.3.0.zip**。
+- 想得到能打印的笔记：下载 **[pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip)**。
+- 想得到浏览器里阅读的笔记：下载 **[pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip)**。
 
 不要选择 `Source code` 或 `.sha256` 作为 Skill 安装包。后者只是用来核对下载是否完整。
 两种笔记可以都要，第一次建议先选一种、做一章，确认效果。
@@ -100,7 +100,7 @@ Agent 应说明哪些考试信息仍然未知。
 
 ### 三种预设与首次配置
 
-以下流程适用于 v0.3.0。已发布的 v0.2.10 下载包采用原流程。
+以下流程适用于 v0.3.0；旧版 v0.2.10 下载包采用原流程。
 
 **先选用途预设，其他设置仍然一次看全：**
 

@@ -8,8 +8,8 @@
 这是给 AI Agent 使用的 Skill（任务说明和配套工具），需要配合支持 Skill、能读取文件的
 Agent 使用。它本身不是双击就能运行的软件。
 
-**版本状态：v0.3.0 正在准备发布。** 本页描述 v0.3.0；GitHub 当前已发布版本仍为
-[v0.2.10](https://github.com/liquidtoy001/PRN/releases/tag/v0.2.10)，该旧包不包含本次新流程。
+**当前版本：[v0.3.0](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0)。**
+本页介绍新版的三个学习预设和完整使用流程。
 
 ## 先选用途：三个预设怎么选
 
@@ -40,14 +40,14 @@ Agent 使用。它本身不是双击就能运行的软件。
 
 | 阅读场景 | v0.3.0 安装包 | 调用名称 |
 |---|---|---|
-| 打印笔记、PDF，也可选 Markdown / LaTeX | pre-review-notes-v0.3.0.zip（待发布） | pre-review-notes |
-| 离线网页笔记、可选折叠问答 | pre-review-notes-html-v0.3.0.zip（待发布） | pre-review-notes-html |
+| 打印笔记、PDF，也可选 Markdown / LaTeX | [pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip) | pre-review-notes |
+| 离线网页笔记、可选折叠问答 | [pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip) | pre-review-notes-html |
 
 **三个预设在两个入口都能使用。** 例如，预习可以用 PDF，考试复习也可以用 HTML。
 两个包可以分别或同时安装；要同时生成两种成品时，各自保存配置和输出。
 
-v0.3.0 发布后，在 [Release 下载页](https://github.com/liquidtoy001/PRN/releases/latest) 的
-Assets 中选择相应 ZIP。发布前可使用本仓库中的完整 Skill 文件夹。具体安装位置和操作见
+点击上表下载，或在 [v0.3.0 下载页](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0) 的
+Assets 中选择相应 ZIP。具体安装位置和操作见
 [小白使用指南](./USAGE.md)。下载的 `.sha256` 是校验文件，GitHub 自动提供的 Source code
 是仓库源码，它们都不等同于安装 ZIP。
 
@@ -144,7 +144,7 @@ PDF 入口另有可选的题库、Anki 导出和重测工具；HTML 折叠问答
 
 ## 版本与开发
 
-当前准备版本：**v0.3.0**。完整变化和升级说明见 [发布说明](./RELEASE-0.3.0.md)。
+当前版本：**v0.3.0**。完整变化和升级说明见 [发布说明](./RELEASE-0.3.0.md)。
 v0.2.10 的两套入口继续兼容原用途配置，新增预习用途；保留旧成品和进度，再让 Agent
 读取新规则处理后续章节。新增检查不会把旧章节自动标记为已经通过。
 

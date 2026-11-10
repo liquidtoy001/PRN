@@ -1,8 +1,9 @@
 # Changelog
 
-## v0.3.0 — release preparation
+## v0.3.0 — 2026-11-10
 
-Prepared 2026-11-10; not yet published. See [release notes](RELEASE-0.3.0.md) and
+See the [GitHub Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0),
+[release notes](RELEASE-0.3.0.md) and
 [validation](TESTING-0.3.0.md). Existing v0.2.10 artifacts remain unchanged.
 
 Keep the PDF and HTML entries, with three explicit purpose presets: preview (new), knowledge
@@ -42,7 +43,7 @@ Release pages/assets are locally archived, while their Git tags remain.
 
 | Version | Changes |
 |---|---|
-| v0.3.0 (prepared) | Three purpose presets with one complete intake; standalone teaching, evidence-based exam configuration, paper identity review and automatic second-pass checks. |
+| v0.3.0 | Three purpose presets with one complete intake; standalone teaching, evidence-based exam configuration, paper identity review and automatic second-pass checks. |
 | v0.2.10 | Independent offline HTML entry, optional folded questions, shared-resource drift checks and dual packages. |
 | v0.2.9 | Separate image extraction and final-layout reviews, crop and render evidence. |
 | v0.2.8 | Optional verified paper reading lists and integrated explanations. |

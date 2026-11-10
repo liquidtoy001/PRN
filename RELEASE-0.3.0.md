@@ -34,8 +34,8 @@ v0.3.0 保留 PDF 和 HTML 两个入口，把学习用途整理成课前预习�
 
 | 目标 | 安装包 | 调用名称 |
 |---|---|---|
-| 打印 PDF，可选 Markdown / LaTeX | `pre-review-notes-v0.3.0.zip` | `pre-review-notes` |
-| 离线 HTML，可选折叠问答 | `pre-review-notes-html-v0.3.0.zip` | `pre-review-notes-html` |
+| 打印 PDF，可选 Markdown / LaTeX | [pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip) | `pre-review-notes` |
+| 离线 HTML，可选折叠问答 | [pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip) | `pre-review-notes-html` |
 
 每个 ZIP 都可独立安装，并配有 `.zip.sha256` 校验文件。保留旧笔记与进度，按平台支持的
 更新方式替换完整 Skill 文件夹，再让 Agent 确认读到 0.3.0。两个调用名称不变；已有

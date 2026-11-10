@@ -1,8 +1,9 @@
-# v0.3.0 release preparation validation
+# v0.3.0 validation
 
-Prepared on 2026-11-10. This record separates engineering checks, artifact inspection and
-learning-effectiveness evidence. GitHub publication is a separate step; no v0.3.0 release
-has been published during preparation.
+Local preparation was completed on 2026-11-10. This record separates engineering checks,
+artifact inspection and learning-effectiveness evidence. The results below describe that
+preparation run. Publication details and CI evidence for the published revision are recorded
+on the [v0.3.0 Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0).
 
 ## Release scope
 
@@ -10,10 +11,11 @@ Both independently installable entries are version 0.3.0. The release includes t
 unreleased teaching, exam-review and presentation improvements as well as the three-purpose
 intake. Source material, private course outputs and local review records are excluded.
 
-## Current preparation run
+## Local preparation run
 
 Environment: Windows, Python 3.10. The following checks were executed for the prepared 0.3.0
-runtime; remote CI for the release commit has not run.
+runtime. Remote CI had not run for that revision at the time of local preparation; it is a
+separate publication check, linked from the Release.
 
 - **37 unit/CLI tests passed.** The new release regression verifies that disabled or missing
   `include_code` rejects HTML pre/code before output, while an explicit true value builds.
