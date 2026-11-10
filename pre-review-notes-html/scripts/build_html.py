@@ -16,7 +16,8 @@ import sys
 from urllib.parse import quote, unquote, urlsplit
 from xml.etree import ElementTree
 
-from validate_citations import find_citations, load_inventory, locator_is_placeholder
+from validate_citations import evidence_sections, find_citations, load_inventory, locator_is_placeholder
+from review_preferences import FIELDS as REVIEW_FIELDS, validate_review_preferences
 
 SKILL = Path(__file__).resolve().parents[1]
 VOID = {"img", "br", "hr"}
@@ -39,14 +40,17 @@ def validate_configuration(value: object) -> dict:
         raise ValueError("incomplete or unknown preferences")
     config = prefs.get("note_configuration")
     choices = {
-        "purpose": {"knowledge", "exam"}, "depth": {"standard-detailed", "extended"},
+        "purpose": {"preview", "knowledge", "exam"}, "depth": {"standard-detailed", "extended"},
         "paper_enrichment": {"off", "reading-list", "integrated"},
         "reading_width": {"standard", "wide"}, "layout_density": {"comfortable", "compact"},
         "theme": {"light", "dark", "auto"}, "self_test": {"none", "folded-qa"},
     }
     expected = set(choices) | {"scope", "deliverables", "answers_initial", "confirmed"}
-    if not isinstance(config, dict) or set(config) != expected:
+    if not isinstance(config, dict) or not expected.issubset(config) or set(config) - expected - REVIEW_FIELDS:
         raise ValueError("incomplete or unknown HTML note_configuration; print options are not accepted")
+    review_errors = validate_review_preferences(config)
+    if review_errors:
+        raise ValueError("; ".join(review_errors))
     for key, allowed in choices.items():
         if not isinstance(config[key], str) or config[key] not in allowed:
             raise ValueError(f"invalid {key}")
@@ -73,7 +77,7 @@ def validate_configuration(value: object) -> dict:
 
 class Fragment(HTMLParser):
     """Validate the deliberately small authoring subset and collect build dependencies."""
-    def __init__(self, root: Path, config: dict):
+    def __init__(self, root: Path, config: dict, evidence: dict | None = None):
         super().__init__(convert_charrefs=True)
         self.root, self.config = root.resolve(), config
         self.stack: list[dict] = []
@@ -83,6 +87,7 @@ class Fragment(HTMLParser):
         self.headings: list[tuple[str, str]] = []
         self.parts: list[str] = []
         self.questions = 0
+        self.evidence = evidence or {}
 
     def local_asset(self, url: str) -> None:
         parsed = urlsplit(url)
@@ -120,6 +125,12 @@ class Fragment(HTMLParser):
             raise ValueError(f"duplicate, boolean or unsupported attribute on {tag}")
         if "src" in attrs and tag != "img" or "href" in attrs and tag != "a":
             raise ValueError("src/href must belong to img/a")
+        if tag in {"pre", "code"} and not self.config.get("include_code", False):
+            raise ValueError("code markup requires include_code=true; explain mechanisms without a listing")
+        classes = attrs.get("class", "").split()
+        for marker, setting in (("source-index", "show_source_index"), ("source-explanation", "show_source_explanations")):
+            if marker in classes and not self.config.get(setting, False):
+                raise ValueError(f"{marker} requires {setting}=true; keep it in a companion by default")
         identifier = attrs.get("id")
         if identifier:
             if identifier in self.ids or identifier == "qa-controls" or any(c.isspace() for c in identifier):
@@ -180,7 +191,7 @@ class Fragment(HTMLParser):
             self.stack[-1]["summary"] = text
         if tag == "details" and (frame["children"].count("summary") != 1 or not text.removeprefix(frame["summary"]).strip()):
             raise ValueError("question needs one summary and a nonempty answer")
-        if tag == "details" and not find_citations(text.removeprefix(frame["summary"]), ".md"):
+        if tag == "details" and not (find_citations(text.removeprefix(frame["summary"]), ".md") or self.evidence.get(frame["id"])):
             raise ValueError("each answer requires a source citation")
         if tag == "figure" and "figcaption" not in frame["children"]:
             raise ValueError("figure needs an adjacent figcaption")
@@ -211,10 +222,25 @@ def build(args: argparse.Namespace) -> Path:
     settings = json.loads(configuration_bytes)
     config = validate_configuration(settings)
     inventory, errors = load_inventory(args.inventory)
-    fragment = Fragment(args.content.parent, config)
+    evidence_path = getattr(args, "evidence", None)
+    evidence_bytes = evidence_path.read_bytes() if evidence_path else b""
+    evidence_text = evidence_bytes.decode("utf-8")
+    evidence = evidence_sections(evidence_text)
+    for identifier in config.get("exam_basis_source_ids", []):
+        if identifier not in inventory:
+            errors.append(f"unknown exam basis source id: {identifier}")
+    fragment = Fragment(args.content.parent, config, evidence)
     fragment.feed(content_bytes.decode("utf-8"))
     body = fragment.finish()
     citations = find_citations(body, ".html")
+    citations.extend(find_citations(evidence_text, ".md"))
+    for anchor, refs in evidence.items():
+        if anchor not in fragment.ids:
+            errors.append(f"evidence anchor absent from note: {anchor}")
+        if not refs:
+            errors.append(f"evidence anchor has no citations: {anchor}")
+    if evidence_path and not evidence:
+        errors.append("evidence companion needs ## anchor sections with source references")
     if not citations:
         errors.append("chapter has no source citations")
     for ref in citations:
@@ -225,7 +251,7 @@ def build(args: argparse.Namespace) -> Path:
     if errors:
         raise ValueError("; ".join(errors))
     zh = settings["preferences"]["language"] != "en"
-    labels = ("跳到正文", "本章导航", "全部展开", "全部折叠", "离线学习笔记 · 资料边界见正文") if zh else ("Skip to content", "In this chapter", "Expand all", "Collapse all", "Offline study notes · See the source boundary above")
+    labels = ("跳到正文", "本章导航", "全部展开", "全部折叠", "离线学习笔记") if zh else ("Skip to content", "In this chapter", "Expand all", "Collapse all", "Offline study notes")
     controls = ""
     enhancement = ""
     if fragment.questions:
@@ -236,7 +262,8 @@ def build(args: argparse.Namespace) -> Path:
         language="zh-CN" if zh else "en", theme=config["theme"], density=config["layout_density"],
         width=config["reading_width"], title=escape(args.title), skip_label=labels[0], toc_label=labels[1],
         toc="".join(f'<li><a href="#{quote(key, safe="")}">{escape(label)}</a></li>' for key, label in fragment.headings),
-        subtitle=escape(config["scope"]), controls=controls, body=body, footer=labels[4], enhancement=enhancement,
+        subtitle=f'<p class="boundary">{escape(config["scope"])}</p>' if config.get("show_source_explanations", False) else "",
+        controls=controls, body=body, footer=labels[4], enhancement=enhancement,
     ).encode("utf-8")
     output = args.output_dir.resolve()
     # No artifact writes happen before configuration, markup, citations and dependencies pass.
@@ -247,15 +274,21 @@ def build(args: argparse.Namespace) -> Path:
         shutil.copyfile(source, destination)
     (output / "index.html").write_bytes(rendered)
     (output / "configuration.json").write_bytes(configuration_bytes)
+    if evidence_path:
+        (output / "evidence.md").write_bytes(evidence_bytes)
     report = {
         "schema_version": 1, "format": "html", "skill_version": (SKILL / "VERSION").read_text().strip(),
         "static_checks": "pass", "browser_review": "pending", "semantic_review": "pending",
+        "teaching_depth_review": "pending", "second_pass_review": "pending",
         "question_count": fragment.questions, "citation_count": len(citations),
         "inputs": {"content": digest(content_bytes), "configuration": digest(configuration_bytes),
                    "inventory": digest(args.inventory.read_bytes()), "template": digest(template_bytes)},
         "artifacts": {"index.html": digest(rendered), **{name: digest(path.read_bytes()) for name, path in fragment.assets.items()}},
         "scope_note": "Restricted markup, local dependencies and citation syntax only; not semantic or browser QA.",
     }
+    if evidence_path:
+        report["inputs"]["evidence"] = digest(evidence_bytes)
+        report["artifacts"]["evidence.md"] = digest(evidence_bytes)
     (output / "build-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return output / "index.html"
 
@@ -265,6 +298,7 @@ def main() -> int:
     for name in ("content", "configuration", "inventory", "output-dir"):
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--title", required=True)
+    parser.add_argument("--evidence", type=Path, help="private Markdown references keyed by ## note/question-anchor")
     args = parser.parse_args()
     try:
         output = build(args)

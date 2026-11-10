@@ -1,6 +1,11 @@
 # HTML chapter review
 
 Artifact / SHA-256 / build report: [actual paths and hashes]
+Second-pass companion: [path, final hashes and actual K/Q counts]
+Teaching depth / question semantics: [separate results and unresolved IDs]
+Standalone reading: [whole chapter or sampled range; prerequisite/transition findings]
+Code and answer-language display: [include_code; snippets appropriate to response types]
+Source display choices: [index/explanations; verify final page follows configuration]
 Browser / version / viewport / theme: [actually tested values]
 Completed source ranges and K IDs: [actual scope]
 Pending K/V IDs and omissions: [IDs and reasons]

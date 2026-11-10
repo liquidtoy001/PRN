@@ -190,6 +190,17 @@ def inventory_digest(materials: list[dict[str, Any]]) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def duplicate_groups(materials: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Expose identical bytes without merging IDs or inferring exam administrations."""
+    groups: dict[str, list[str]] = {}
+    for item in materials:
+        groups.setdefault(item["sha256"], []).append(item["id"])
+    return [
+        {"sha256": digest, "source_ids": identifiers, "basis": "identical-bytes"}
+        for digest, identifiers in groups.items() if len(identifiers) > 1
+    ]
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path, help="directory containing local course materials")
@@ -284,6 +295,8 @@ def main(argv: list[str] | None = None) -> int:
         "root": str(root),
         "inventory_digest": inventory_digest(materials),
         "materials": materials,
+        "duplicate_groups": duplicate_groups(materials),
+        "duplicate_scope": "Identical bytes only. Inspect full questions and provenance to identify papers, variants and repeated administrations.",
         "warnings": warnings,
     }
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -24,6 +24,9 @@ permission.
 Run `inventory_materials.py` before substantial research. The inventory records a stable
 source ID, relative path, byte size, SHA-256 digest, inferred role, and available PDF metadata.
 Role inference is only a routing hint and must not be presented as a verified course fact.
+The inventory also groups byte-identical files without merging their IDs. For assessment
+sources, follow `exam-review.md` to inspect full-content identity and question overlaps;
+different hashes and filename years are insufficient to establish distinct papers.
 
 Useful source roles include:
 
@@ -40,6 +43,10 @@ record the derivative path. A missing PDF parser is `metadata_unavailable`, not 
 the file is searchable.
 
 ## 3. Establish the assessment boundary
+
+Apply this when the selected purpose or requested applications involve assessment claims.
+Preview and knowledge can follow the course and prerequisite order without an exam map;
+do not require past papers before teaching the agreed material.
 
 Prefer evidence in this order:
 
@@ -72,10 +79,12 @@ internally inconsistent, cite both locations and explain the discrepancy.
 
 ## 5. Source coverage before drafting
 
-Before fixing the chapter order, report which evidence classes are present and missing. In
-particular, explicitly say when there are no grading weights, past papers, official solutions,
-or current-course confirmation. That boundary must survive into the note header, progress
-report, and delivery summary.
+Before fixing the chapter order, report relevant evidence and processing gaps. For exam
+purpose or assessment claims, explicitly say when there are no grading weights, past papers,
+official solutions or current-course confirmation. Missing assessment material is not a
+prerequisite for preview/knowledge notes. That boundary must survive into the note header, progress
+report, and delivery summary when source explanations are enabled. With the default off,
+keep the full boundary in companions and the delivery summary, following note-presentation.md.
 
 Run the material-capacity report after inventory. Its filename-derived role counts are only a
 preliminary signal; confirm whether apparent assessment files actually contain current

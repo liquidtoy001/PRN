@@ -17,6 +17,9 @@
       "theme": "light",
       "self_test": "folded-qa",
       "answers_initial": "closed",
+      "include_code": true,
+      "show_source_index": true,
+      "show_source_explanations": true,
       "confirmed": true
     }
   }

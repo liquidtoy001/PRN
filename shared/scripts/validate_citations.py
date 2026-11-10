@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 from html.parser import HTMLParser
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -112,6 +113,19 @@ class HTMLCitations(HTMLParser):
             self.citations.append(citation)
 
 
+def evidence_sections(text: str) -> dict[str, list[dict[str, str]]]:
+    """Read a private Markdown map keyed by exact note/question anchors."""
+    sections: dict[str, list[dict[str, str]]] = {}
+    headings = list(re.finditer(r"^## ([A-Za-z][A-Za-z0-9_.:-]*)\s*$", text, re.M))
+    for index, heading in enumerate(headings):
+        identifier = heading.group(1)
+        if identifier in sections:
+            raise ValueError(f"duplicate evidence anchor: {identifier}")
+        end = headings[index + 1].start() if index + 1 < len(headings) else len(text)
+        sections[identifier] = find_citations(text[heading.end():end], ".md")
+    return sections
+
+
 def line_number(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
 
@@ -120,6 +134,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("note", type=Path, help="generated .tex, .md or .html note")
     parser.add_argument("--inventory", type=Path, required=True)
+    parser.add_argument("--evidence", type=Path, help="private Markdown claim-to-source companion for citation-free body text")
     parser.add_argument("--materials-root", type=Path, help="optionally verify inventoried files exist")
     parser.add_argument("--allow-empty", action="store_true", help="allow a note with no source references")
     parser.add_argument("--report", type=Path, help="write a JSON validation report")
@@ -129,24 +144,33 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        text = args.note.read_text(encoding="utf-8")
+        note_bytes = args.note.read_bytes()
+        text = note_bytes.decode("utf-8")
         inventory, errors = load_inventory(args.inventory)
+        evidence_bytes = args.evidence.read_bytes() if args.evidence else b""
+        evidence_text = evidence_bytes.decode("utf-8")
     except (OSError, UnicodeError, ValueError, json.JSONDecodeError, csv.Error) as exc:
         print(f"validation setup error: {exc}", file=sys.stderr)
         return 2
 
     citations = find_citations(text, args.note.suffix)
+    inline_count = len(citations)
+    evidence_citations = find_citations(evidence_text, ".md")
+    citations.extend(evidence_citations)
     if not citations and not args.allow_empty:
-        errors.append("note contains no machine-readable source references")
+        errors.append("note and evidence companion contain no machine-readable source references")
 
-    for citation in citations:
-        location = line_number(text, int(citation["offset"]))
+    for index, citation in enumerate(citations):
+        is_evidence = index >= inline_count
+        document = evidence_text if is_evidence else text
+        location = line_number(document, int(citation["offset"]))
+        label = "evidence" if is_evidence else "note"
         identifier = citation["id"]
         locator = citation["locator"]
         if identifier not in inventory:
-            errors.append(f"line {location}: unknown source id {identifier}")
+            errors.append(f"{label} line {location}: unknown source id {identifier}")
         if locator_is_placeholder(locator):
-            errors.append(f"line {location}: unresolved or empty locator for {identifier}")
+            errors.append(f"{label} line {location}: unresolved or empty locator for {identifier}")
 
     if args.materials_root:
         root = args.materials_root.resolve()
@@ -165,6 +189,10 @@ def main(argv: list[str] | None = None) -> int:
         "inventory": str(args.inventory.resolve()),
         "status": "pass" if not errors else "fail",
         "citation_count": len(citations),
+        "inline_citation_count": inline_count,
+        "note_sha256": hashlib.sha256(note_bytes).hexdigest(),
+        "evidence": str(args.evidence.resolve()) if args.evidence else None,
+        "evidence_sha256": hashlib.sha256(evidence_bytes).hexdigest() if args.evidence else None,
         "source_ids": sorted({citation["id"] for citation in citations}),
         "errors": errors,
         "scope_note": (

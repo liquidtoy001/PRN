@@ -6,6 +6,8 @@ The bundled builder accepts a restricted, non-executable HTML/MathML fragment. I
 titles/navigation and rejects scripts, event handlers, inline CSS, embedded documents,
 remote assets, missing images, escaping paths, duplicate IDs and broken local anchors.
 This is a controlled authoring subset, not a general-purpose hostile-HTML sanitizer.
+For an explicitly requested citation-free body, use the optional `--evidence` companion
+described in citation-format.md. Preserve attribution required for reused images or quotations.
 
 ```text
 python scripts/build_html.py --content <chapter-body.html> \
@@ -41,7 +43,8 @@ ledger paths and actual QA findings in the HTML state manually. No print helper 
 For each entry in `study-state-template.json`'s chapters list, record a stable slug, selected
 source IDs/ranges, inventory/configuration/build-report hashes, output/coverage/review paths,
 pending K/V IDs, and `qa` values for coverage, reasoning, citations, extraction, browser,
-capacity disclosure and usage accounting. Use pending/pass/fail/not-applicable honestly.
+capacity disclosure, usage accounting, teaching depth and second pass. Bind the second-pass
+companion path and results to the final build. Use pending/pass/fail/not-applicable honestly.
 Only mark the chapter delivered after requested artifacts exist and all applicable checks
 pass; otherwise record a partial handoff with its remaining checks. State is agent-maintained,
 not a claim of automated HTML workflow enforcement or stored quiz attempts.

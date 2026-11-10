@@ -69,6 +69,11 @@
 % from \examref which tags WHERE it is ASSESSED.
 \newcommand{\pref}[1]{{\footnotesize\color{darktext}\texttt{#1}}}
 \newcommand{\subtitle}[1]{{\scriptsize\color{gray}\itshape #1}}
+% Set from note_configuration; default student-facing provenance sections are off.
+\newif\ifshowsourceindex
+\showsourceindexfalse
+\newif\ifshowsourceexplanations
+\showsourceexplanationsfalse
 
 \newcommand{\topicsection}[1]{%
   \par\Needspace{7\baselineskip}%
@@ -141,6 +146,7 @@
 % ============================================================
 \vspace*{2pt}
 \chaptertitle{Chapter [X]: [Topic Name]}
+\ifshowsourceexplanations
 \sourceref{S001}{[e.g. PDF p. 18 / Section 4]} \quad
 \subtitle{[One line: why this chapter matters for assessment — e.g.
 "18 of 100 exam marks; recurs in every past sitting; official sample
@@ -155,36 +161,37 @@ is unknown rather than filling this placeholder with a generic claim.]}
 whether exam priority and answer depth are verified, limited, or unavailable;
 and the next evidence/check that would improve this artifact.]
 \end{qualitybox}
+\fi
 
 % ============================================================
-% CONCEPT SECTION — repeat for every distinct coverage-ledger point.
-% Expand with notation, conditions, reasoning and diagrams as needed.
+% OPENING AND CONNECTED TEACHING SECTION — group related K IDs.
+% The ledger is not the chapter outline. Follow standalone-teaching.md.
 % Keep normal explanations in body prose; boxes highlight only key results.
 % Reuse informative source visuals near this explanation with includegraphics.
 % Preserve aspect ratio; add a caption, literal sourceref citation, transformation
 % label and reading explanation. Track V IDs in coverage.md and follow source-visuals.md.
 % ============================================================
-\topicsection{[X.1] [Concept Name]}
-\sourceref{S001}{[where taught]}\assessref{S004}{[e.g. 2023 exam Q5]}
+[A concrete situation, the decision to make, and the short reading route. Restore
+the prerequisites actually needed, rather than opening with many unexplained symbols.]
 
-\begin{rc}
-{\small\bfseries [One plain-language framing sentence: what problem
-does this concept solve, or what question does it answer?]}
+\topicsection{[X.1] [A connected teaching topic]}
 
-\medskip
-{\small\bfseries Formal statement:}\;
-[Definition / theorem / rule / doctrine, in the course's own notation
-and phrasing — not a generic textbook restatement.]
+[Connect to the preceding question. Explain the necessary earlier idea with a minimal
+example before using it, and say why it matters here.]
 
-\medskip
-{\small\bfseries Short example:}\;
-[A minimal example illustrating the concept — this is NOT the full
-worked derivation; that goes in its own "Derivation" block below.]
+[Develop the mechanism in connected prose and then its formal statement. Define symbols
+as introduced, interpret the rule in words, and keep conditions beside the relevant step.]
 
+[Work through a useful example here. Explain the omitted intermediate step and the result.
+Compare with the closest relevant prerequisite or alternative using the same input if useful.]
+
+[Explain what this resolves and why the next idea is needed.]
+\sourceref{S001}{[where taught]}
+
+% Optional takeaway after the explanation, not a mandatory box per K ID.
 \begin{keybox}
 \centering\small\bfseries [The one sentence to remember from this section.]
 \end{keybox}
-\end{rc}
 
 % ============================================================
 % WORKED DERIVATION — the highest-value block in the whole template.
@@ -205,6 +212,11 @@ worked derivation; that goes in its own "Derivation" block below.]
 \step{\ding{193}}{[Second step.]}
 \step{\ding{194}}{[Continue until the answer is reached — match the
 depth/notation of any official sample solution if one exists.]}
+
+% Add an answer-language snippet only for an eligible assessed prose demand when useful.
+% Calculations and ordinary choice items need no second English answer block.
+% include_code=false by default: explain source-code mechanisms with prose/trace tables.
+% A lab source or extended depth does not authorize importing code listings.
 
 \medskip
 {\small\bfseries Why this matters:}\;
@@ -265,9 +277,10 @@ things that, if forgotten, would sink an otherwise-good answer.]
 \end{rc}
 
 % ============================================================
-% ASSESSMENT-MAPPING TABLE — every real item touching this chapter.
-% This is what tells the learner exactly what to go practice next.
+% ASSESSMENT-MAPPING TABLE — opt in via show_source_index.
+% Keep the full mapping in exam-plan.md by default.
 % ============================================================
+\ifshowsourceindex
 \topicsection{[X.N+1] Assessment Mapping}
 
 \begin{rc}
@@ -284,12 +297,12 @@ things that, if forgotten, would sink an otherwise-good answer.]
 \end{tabular}}
 
 \begin{keybox}
-\centering\small\bfseries\color{redline} [One-sentence summary of the
-highest-probability item type for the next assessment, based on
-recurrence across the sources above.]
+\centering\small\bfseries\color{redline} [Supported emphasis from the
+deduplicated sources; distinguish instructor guidance from observed recurrence.]
 \end{keybox}
 \end{rc}
 
+\fi
 % ============================================================
 % ACTIVE-LEARNING HANDOFF — include when flashcards/quizzes were requested.
 % Keep the validated JSON bank and learner state outside the PDF; this block

@@ -1,0 +1,71 @@
+# Pre-Review Notes v0.3.0 — 三种学习预设与完整复核
+
+v0.3.0 保留 PDF 和 HTML 两个入口，把学习用途整理成课前预习、知识巩固、考试复习三个
+可修改的预设，并完善从连贯讲解到逐项复核的流程。
+
+## 首次使用更容易选择
+
+- 新增课前预习：先补必要前置知识，再通过问题背景、小例子与概念联系帮助理解课程。
+- 知识巩固强调定义、机制、推导和相近概念；考试复习依据所供真卷、大纲或考点清单组织。
+- 第一次对话一次显示所有设置、可选值和推荐值，包括高级与暂不适用的选项。
+  用户可回复“其余按推荐”，已有明确选择不会被覆盖。
+- 用途与处理节奏分开：“先做一章 / 分章完成课程 / 限时冲刺”只决定范围和时间安排。
+- 三个预设默认不额外出题，原课件例题仍保留。题库、记忆卡或 HTML 折叠问答可单独选择。
+
+## 笔记更适合独立阅读
+
+- 按知识依赖组织连续讲解，第一次使用前补足必要概念，说明相近方法之间的联系。
+- 逐知识点核对定义、符号、输入输出、机制、条件与必要例子；不把标题和公式当作讲解完成。
+- 正文代码默认关闭；HTML 构建时也会拒绝未开启的代码标记。课程实验中的原理、状态变化
+  与输入输出仍需解释，伪装成普通段落的代码仍需人工复核。
+- 正文资料索引和来源过程说明默认关闭，完整证据映射留在配套记录，必要引用与图表署名保留。
+
+## 考试专项与二次验收
+
+- 核对试卷身份与完整题目，区分副本、变体和独立考试，避免重复计频。
+  工具自动识别相同字节文件；扫描、批注和重排版本仍需模型核对。
+- 按题型决定作答表达：计算题和普通选择题不重复附英文答案，定义、比较、论证等文字题
+  才酌情提供简洁的答题语言片段。
+- 初稿完成后提醒并继续逐知识点、逐题与小问复核，再通读整章检查前置知识和过渡。
+  修正后重新构建，交付时报告修正和待核实部分。
+- 状态与构建工具支持新的配置和复核记录；旧章节不会自动获得新的通过状态。
+
+## 下载与升级
+
+| 目标 | 安装包 | 调用名称 |
+|---|---|---|
+| 打印 PDF，可选 Markdown / LaTeX | `pre-review-notes-v0.3.0.zip` | `pre-review-notes` |
+| 离线 HTML，可选折叠问答 | `pre-review-notes-html-v0.3.0.zip` | `pre-review-notes-html` |
+
+每个 ZIP 都可独立安装，并配有 `.zip.sha256` 校验文件。保留旧笔记与进度，按平台支持的
+更新方式替换完整 Skill 文件夹，再让 Agent 确认读到 0.3.0。两个调用名称不变；已有
+knowledge/exam 配置继续有效，preview 是新增用途。新配置不应交给旧版本运行时处理。
+
+继续任务时沿用已保存设置。若需要重新生成旧章，另存新成品，重新执行对应检查；
+本次升级不会自动重写课程资料或历史验收记录。
+
+## 验证与范围
+
+验证命令、实际结果及未验证项见 [v0.3.0 验证记录](TESTING-0.3.0.md)。
+本地 37 项回归测试通过；两包可复现构建、独立解压运行和两份中文 PDF 样本检查通过。
+HTML 实际浏览器视觉与交互验收因工具不允许打开本地文件而仍待完成，未把构建通过记为浏览器通过。
+原有知识覆盖、源图复用、PDF 与 HTML 独立入口、论文拓展和练习工具继续保留。
+本次不包含独立 HTML 题集应用，也不声明跨学科准确性或学习效果已经得到系统验证。
+
+使用方法见 [小白使用指南](USAGE.md)，首次交互见 [完整配置示例](examples/intake/README.md)。
+
+## English summary
+
+Two independent PDF/HTML entries now offer preview, knowledge consolidation and exam revision
+presets. A single intake displays all alternatives and recommendations while preserving saved
+choices. Purpose remains separate from scope and pace; additional practice is opt-in.
+
+Teaching follows a connected reading path with local prerequisites and related-concept
+explanations. Exam planning uses supplied evidence and reviewed paper identities. Code and
+source/process sections default to off in the body. Answer-language snippets follow the
+question type. An announced automatic second pass checks knowledge, questions and chapter
+continuity, with artifact-bound review records and explicit unresolved items.
+
+Existing knowledge/exam configurations remain readable. Preserve historical notes and state;
+new review requirements do not retroactively certify old artifacts. See the validation record
+for observed engineering/visual checks and their limits.

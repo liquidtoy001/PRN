@@ -1,11 +1,8 @@
 # Active learning and staged retesting
 
-Respect `configuration.md` first: knowledge consolidation and an explicit `none` companion
-choice suppress automatic question/bank generation in every mode. Existing source exercises
-may still be explained as examples. Never infer a quiz request merely from full mode.
-
-Use this workflow when the learner requests flashcards or quizzes, or when `full` or
-`exam-cram` mode includes active-learning outputs. Notes remain the source-grounded teaching
+Use this workflow only when flashcards or quizzes are selected in the confirmed configuration.
+All three purpose presets default to no additional practice; full and exam-cram do not change
+that choice. Existing source exercises remain explained examples. Notes remain the source-grounded teaching
 artifact; a learning bank is a separate, machine-checkable practice layer.
 
 ## Build a learning bank only from verified chapter content
@@ -24,6 +21,10 @@ Do not turn a generic textbook fact into a course-specific exam claim. Distracto
 represent sourced or observed misconceptions when possible; label generic diagnostic
 distractors as general guidance. Avoid long copyrighted question reproduction in any public
 export.
+Review the stem, answer, rationale and every distractor together using
+`second-pass-review.md`. A changed prompt requires renewed semantic review of its explanation
+and concise answer sentence, even when its concept tag is unchanged. Check accidental option
+clues without forcing equal lengths or answer-position quotas.
 
 Validate before use:
 

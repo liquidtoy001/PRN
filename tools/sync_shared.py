@@ -8,12 +8,18 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[1]
 SKILLS = ("pre-review-notes", "pre-review-notes-html")
 SHARED_FILES = (
+    "references/learning-presets.md",
     "references/coverage-and-depth.md",
+    "references/standalone-teaching.md",
+    "references/exam-review.md",
+    "references/second-pass-review.md",
+    "references/note-presentation.md",
     "references/source-visuals.md",
     "references/evidence-workflow.md",
     "references/paper-enrichment.md",
     "references/measurement-and-capacity.md",
     "assets/coverage-template.md",
+    "assets/second-pass-template.md",
     "assets/pricing-template.json",
     "scripts/inventory_materials.py",
     "scripts/assess_capacity.py",
@@ -21,6 +27,7 @@ SHARED_FILES = (
     "scripts/usage_ledger.py",
     "scripts/download_materials.py",
     "scripts/validate_citations.py",
+    "scripts/review_preferences.py",
 )
 
 

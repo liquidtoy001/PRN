@@ -1,11 +1,11 @@
 ---
 name: pre-review-notes
-description: Build source-grounded, print-first course notes in PDF, editable LaTeX or Markdown, with optional revision plans and source-linked practice. Use with the learner's slides, exercises and assessment materials. For interactive HTML notes or collapsible answers use pre-review-notes-html instead; not for generic explanations without course material.
+description: Build source-grounded, print-first course notes for preview, knowledge consolidation or exam revision in PDF, editable LaTeX or Markdown. Use with the learner's slides, exercises and assessment materials. For interactive HTML notes or collapsible answers use pre-review-notes-html instead; not for generic explanations without course material.
 ---
 
 # Pre-Review Notes
 
-Version: 0.2.10. Resolve this directory and read `VERSION`
+Version: 0.3.0. Resolve this directory and read `VERSION`
 before starting; disclose which copy is used when multiple installations exist.
 
 Turn scattered course materials into maintainable revision notes whose priorities, worked
@@ -26,6 +26,10 @@ small remarks. Lightweight reduces the batch size, not explanation depth. A quic
 card is a companion, not a substitute for the chapter; explicit cheat-sheet requests may
 use condensed output with omissions disclosed.
 
+**Standalone reading.** Build a connected explanation with the prerequisites available
+before they are used. Read [references/standalone-teaching.md](references/standalone-teaching.md)
+when planning and drafting; a correct inventory of separate points is not a readable chapter.
+
 1. **Calibrate to evidence, not textbook convention.** Never call a topic important,
    frequent, or exam-style without a source that supports the claim. If assessment evidence
    is absent, label the result as lecture-driven rather than exam-calibrated.
@@ -34,8 +38,8 @@ use condensed output with omissions disclosed.
    source files in a local ignored directory unless the user explicitly authorizes publishing
    them and the licence permits it.
 3. **Use stable source identifiers.** Build a material inventory before making substantial
-   claims. Cite source IDs and precise locators such as a PDF page, question number, section,
-   or timestamp.
+   claims. Record source IDs and precise locators such as a PDF page, question number,
+   section or timestamp in the note or its mapped evidence companion.
 4. **Verify worked reasoning independently.** Do not copy a calculation or derivation on
    trust, even from an official solution. Mark unresolved uncertainty instead of smoothing it
    over.
@@ -50,41 +54,35 @@ use condensed output with omissions disclosed.
    record. Provider-reported usage, manual counts, partial estimates, and unavailable values
    must never be presented as equivalent.
 
-## Start with the complete configuration intake
+## Start with presets and a complete configuration card
 
-Read [references/configuration.md](references/configuration.md) before generation.
-Present the complete configuration in the learner's language, showing already specified
-values and recommended defaults. Ask once for all missing choices; allow a single reply
-accepting defaults. Do not silently treat the recommendations as confirmed preferences.
-If the user already specified everything or explicitly delegated choices, proceed without
-another confirmation. Resume saved settings and ask only about unresolved or changed choices.
+Read [references/learning-presets.md](references/learning-presets.md) and
+[references/configuration.md](references/configuration.md) before generation. Offer 课前预习
+(`preview`), 知识巩固 (`knowledge`) and 考试复习 (`exam`). Show their short comparison and the
+entire grouped PDF configuration in the first configuration exchange: alternatives, current
+values and which are supplied, recommended, evidence-derived or not applicable. Advanced and
+inactive settings stay visible; do not ask for the preset first and reveal the rest later.
 
-Purpose is independent of mode: `knowledge` (知识巩固版) teaches source knowledge with
-proportionate expansion and no generated questions by default; `exam` (考试复习版) adds
-evidence-based assessment preparation. Source examples remain in both. Purpose and explicit
-companion choices override mode defaults, including full-mode learning-bank generation.
+Focus decisions on purpose, concrete scope, language and deliverables. Recommend the rest so
+one reply can accept or customise them. Existing choices win over presets. If choices are
+already complete or delegated, show the resolved card and continue; otherwise wait for the
+reply before drafting. Save the complete configuration even for one chapter. On resume, ask
+only unresolved/changed choices instead of repeating the first-use questionnaire.
 
-The complete intake includes purpose, mode, source scope, depth, language, deliverable set,
-page size, layout density, paper enrichment, learning companions and relevant deadline/study time. Save the
-resolved settings in study state even for a single chapter, following configuration.md.
-
-### Existing preference semantics
-
-Do not re-ask anything the learner has already specified. Resolve only what is missing:
-
-- mode: **lightweight**, **full**, or **exam-cram**;
-- main note language: **Chinese**, **English**, or **bilingual Chinese-English**;
-- deliverable: Markdown, editable LaTeX, compiled PDF, or a combination;
-- active-learning companion: none, flashcards, quiz, or both;
-- deadline and available study time when they affect prioritisation.
-
-Read [references/modes.md](references/modes.md) before choosing or applying a mode. If the
-choice materially changes the result and cannot be inferred, ask one compact question that
-bundles the missing preferences.
+Purpose selects the teaching route. Mode selects scope/time: 先做一章 (`lightweight`), 分章完成课程
+(`full`), 限时冲刺 (`exam-cram`). Read [references/modes.md](references/modes.md). All presets
+retain source examples, full within-scope teaching and review; additional practice defaults
+to none. Full mode and exam purpose never silently enable a quiz or bank.
+For exam purpose, read [references/exam-review.md](references/exam-review.md) and derive
+structure, scope and answer language from the supplied papers, syllabus or topic checklist.
+Read [references/note-presentation.md](references/note-presentation.md): source indexes and
+source/process explanations default to off in the student note; keep the evidence companions.
+Visible code also defaults to off (`include_code=false`). Answer-language snippets follow
+the actual question type in exam-review.md, not every formula, calculation or choice item.
 
 For Chinese notes, write specialised or easily confused terminology as
-`中文（English, acronym）` on first use, then use the established English name or acronym
-consistently. Examples include 普通最小二乘法（Ordinary Least Squares, OLS）、岭回归
+`中文（English, acronym）` on first use, then use stable Chinese terminology or familiar acronyms
+naturally in the confirmed note language. Examples include 普通最小二乘法（Ordinary Least Squares, OLS）、岭回归
 （Ridge Regression）and 1-最近邻（1-Nearest Neighbour, 1-NN）. Keep mathematical
 notation, code identifiers, bibliographic titles, and quoted source wording in their
 canonical form.
@@ -114,10 +112,13 @@ Before substantial generation, read
 quality ceiling. If material does not safely fit, switch to cited chapter subsets and retain
 an explicit uncovered-source list; a large upload must not silently become partial coverage.
 
-### 2. Map assessment and topic priority
+### 2. Plan topics for the selected purpose
 
-Identify the grading structure, exam format, explicit instructor guidance, assessed items,
-and official solutions. Build chapters at an assessable topic grain. Order them by supported
+For preview and knowledge, follow the course sequence and prerequisite dependencies from
+learning-presets.md. Do not require an exam map or past-paper search to start a preview.
+For exam, identify grading structure, format, instructor guidance, assessed items and
+official solutions. Resolve paper identities and question overlaps using exam-review.md
+before counting recurrence. Build chapters at an assessable topic grain. Order them by supported
 assessment weight subject to genuine prerequisites. Where evidence is thin, use transparent
 labels such as `verified`, `inferred from limited evidence`, and `unknown`; do not fabricate a
 numerical ranking.
@@ -148,8 +149,8 @@ For source figures, charts and tables, read
 original visuals near their explanation; record their disposition in the coverage ledger.
 Text coverage alone is insufficient when a figure carries essential relationships or examples.
 
-Retrieve the course's own theory, instructor examples, practice problems, assessed work,
-past questions, and explicit guidance for the selected topic. Prefer real course problems to
+Retrieve the course's own theory, instructor examples and exercises for the selected topic;
+use assessment sources when the confirmed purpose/scope calls for them. Prefer real course problems to
 invented textbook analogues. Use:
 
 - `assets/template.tex` for quantitative courses;
@@ -157,8 +158,10 @@ invented textbook analogues. Use:
 
 Read [references/authoring.md](references/authoring.md) while drafting. Every assessment
 claim and non-trivial sourced claim must carry a stable source ID and locator.
+When the learner requests citation-free body text, put those mappings in evidence.md using
+references/citation-format.md and pass it to the citation validator.
 
-When flashcards or quizzes are requested, or included by the selected mode, read
+When flashcards or quizzes are selected in the confirmed configuration, read
 [references/active-learning.md](references/active-learning.md). Generate a separate learning
 bank from verified chapter content, validate it with `scripts/manage_learning.py`, and record
 attempts, confidence, mistakes, mastery, and staged retests in local learner state. Do not
@@ -175,6 +178,13 @@ Reconcile the coverage ledger against the original pages and the final note, the
 independent reasoning and visual layout are separate checks. Automated citation validation
 does not certify correctness or completeness. Unresolved substantive points prevent a claim
 of complete coverage; report partial delivery explicitly.
+
+After the draft exists, read [references/second-pass-review.md](references/second-pass-review.md).
+Notify the learner that the automatic second pass is starting, then check every in-scope K ID
+and question/subpart against the final note. Use `assets/second-pass-template.md`, repair
+omissions and non-responsive explanations, read the chapter continuously for prerequisite
+gaps and broken transitions, and rebuild affected outputs. Explicitly deferred
+reviews remain pending. Question checking does not require printing questions in the note.
 
 Run the citation validator when local files are available:
 
@@ -207,6 +217,9 @@ pricing profile and remains an estimate rather than an invoice.
 For schema-version 2 state, do not mark a newly generated chapter verified or delivered until
 `capacity_disclosure` and `usage_accounting` QA pass. Update `study_state.json` only after
 observable validation; then refresh `progress.md` and any requested retest plan.
+For automatic second-pass configurations, `teaching_depth` and `second_pass` must also pass.
+Remind the learner of the completed K/Q counts, corrections and unresolved items in delivery,
+with a link to the private review companion. Keep that audit trail out of the note by default.
 
 ## Included resources
 

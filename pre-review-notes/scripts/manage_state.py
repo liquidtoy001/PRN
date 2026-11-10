@@ -11,6 +11,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from review_preferences import validate_review_preferences
+
 
 MODES = {"lightweight", "full", "exam-cram"}
 LANGUAGES = {"zh", "en", "bilingual"}
@@ -19,6 +21,8 @@ LEARNING_OUTPUTS = {"flashcards", "quiz"}
 STATUSES = {"planned", "drafting", "verified", "delivered", "stale", "blocked"}
 QA_VALUES = {"pending", "pass", "fail", "not-applicable", "unavailable"}
 QA_FIELDS = {
+    "teaching_depth",
+    "second_pass",
     "citations",
     "reasoning",
     "pdf_structure",
@@ -42,7 +46,7 @@ def validate_note_configuration(configuration: Any) -> list[str]:
         return ["preferences.note_configuration must be an object"]
     errors: list[str] = []
     choices = {
-        "purpose": {"knowledge", "exam"},
+        "purpose": {"preview", "knowledge", "exam"},
         "depth": {"standard-detailed", "extended"},
         "layout_density": {"comfortable", "compact"},
     }
@@ -63,6 +67,7 @@ def validate_note_configuration(configuration: Any) -> list[str]:
         errors.append("note_configuration.deliverables must contain pdf, latex or markdown")
     if not isinstance(configuration.get("confirmed"), bool):
         errors.append("note_configuration.confirmed must be boolean")
+    errors.extend(f"note_configuration.{error}" for error in validate_review_preferences(configuration))
     return errors
 
 
@@ -78,6 +83,14 @@ def write_state(path: Path, state: dict[str, Any]) -> None:
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
+
+
+def second_pass_policy(state: dict[str, Any]) -> str | None:
+    preferences = state.get("preferences")
+    if not isinstance(preferences, dict):
+        return None
+    configuration = preferences.get("note_configuration")
+    return configuration.get("second_pass_review") if isinstance(configuration, dict) else None
 
 
 def validate_state(state: dict[str, Any]) -> list[str]:
@@ -168,6 +181,8 @@ def validate_state(state: dict[str, Any]) -> list[str]:
         if digest is not None and not DIGEST_PATTERN.fullmatch(str(digest)):
             errors.append(f"chapter {slug or index} has invalid input_digest")
         qa = chapter.get("qa", {})
+        if chapter.get("second_pass_review") not in (None, "automatic", "on-request"):
+            errors.append(f"chapter {slug or index} second_pass_review has an invalid policy")
         if not isinstance(qa, dict):
             errors.append(f"chapter {slug or index} qa must be an object")
         else:
@@ -178,6 +193,8 @@ def validate_state(state: dict[str, Any]) -> list[str]:
             if not DIGEST_PATTERN.fullmatch(str(chapter.get("input_digest") or "")):
                 errors.append(f"chapter {slug or index} requires input_digest when verified or delivered")
             required = {"citations": "pass", "reasoning": "pass"}
+            if chapter.get("second_pass_review") in ("automatic", "on-request"):
+                required.update({"teaching_depth": "pass", "second_pass": "pass"})
             if isinstance(preferences, dict) and "pdf" in str(preferences.get("format", "")):
                 required.update({"pdf_structure": "pass", "visual": "pass"})
             if schema_version == 2 and not chapter.get("legacy_generation", False):
@@ -373,6 +390,7 @@ def command_update_chapter(args: argparse.Namespace) -> int:
             "title": args.title,
             "status": "planned",
             "legacy_generation": False,
+            "second_pass_review": second_pass_policy(state),
             "priority_basis": None,
             "source_ids": [],
             "input_digest": None,
@@ -395,6 +413,10 @@ def command_update_chapter(args: argparse.Namespace) -> int:
     if args.priority_basis is not None:
         chapter["priority_basis"] = args.priority_basis
     if args.input_digest:
+        if chapter.get("input_digest") != args.input_digest:
+            chapter["second_pass_review"] = second_pass_policy(state)
+            qa = chapter.setdefault("qa", {})
+            qa.update({"teaching_depth": "pending", "second_pass": "pending"})
         chapter["input_digest"] = args.input_digest
     if args.source_id:
         chapter["source_ids"] = sorted(set(chapter.get("source_ids", [])) | set(args.source_id))
@@ -410,6 +432,8 @@ def command_update_chapter(args: argparse.Namespace) -> int:
     if args.status:
         if args.status in {"verified", "delivered"}:
             required = {"citations": "pass", "reasoning": "pass"}
+            if chapter.get("second_pass_review") in ("automatic", "on-request"):
+                required.update({"teaching_depth": "pass", "second_pass": "pass"})
             if "pdf" in state.get("preferences", {}).get("format", ""):
                 required.update({"pdf_structure": "pass", "visual": "pass"})
             if state.get("schema_version") == 2 and not chapter.get("legacy_generation", False):

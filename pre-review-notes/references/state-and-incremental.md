@@ -18,6 +18,10 @@ The template is `assets/study-state-template.json`. Important fields are:
 Allowed chapter statuses are `planned`, `drafting`, `verified`, `delivered`, `stale`, and
 `blocked`. Use `verified` only after citation and reasoning checks. Use `delivered` only after
 every requested artifact has passed its applicable checks.
+For chapters using the new second-pass policy, `teaching_depth=pass` and `second_pass=pass`
+are also required. Record the review companion path with the chapter artifacts. Explicitly
+deferred review keeps the chapter drafting until it is completed. These flags record an
+agent's observed results; their presence alone cannot prove semantic quality.
 
 Schema version 2 requires `capacity_disclosure=pass` and `usage_accounting=pass` for every new
 verified/delivered generation. These values mean the report or ledger entry exists and its
@@ -32,7 +36,7 @@ Initialise and validate state:
 ```text
 python scripts/manage_state.py init --output output/study_state.json \
   --course-id COURSE --course-title "Course title" --mode lightweight \
-  --language zh --format latex-pdf
+  --language zh --format latex-pdf --note-configuration output/confirmed-configuration.json
 python scripts/manage_state.py validate output/study_state.json
 python scripts/manage_state.py migrate output/legacy-study_state.json
 ```
@@ -44,7 +48,8 @@ python scripts/manage_state.py update-chapter output/study_state.json \
   --slug regression --title Regression --status verified \
   --input-digest <sha256> --source-id S002 --artifact output/regression.tex \
   --qa-citations pass --qa-reasoning pass \
-  --qa-capacity-disclosure pass --qa-usage-accounting pass
+  --qa-capacity-disclosure pass --qa-usage-accounting pass \
+  --qa-teaching-depth pass --qa-second-pass pass
 ```
 
 Check whether an unchanged chapter can be reused:
@@ -59,11 +64,12 @@ means rebuild it.
 
 ## Computing an input digest
 
-For 0.2.5 generations, include `coverage.md` and `review.md` as chapter artifacts and record
+Include `coverage.md`, `review.md` and the second-pass companion as chapter artifacts and record
 their outcomes in the human-readable progress report. The existing schema-2 validator does
 not enforce semantic coverage: check those sidecars before setting verified/delivered.
-Include the skill VERSION and coverage policy in the input digest, so an older compressed
-chapter is not reused as a coverage-complete 0.2.5 generation without review.
+Include the skill VERSION and relevant policy/template digests so local unreleased policy
+changes invalidate reuse too. Historical chapters lacking a second-pass policy retain their
+old record until requested regeneration; do not infer they passed a later review standard.
 
 Hash the canonical combination of:
 

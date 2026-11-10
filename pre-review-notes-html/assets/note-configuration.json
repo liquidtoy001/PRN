@@ -17,6 +17,13 @@
       "theme": "light",
       "self_test": "none",
       "answers_initial": null,
+      "exam_organisation": "source-led",
+      "exam_basis_source_ids": [],
+      "exam_answer_language": null,
+      "include_code": false,
+      "show_source_index": false,
+      "show_source_explanations": false,
+      "second_pass_review": "automatic",
       "confirmed": false
     }
   }

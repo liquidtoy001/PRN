@@ -7,7 +7,8 @@ This setting is independent of note purpose and does not relax source coverage r
 
 - `off`: use the supplied course materials. Preserve references already present in them,
   but do not initiate additional literature research or append new recommendations.
-- `reading-list` (recommended at intake): add a short chapter-end reading list. For each
+- `reading-list` (recommended for knowledge consolidation; preview/exam recommend off):
+  add a short chapter-end reading list. For each
   paper give a verified citation and direct DOI/publisher/repository link, why it matters,
   the question it answers, and recommended sections or figures actually inspected. Prefer
   the original paper and a small number of relevant variants or applications. Do not fill

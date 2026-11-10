@@ -13,42 +13,39 @@ using; everything below the line is the actual template.
 
 # Chapter [X]: [Topic Name]
 
-**Source:** [source:S001|PDF p. 18] · **Why this matters:** [one line —
-e.g. "18 of 100 marks; recurs in every past sitting; official model answer exists for
-Essay Question 3." If unsupported, state that the priority is unknown.]
-
-> **Quality ceiling.** [Capacity status; source IDs used and omitted;
-> OCR/encryption/chunking limits; whether exam priority and answer depth are verified,
-> limited, or unavailable; and the next evidence/check that would improve this artifact.]
+<!-- Source index and source/process explanations default to off. Keep inventory,
+assessment mapping, capacity limits and review results in companions and the delivery
+message. Add concise source explanations here only when explicitly enabled. -->
 
 ---
 
-## [X.1] [Concept Name]
+<!-- Open with the chapter's concrete problem and a short reading route. Restore the
+prerequisites actually needed here. Do not start with a dense list of new names/symbols. -->
+[A concrete situation, the decision to make, and why the following ideas help.]
 
-<!-- Repeat for every distinct coverage-ledger point, including small conditions and
-figure conclusions. Expand explanation to learning depth; quick reference comes later. -->
+## [X.1] [A connected teaching topic]
 
-**Source tag:** [source:S001|PDF p. 18] · **Tested in:**
-[assessment:S004|2023 final Q2(b)]
+<!-- Several K IDs may belong here. Weave conditions, notation and small observations
+into the explanation. These paragraph prompts are not repeated labelled subheadings. -->
 
-[One plain-language framing sentence: what problem does this concept solve, or what
-question does it answer?]
+[Connect to the preceding question. Explain the necessary earlier idea with a minimal
+example before relying on it; say why it is needed now.]
 
-> **Formal statement.** [Definition / rule / doctrine, in the course's own phrasing —
-> not a generic textbook restatement.]
+[Develop the mechanism in prose, then its formal statement. Define symbols as introduced
+and interpret the formula/rule in words. Preserve assumptions and boundary conditions.]
 
-**Example.** [A minimal illustrative example — the full worked derivation goes in its
-own section below, not here.]
+[Work through a useful example here, including the step the slide leaves implicit.
+Interpret the result and relate it to the closest relevant alternative or prerequisite.]
 
-**Notation and conditions.** [Define symbols and state when the claim applies.]
+[Explain what this resolves and why the next idea is needed.]
 
-**Why and how.** [Explain omitted steps; label supplementary reasoning or original examples.]
+[source:S001|PDF p. 18]
 
 <!-- When an informative source visual supports this concept, embed its local derivative
 here. Add a caption, source citation, transformation label and reading explanation.
 Record its V ID and path in coverage.md; follow references/source-visuals.md. -->
 
-> 💡 **Remember:** [the one sentence to carry out of this section]
+<!-- Optional: one takeaway after a complete explanation, not one box per K ID. -->
 
 ---
 
@@ -65,6 +62,11 @@ Record its V ID and path in coverage.md; follow references/source-visuals.md. --
 2. [Second step.]
 3. [Continue until the answer is reached — match the depth and register of any
    official model answer, if one exists.]
+
+<!-- Add a concise answer-language snippet only for an assessed prose demand when useful.
+Calculations and ordinary choice questions keep their reasoning/result without a second
+English answer block. Visible code defaults off; explain source-code mechanisms in prose
+or trace tables unless include_code=true was explicitly selected. -->
 
 *Why this matters:* [what makes this problem TYPE recur — e.g. "this same doctrine
 combination appeared in 3 of the last 4 exam sittings."]
@@ -103,18 +105,8 @@ combination appeared in 3 of the last 4 exam sittings."]
 
 ---
 
-## [X.N+1] Assessment Mapping
-
-| Source | Topic / key point tested |
-|---|---|
-| [assessment:S004\|2021 exam Q3] | [what it tested, one line] |
-| [source:S002\|Worksheet 4 Task 2] | [what it tested] |
-| [assessment:S005\|Assignment 2 Q1] | [what it tested] |
-
-> 🔴 [One-sentence summary of the highest-probability item type for the next
-> assessment, based on recurrence across the sources above.]
-
----
+<!-- Add an assessment mapping table only when show_source_index=true.
+Otherwise keep canonical paper/Q -> K -> note mappings in exam-plan.md. -->
 
 ## [X.N+2] Practice and Staged Retest
 

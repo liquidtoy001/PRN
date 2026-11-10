@@ -50,7 +50,31 @@ python pre-review-notes/scripts/download_materials.py tests/fixtures/stat3007/ma
 Downloads are local third-party inputs. The manifest specifies expected sizes and SHA-256 hashes;
 it does not grant redistribution rights. Never commit those PDFs or private learner state.
 The original HTML fixture in `tests/fixtures/html/` can be used without third-party course data;
-its build command is documented in [TESTING-0.2.10.md](./TESTING-0.2.10.md).
+its build command is documented in [TESTING-0.2.10.md](./TESTING-0.2.10.md). Current release
+preparation results are in [TESTING-0.3.0.md](./TESTING-0.3.0.md).
+
+## Prepare a version
+
+Update both `VERSION` files, the version lines in both `SKILL.md` files and the HTML state
+template together. Update the release notes, bilingual README and usage instructions; keep
+historical test reports and existing release archives unchanged. Tests derive package names
+from each entry's version and check that bundled metadata agrees.
+
+Run the shared-resource check, unit/CLI suite and skill validation before building both
+packages into a version-specific ignored directory. Compare two builds byte-for-byte and
+exercise packages extracted without the sibling skill or `shared/` directory. Record actual
+artifact hashes and outstanding validation in the version's test report.
+For final release bytes, export with `git -c core.autocrlf=false archive` and build from
+that reviewed revision. A plain Git archive can inherit Windows CRLF conversion too.
+Verify bundled files against raw Git blobs from that
+revision, not just the package filename or two builds of an unrelated working copy.
+
+Before publishing, inspect the explicitly staged file list and run the publication audit.
+`LOCAL-REVIEW.md` is a private local record and stays ignored. Only project-authored fixtures
+belong in public tests; generated learner files do not. Publication preparation does not
+create a remote tag or Release automatically. When publication is requested, recheck remote
+state, update the preparation notices/download links, push the reviewed revision and wait
+for that revision's CI before attaching its matching ZIPs and checksums to the new Release.
 
 ## Publication checks
 

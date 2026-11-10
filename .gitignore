@@ -21,6 +21,9 @@ examples/stat3007/slides/*.pdf
 # Generated release artifacts belong in GitHub Releases, not Git history
 dist/
 
+# Private course-trial review links and local paths are not release documentation
+/LOCAL-REVIEW.md
+
 # Python/editor/OS noise
 __pycache__/
 *.py[cod]

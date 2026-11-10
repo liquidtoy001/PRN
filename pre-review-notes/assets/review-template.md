@@ -2,6 +2,11 @@
 
 Artifact and version/hash: [identify the actual reviewed artifact]
 Coverage ledger: [path]
+Second-pass companion: [path, final artifact hashes and actual K/Q counts]
+Teaching depth / question semantics: [separate results and unresolved IDs]
+Standalone reading: [whole chapter or sampled range; prerequisite/transition findings]
+Code and answer-language display: [include_code; snippets appropriate to response types]
+Source display choices: [index/explanations; verify final note follows configuration]
 
 ## Coverage and length
 

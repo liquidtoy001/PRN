@@ -30,6 +30,36 @@ the idea, destination section, disposition and rationale. Dispositions:
 Do not exclude a minor teaching point merely because it seems unlikely to be assessed.
 Optional topics retain their label and receive proportionate explanation unless the learner
 excluded them. A source-by-source heading list is not a knowledge-point ledger.
+Several K IDs may share one coherent teaching section. Follow `standalone-teaching.md` to
+plan prerequisite bridges and the reading sequence; do not turn each ledger row into a box.
+
+## Teaching depth before marking a point explained
+
+For each K ID, apply the relevant criteria below. A short factual point may need only a
+sentence and a small example; a process needs enough steps to reconstruct it. Keep the
+teaching cohesive rather than repeating a fixed questionnaire for every point.
+
+- Definition: name the category, object and distinguishing action/result. "Improves
+  performance" describes a benefit and cannot stand in for the definition.
+- Mechanism: make inputs, transformations and outputs explicit, including assumptions and
+  the intermediate step that the slide leaves implicit.
+- Example: provide the smallest useful worked instance or counterexample. For a drawing or
+  search procedure, show how to construct/read it, including roots, directions, axes or scores.
+- Notation: explain each variable, index, dimension/unit, domain, denominator and logarithm
+  base where applicable. Symbols must agree across formula, prose, example and figure.
+- Comparison: state shared purpose first, then distinguish alternatives on named axes and
+  conditions. A method family and one variant require separate definitions. Use the same
+  input/example when comparing procedures so the difference is visible.
+- Terminology: bind everyday explanations to the canonical course/exam term and acronym.
+  A synonym must not appear to remove a named component from the definition.
+
+Read each final section as if the learner had no previous chat explanation. Can they explain
+what it is, trace how it works, distinguish the nearby alternatives, and use its formula or
+diagram? A heading, named formula or unexplained picture cannot earn `explained`. Record
+missing teaching as pending and repair it before compressing the prose. Check prerequisite
+availability and cross-section continuity as well as local completeness. Eligible short
+model answers follow `exam-review.md`; a calculation or choice item does not need a second
+English version of its answer.
 
 ## Length as a diagnostic
 

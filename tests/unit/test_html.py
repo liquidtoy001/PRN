@@ -41,7 +41,8 @@ class HTMLBuildTests(unittest.TestCase):
         self.content = self.root / "input/chapter.html"
         self.config = json.loads((HTML_SKILL / "assets/note-configuration.json").read_text(encoding="utf-8"))
         self.note = self.config["preferences"]["note_configuration"]
-        self.note.update(confirmed=True, self_test="folded-qa", answers_initial="closed", paper_enrichment="off")
+        self.note.update(confirmed=True, self_test="folded-qa", answers_initial="closed", paper_enrichment="off",
+                         include_code=True, show_source_index=True, show_source_explanations=True)
 
     def build(self, name="result", skill=HTML_SKILL):
         settings = self.root / "config.json"
@@ -73,15 +74,54 @@ class HTMLBuildTests(unittest.TestCase):
         opened = Elements((self.root / "open/index.html").read_text(encoding="utf-8"))
         self.assertTrue(all("open" in attrs for tag, attrs in opened.elements if tag == "details"))
 
-    def test_knowledge_without_questions_and_no_accidental_full_mode_quiz(self):
+    def test_all_purposes_without_questions_and_no_accidental_full_mode_quiz(self):
         self.config["preferences"]["mode"] = "full"
         self.note.update(self_test="none", answers_initial=None)
-        self.assertNotEqual(self.build().returncode, 0)
-        self.assertFalse((self.root / "result").exists())
-        self.content.write_text('<h2 id="concept">Concept</h2><p>Complete teaching. [source:S001|section Mean and squared error]</p>', encoding="utf-8")
-        self.assertEqual(self.build().returncode, 0)
+        original = self.content.read_text(encoding="utf-8")
+        for purpose in ("preview", "knowledge", "exam"):
+            with self.subTest(purpose=purpose):
+                self.note["purpose"] = purpose
+                self.content.write_text(original, encoding="utf-8")
+                self.assertNotEqual(self.build(purpose).returncode, 0)
+                self.assertFalse((self.root / purpose).exists())
+                self.content.write_text('<h2 id="concept">Concept</h2><p>Complete teaching. [source:S001|section Mean and squared error]</p>', encoding="utf-8")
+                result = self.build(purpose)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                page = Elements((self.root / purpose / "index.html").read_text(encoding="utf-8"))
+                self.assertFalse(any(tag in ("details", "script", "button") for tag, attrs in page.elements))
+                saved = json.loads((self.root / purpose / "configuration.json").read_text(encoding="utf-8"))
+                self.assertEqual(saved, self.config)
+
+    def test_preview_honours_explicit_practice_and_presentation_choices(self):
+        self.config["preferences"].update(language="en", mode="full")
+        self.note.update(purpose="preview", depth="extended", reading_width="wide",
+                         layout_density="compact", theme="dark", answers_initial="open")
+        result = self.build()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        saved = json.loads((self.root / "result/configuration.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved, self.config)
         page = Elements((self.root / "result/index.html").read_text(encoding="utf-8"))
-        self.assertFalse(any(tag in ("details", "script", "button") for tag, attrs in page.elements))
+        details = [attrs for tag, attrs in page.elements if tag == "details"]
+        self.assertEqual(len(details), 2)
+        self.assertTrue(all("open" in attrs for attrs in details))
+
+    def test_code_markup_requires_explicit_opt_in(self):
+        for name in ("disabled", "legacy"):
+            with self.subTest(configuration=name):
+                if name == "disabled":
+                    self.note["include_code"] = False
+                else:
+                    self.note.pop("include_code")
+                result = self.build(name)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("include_code=true", result.stderr)
+                self.assertFalse((self.root / name).exists())
+        self.note["include_code"] = True
+        result = self.build("enabled")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = Elements((self.root / "enabled/index.html").read_text(encoding="utf-8"))
+        self.assertTrue(any(tag == "pre" for tag, attrs in page.elements))
+        self.assertTrue(any(tag == "code" for tag, attrs in page.elements))
 
     def test_configuration_rejection_before_output(self):
         for key, value in (("confirmed", False), ("deliverables", ["pdf"]), ("page_size", "A4"),
@@ -178,18 +218,24 @@ class PackagingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             for skill in ("pre-review-notes", "pre-review-notes-html"):
+                version = (REPOSITORY / skill / "VERSION").read_text(encoding="utf-8").strip()
                 for repeat in ("one", "two"):
                     result = run(REPOSITORY / "tools/package_skill.py", "--skill-dir", REPOSITORY / skill, "--output-dir", root / repeat)
                     self.assertEqual(result.returncode, 0, result.stderr)
-                archive = root / "one" / f"{skill}-v0.2.10.zip"
+                archive = root / "one" / f"{skill}-v{version}.zip"
                 self.assertEqual(archive.read_bytes(), (root / "two" / archive.name).read_bytes())
                 with zipfile.ZipFile(archive) as bundle:
                     names = bundle.namelist()
                     self.assertEqual(len(names), len(set(names)))
                     self.assertIn("SKILL.md", names)
                     self.assertIn("LICENSE", names)
+                    self.assertEqual(bundle.read("VERSION").decode("utf-8").strip(), version)
+                    self.assertIn(f"Version: {version}.", bundle.read("SKILL.md").decode("utf-8"))
+                    self.assertIn("references/learning-presets.md", names)
                     self.assertFalse(any(Path(name).suffix in (".pdf", ".pyc", ".zip") for name in names))
                     if skill.endswith("-html"):
+                        state_template = json.loads(bundle.read("assets/study-state-template.json"))
+                        self.assertEqual(state_template["skill_version"], version)
                         self.assertNotIn("scripts/build_note.py", names)
                         self.assertNotIn("references/pdf-workflow.md", names)
                         self.assertFalse(any(name.endswith(".tex") for name in names))
@@ -200,7 +246,8 @@ class PackagingTests(unittest.TestCase):
                         self.assertNotIn("assets/template.html", names)
             # Actually run a ZIP-extracted HTML package with no sibling/shared checkout.
             config = json.loads((installed / "assets/note-configuration.json").read_text())
-            config["preferences"]["note_configuration"].update(confirmed=True, self_test="folded-qa", answers_initial="closed", paper_enrichment="off")
+            config["preferences"]["note_configuration"].update(confirmed=True, self_test="folded-qa", answers_initial="closed", paper_enrichment="off",
+                                                               include_code=True, show_source_index=True, show_source_explanations=True)
             settings = root / "configuration.json"
             settings.write_text(json.dumps(config), encoding="utf-8")
             result = run(installed / "scripts/build_html.py", "--configuration", settings,
