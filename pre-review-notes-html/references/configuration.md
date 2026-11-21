@@ -1,11 +1,6 @@
 # HTML configuration intake
 
-Read [learning-presets.md](learning-presets.md). Show the three presets and **all four groups
-below in the same first configuration exchange**, in the learner's language. Include every
-row's alternatives, resolved value and status, even when not applicable. Recommend the
-non-core settings so one reply can accept or adjust them; do not hide an advanced section or
-ask for a preset before displaying the rest. Preserve supplied/saved choices. Save the complete
-object from `assets/note-configuration.json` after confirmation, not merely changed fields.
+Use these four tables for the [first-use card](learning-presets.md).
 
 ## Core choices
 
@@ -48,7 +43,6 @@ object from `assets/note-configuration.json` after confirmation, not merely chan
 
 ## Applying the resolved preset
 
-Use `learning-presets.md` for purpose behaviour, first-use confirmation and continuation.
 Map purpose to `preview/knowledge/exam`, pace to `lightweight/full/exam-cram`, depth to
 `standard-detailed/extended`, paper to `off/reading-list/integrated`, self-test to
 `none/folded-qa`, and review to `automatic/on-request`. Keep storage keys out of the card.
@@ -73,13 +67,12 @@ by the requested response type, not added to every calculation or choice item. P
 boolean `include_code` from note-presentation.md. Missing keys in older configurations mean
 false for new generation; retain explicit prior code requests and old artifacts/history.
 
-The HTML configuration has `schema_version=1`, `format=html`, and `preferences` containing
+Save the complete object from `assets/note-configuration.json`. The HTML configuration has `schema_version=1`, `format=html`, and `preferences` containing
 mode, language, date/hours and `note_configuration`. `confirmed=true` requires a user reply
 or explicit delegation. `answers_initial=null` when self-test is none. Paper enrichment is
 stored in `preferences.note_configuration.paper_enrichment` as in the shared evidence rules.
 Never pass this configuration to the print entry's `manage_state.py` or merge states by name.
-On resume, read saved configuration and ask only unresolved/changed choices. Imported PDF
-preferences may be shown as candidates, never silently relabelled as confirmed HTML choices.
+Imported PDF preferences may be shown as candidates, never silently relabelled as confirmed HTML choices.
 The output choice describes learner-facing notes; internal inventory/configuration/review
 data retain their documented native formats. Use the included CLI interfaces without I/O
 wrappers that change state encodings or claim unsupported continuation compatibility.

@@ -5,7 +5,7 @@ description: Create source-grounded HTML course notes for preview, knowledge con
 
 # Pre-Review Notes HTML
 
-Version: 0.3.0. Resolve this directory and read `VERSION`; disclose the copy used if several
+Version: 0.3.5. Resolve this directory and read `VERSION`; disclose the copy used if several
 exist. All resource paths below are relative to this skill, not to the course workspace.
 This package works independently. Do not load the print entry's configuration, templates,
 state helper or rendering rules. Source PDFs are inputs, not a request to produce a PDF.
@@ -19,17 +19,10 @@ The default chapter must be readable without the earlier chat or slides.
 
 ## Intake before generation
 
-Read [references/learning-presets.md](references/learning-presets.md) and
-[references/configuration.md](references/configuration.md). Offer 课前预习 (`preview`), 知识巩固
-(`knowledge`) and 考试复习 (`exam`). In the first configuration exchange, show their comparison
-and the entire grouped HTML catalogue, including every alternative and inactive/advanced row.
-Mark supplied, saved, recommended and evidence-derived values; do not hide settings behind a
-prior preset choice. Focus on purpose, scope and language; this entry's output is offline HTML.
-Present work pace as 先做一章 / 分章完成课程 / 限时冲刺, separately from the learning purpose.
+Follow the [first-use conversation](references/learning-presets.md) using every row and
+alternative in the [configuration card](references/configuration.md). Show the whole card
+once, including inactive rows. On resume, ask only about missing or changed choices.
 
-One reply can accept or customise the displayed defaults. Wait before drafting if choices
-remain unresolved; if complete or delegated, show the resolved card and proceed. Resume saved
-settings without another full questionnaire, and preserve custom choices across presets.
 All presets default to no extra self-test. Source exercises remain explained examples and
 within-scope teaching stays complete, including preview, subject to active-assessment restrictions.
 For exam purpose, read [references/exam-review.md](references/exam-review.md) and derive the
@@ -91,7 +84,8 @@ recompute examples and compare conditions, figures and citations. Read
 [references/second-pass-review.md](references/second-pass-review.md) after drafting: notify
 the learner and automatically check every selected K ID and included question/subpart,
 including folded answers when requested, then read the continuous chapter for prerequisite
-gaps and broken transitions. Record actual findings with
+gaps and broken transitions. Try a consequential next step with its result hidden and check
+similar questions against their distinct demands. Record actual findings with
 `assets/second-pass-template.md`, repair explanations and rebuild affected outputs. Read
 [references/visual-layout.md](references/visual-layout.md) and fill `assets/review-template.md`
 with actual browser observations: wide/narrow viewports, keyboard folding, internal links,

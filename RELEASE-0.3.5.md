@@ -1,0 +1,28 @@
+# Pre-Review Notes v0.3.5
+
+The print and offline HTML skills retain the preview, knowledge consolidation and exam
+revision presets. Download the [print or HTML package](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5), replace the corresponding skill folder and ask the agent to confirm v0.3.5. Historical progress remains readable; fill in both sprint constraints to resume an incomplete exam-cram setup.
+
+* In a worked example, the chapter locates one real input, shows one decision or substitution,
+  and uses its result to explain the next step. A nearby concept can reuse the same example
+  so the reader can see which assumption changes the outcome.
+* The default handout uses a single reading column, bold section titles, thin rules and
+  compact tables. Teaching and worked-question sections share this hierarchy. PDF keeps
+  grayscale distinction and page numbers. HTML retains keyboard folding and theme controls.
+* A short revision keeps conditions, useful numerical shortcuts and exceptions where they
+  matter. Exam applications distinguish the operation and result each subpart calls for,
+  including alternatives allowed by an unspecified condition.
+* After drafting, the reviewer covers a result and tries the next step from the visible text
+  or figure. Related questions with different demands receive an answer-swap check. For a
+  requested practice/solution pair or folded exercise, the reviewer checks that the student
+  can attempt the item with its given data and then find the matching solution.
+
+* New copies preserve existing source IDs. A unique renamed file can retain its ID. The print
+  resume command checks all registered files and compares their hashes when available.
+* Both entries require a real date and positive finite study hours for a sprint. The first
+  reply presents every option in one card (17 print settings or 19 HTML settings).
+* Print templates start with teaching prose. Add extra practice, a retest or a quick-reference
+  section when requested. Final builds reject unresolved slots; `--allow-placeholders` previews a draft.
+
+Build local ZIPs with the commands in [DEVELOPMENT.md](./DEVELOPMENT.md).
+See [validation and trial limits](./TESTING-0.3.5.md).

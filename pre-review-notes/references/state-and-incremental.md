@@ -60,7 +60,17 @@ python scripts/manage_state.py needs-rebuild output/study_state.json \
 ```
 
 Exit code `0` means the recorded verified/delivered chapter can be reused; exit code `3`
-means rebuild it.
+means rebuild it. Register each deliverable and review companion. Verification records their
+SHA-256 hashes. Reuse requires the matching input digest and every registered file intact.
+Legacy records without hashes check file existence until the next verification. A chapter
+with no registered files must rebuild. Return a changed artifact to drafting for review.
+
+Run init from the course project root, or supply `--project-root`. If the output is outside
+that working directory, the implicit base is the state file’s directory. New state stores its base
+relative to the state file when possible. Older state resolves paths beside the state file;
+pass `--project-root` on needs-rebuild or update-chapter for older project-relative paths.
+Exam-cram needs a YYYY-MM-DD deadline and positive finite hours. Historical progress remains
+readable with render-progress; fill missing scheduling fields before validating or resuming.
 
 ## Computing an input digest
 

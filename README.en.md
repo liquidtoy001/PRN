@@ -8,8 +8,12 @@ knowledge consolidation or exam revision**, then choose printable PDF or screen-
 This is an Agent Skill: instructions and supporting tools for an AI agent that can read files
 and create artifacts. It is not a standalone application.
 
-**Current version: [v0.3.0](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0).**
-This page introduces its three learning presets and complete workflow.
+**Current version: [v0.3.5](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5).**
+v0.3.5 checks whether a reader can work out the next step from the chapter. For example, an attention explanation identifies the query and its source vectors and works one dot product so the reader can calculate the next score. [Release notes](./RELEASE-0.3.5.md)
+
+The layout defaults to a course handout with a single reading column, bold headings,
+displayed equations and lightly shaded table headers. Each worked subpart keeps its solution
+nearby. HTML uses the same hierarchy with optional folded answers and a dark theme.
 
 ## Choose a purpose: which preset fits?
 
@@ -45,17 +49,17 @@ structure, question frequency or this year's emphasis.
 
 ## Choose an output: PDF or HTML
 
-| Reading context | v0.3.0 package | Skill name |
+| Reading context | v0.3.5 package | Skill name |
 |---|---|---|
-| Printable PDF; optional Markdown / LaTeX | [pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip) | pre-review-notes |
-| Offline HTML with optional folded answers | [pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip) | pre-review-notes-html |
+| Printable PDF; optional Markdown / LaTeX | [pre-review-notes-v0.3.5.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.5/pre-review-notes-v0.3.5.zip) | pre-review-notes |
+| Offline HTML with optional folded answers | [pre-review-notes-html-v0.3.5.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.5/pre-review-notes-html-v0.3.5.zip) | pre-review-notes-html |
 
 **All three presets work with either entry.** Preview can use PDF; exam revision can use HTML.
 Install either package or both. When requesting both outputs, each keeps its own configuration
 and artifacts.
 
 Use the download links above, or select the appropriate ZIP under Assets on the
-[v0.3.0 Release page](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0).
+[v0.3.5 Release page](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5).
 Follow the [beginner installation guide](./USAGE.md).
 The `.sha256` file checks integrity; GitHub's automatic Source code download is the repository
 archive. Neither is the named skill installation ZIP.
@@ -153,9 +157,9 @@ The [original HTML fixture](./tests/fixtures/html/) checks math, images and ques
 The [older course example](./examples/stat3007/README.md) is a historical trial.
 
 Actual course trials have concentrated on AI/ML. Cross-domain accuracy and learning gains have
-not been systematically evaluated. Local validation passed 37 regression tests and inspected
-two Chinese PDF fixtures; actual HTML browser layout and interaction acceptance remains pending.
-See [v0.3.0 validation](./TESTING-0.3.0.md) for the exact scope. Passing automated tests does not
+not been systematically evaluated. All 45 local regression tests passed. Both pages of a Chinese PDF handout were inspected.
+The offline HTML fixture built successfully. Narrow-screen and keyboard checks ran on an earlier candidate.
+See [v0.3.5 validation](./TESTING-0.3.5.md) for the exact scope. Passing automated tests does not
 establish teaching quality or error-free content; compare generated notes with their sources.
 
 Keep private course materials local. Source slides are excluded from installation packages.
@@ -163,8 +167,8 @@ The [MIT License](./LICENSE) covers project code and original templates, not thi
 
 ## Versions and development
 
-The current version is **v0.3.0**; see [release notes and upgrade guidance](./RELEASE-0.3.0.md).
-Both v0.2.10 entries keep their names and accept existing knowledge/exam configurations.
+The current version is **v0.3.5**; see [release notes and upgrade guidance](./RELEASE-0.3.5.md).
+Use the same skill names when upgrading. Existing course progress remains readable.
 Preserve old outputs and progress before using the new workflow for subsequent chapters.
 Historical chapters are never automatically credited with passing the new review.
 

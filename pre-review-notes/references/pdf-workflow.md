@@ -11,6 +11,9 @@ Run from the skill directory or pass an absolute script path:
 python scripts/build_note.py path/to/chapter.tex --output-dir output/pdf
 ```
 
+Final builds reject unresolved template slots by default, including in literal local
+`\input` and `\include` files. Use `--allow-placeholders` only to preview a draft.
+
 The helper tries an explicitly requested engine first. In automatic mode it prefers XeLaTeX
 for documents containing CJK text and otherwise tries Tectonic, `latexmk`, XeLaTeX, then
 pdfLaTeX when available. It emits a machine-readable QA report and renders representative

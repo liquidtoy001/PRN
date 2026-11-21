@@ -16,9 +16,33 @@ from typing import Any
 
 CJK_PATTERN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]")
 PLACEHOLDER_PATTERN = re.compile(
-    r"\[(?:Topic Name|One line|where taught|problem location|Definition /|First step|"
-    r"Second step|Continue until|Concept \d|Technique/recipe|what it tested|step)"
+    r"\\prnslot\s*\{[^{}]*\}|\[(?:Topic Name|One line|where taught|problem location|Definition /|First step|"
+    r"Second step|Continue until|Concept \d|Technique/recipe|what it tested|step\])"
 )
+
+
+def tex_sources(main: Path) -> str:
+    """Read the main file and literal local inputs, excluding comments."""
+    texts = []
+    pending = [main]
+    seen = set()
+    while pending:
+        path = pending.pop().resolve()
+        if path in seen:
+            continue
+        seen.add(path)
+        source = re.sub(
+            r"\\[^\n]|%[^\n]*", lambda match: "" if match[0].startswith("%") else match[0],
+            path.read_text(encoding="utf-8"),
+        )
+        texts.append(source)
+        for name in re.findall(r"\\(?:input|include)\s*\{([^{}\\#]+)\}", source):
+            include = main.parent / name.strip()
+            if not include.is_file():
+                include = Path(str(include) + ".tex")
+            if include.is_file():
+                pending.append(include)
+    return "\n".join(texts)
 
 
 def utc_now() -> str:
@@ -190,7 +214,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--report", type=Path, help="defaults to <output-dir>/<stem>.qa.json")
     parser.add_argument("--skip-render", action="store_true")
-    parser.add_argument("--fail-on-placeholders", action="store_true")
+    placeholders = parser.add_mutually_exclusive_group()
+    placeholders.add_argument("--fail-on-placeholders", dest="strict", action="store_true",
+                              help="reject template placeholders (default)")
+    placeholders.add_argument("--allow-placeholders", dest="strict", action="store_false",
+                              help="permit an unfinished template for a draft preview")
+    parser.set_defaults(strict=True)
     return parser
 
 
@@ -203,9 +232,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"LaTeX source not found: {tex}", file=sys.stderr)
         return 2
 
-    source = tex.read_text(encoding="utf-8")
+    source = tex_sources(tex)
     placeholders = sorted(set(match.group(0) for match in PLACEHOLDER_PATTERN.finditer(source)))
-    if placeholders and args.fail_on_placeholders:
+    if placeholders and args.strict:
         print(f"unresolved template placeholders: {placeholders}", file=sys.stderr)
         return 2
     output_dir.mkdir(parents=True, exist_ok=True)

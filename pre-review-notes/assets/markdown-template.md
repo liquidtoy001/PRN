@@ -5,9 +5,9 @@ Use this instead of template.tex for prose-heavy fields where LaTeX's
 formula-box aesthetic fights the content: law, history, literature,
 languages, most of business, qualitative social science, etc.
 
-Same structural slots as template.tex, same underlying methodology
-(see SKILL.md) — just rendered as headers / blockquotes / tables
-instead of tcolorbox environments. Delete this comment block before
+Use a single reading column, numbered headings, ordinary paragraphs and standalone
+equations. Use a compact table when comparing quantities. Keep a question's givens and
+answer together. Reserve blockquotes for an occasional consequential result. Delete this comment block before
 using; everything below the line is the actual template.
 -->
 
@@ -39,7 +39,7 @@ Interpret the result and relate it to the closest relevant alternative or prereq
 
 [Explain what this resolves and why the next idea is needed.]
 
-[source:S001|PDF p. 18]
+[source:SOURCE_ID|verified page or section]
 
 <!-- When an informative source visual supports this concept, embed its local derivative
 here. Add a caption, source citation, transformation label and reading explanation.
@@ -47,80 +47,8 @@ Record its V ID and path in coverage.md; follow references/source-visuals.md. --
 
 <!-- Optional: one takeaway after a complete explanation, not one box per K ID. -->
 
----
 
-## Derivation: [Descriptive title, e.g. "2022 Past Paper Q4 Walkthrough"]
-
-**Source tag:** [source:S002|Worksheet 4 Q2] · **Assessment evidence:**
-[assessment:S004|2023 final Q2(b)]
-
-**Problem.** [Restate the real problem concisely.]
-
-**Answer, step by step:**
-
-1. [First step of the derivation, with reasoning.]
-2. [Second step.]
-3. [Continue until the answer is reached — match the depth and register of any
-   official model answer, if one exists.]
-
-<!-- Add a concise answer-language snippet only for an assessed prose demand when useful.
-Calculations and ordinary choice questions keep their reasoning/result without a second
-English answer block. Visible code defaults off; explain source-code mechanisms in prose
-or trace tables unless include_code=true was explicitly selected. -->
-
-*Why this matters:* [what makes this problem TYPE recur — e.g. "this same doctrine
-combination appeared in 3 of the last 4 exam sittings."]
-
-> 💡 **Reusable pattern:** [the technique this derivation demonstrates, phrased so it
-> transfers to similar problems.]
-
----
-
-## ⚠️ Trap: [Name of the specific confusion or mistake]
-
-**Source of this warning:** [source:S003|PDF p. 21] or
-[assessment:S006|Examiner report 2022, p. 3]
-
-**The trap:** [What learners commonly get wrong, and why it looks right at first.]
-
-**The correct reasoning:** [What distinguishes the correct approach, stated precisely.]
-
-> ⚠️ **Say this to yourself in the exam:** [a short, memorable correction]
-
----
-
-## [X.N] Quick Reference
-
-| Concept | One-line summary |
-|---|---|
-| [Concept 1] | [definition/rule in one line] |
-| [Concept 2] | [definition/rule in one line] |
-
-**Technique / recipe** (if applicable):
-1. [step]
-2. [step]
-
-> 🔴 **Must remember:** [the 2-4 things that, if forgotten, would sink an otherwise-good
-> answer]
-
----
-
-<!-- Add an assessment mapping table only when show_source_index=true.
-Otherwise keep canonical paper/Q -> K -> note mappings in exam-plan.md. -->
-
-## [X.N+2] Practice and Staged Retest
-
-**Learning bank:** [path / item IDs]
-
-- **Next attempt:** [named item or problem, before viewing its answer]
-- **Retest:** [date from learning state]
-- **Uncovered:** [items omitted by the current time budget]
-
----
-
-<!--
-OPTIONAL: bilingual personal gloss
-Add short italic asides in a second language wherever helpful, e.g.:
-*(个人注释: ...)* — keep these terse; they're memory aids, not translations
-of the whole section.
--->
+<!-- For an in-scope course exercise, keep the givens, each subpart and its solution
+together. Cite its real location. Include answer-language wording only for eligible
+assessed prose. Explain a source-code mechanism in prose unless code was requested.
+Add a quick-reference card, extra practice or staged retest only when requested. -->

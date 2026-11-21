@@ -54,7 +54,8 @@ class HTMLBuildTests(unittest.TestCase):
     def test_offline_bundle_closed_and_open_answers(self):
         result = self.build()
         self.assertEqual(result.returncode, 0, result.stderr)
-        page = (self.root / "result/index.html").read_text(encoding="utf-8")
+        page_bytes = (self.root / "result/index.html").read_bytes()
+        page = page_bytes.decode("utf-8")
         elements = Elements(page).elements
         details = [attrs for tag, attrs in elements if tag == "details"]
         self.assertEqual(len(details), 2)
@@ -66,7 +67,7 @@ class HTMLBuildTests(unittest.TestCase):
                 self.assertTrue((self.root / "result" / attrs["src"]).is_file())
         self.assertEqual((self.root / "result/assets/loss.svg").read_bytes(), (FIXTURE / "assets/loss.svg").read_bytes())
         report = json.loads((self.root / "result/build-report.json").read_text())
-        self.assertEqual(report["artifacts"]["index.html"], hashlib.sha256(page.encode()).hexdigest())
+        self.assertEqual(report["artifacts"]["index.html"], hashlib.sha256(page_bytes).hexdigest())
         self.assertEqual(report["browser_review"], "pending")
         self.assertEqual(report["semantic_review"], "pending")
         self.note["answers_initial"] = "open"
@@ -137,6 +138,21 @@ class HTMLBuildTests(unittest.TestCase):
         self.assertNotEqual(self.build().returncode, 0)
         self.config["preferences"].update(assessment_date="2026-10-01", study_hours_available=4)
         self.assertEqual(self.build().returncode, 0)
+
+    def test_exam_cram_bad_dates_and_hours_leave_no_bundle(self):
+        prefs = self.config["preferences"]
+        prefs["mode"] = "exam-cram"
+        for deadline, hours in (("2027-02-29", 1), ("20280229", 1), ("2028-02-29", 0),
+                                ("2028-02-29", -2), ("2028-02-29", float("inf")),
+                                ("2028-02-29", float("nan")), ("2028-02-29", True)):
+            with self.subTest(deadline=deadline, hours=hours):
+                prefs.update(assessment_date=deadline, study_hours_available=hours)
+                result = self.build()
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse((self.root / "result").exists())
+        prefs.update(assessment_date="2028-02-29", study_hours_available=0.5)
+        result = self.build()
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_rejects_markup_assets_links_and_missing_citations(self):
         original = self.content.read_text(encoding="utf-8")

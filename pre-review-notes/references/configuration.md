@@ -1,10 +1,6 @@
 # Configuration intake
 
-Read [learning-presets.md](learning-presets.md) for the three presets, their defaults and
-the first-use conversation. Show the preset comparison and **all four groups below in the
-same first configuration exchange**, with alternatives, resolved values and their status.
-Only the core choices normally need attention; the other groups stay visible and editable.
-Do not hide advanced or exam-only rows. Ask once for unresolved choices, not once per group.
+Use these four tables for the [first-use card](learning-presets.md).
 
 ## Core choices
 
@@ -49,11 +45,6 @@ Markdown-only, still show page size and density with their alternatives, marked 
 
 ## Applying the resolved preset
 
-Use the purpose behaviour and precedence rules in `learning-presets.md`. `preview` and
-`knowledge` organise teaching by prerequisite-aware topics; `exam` adds the course-specific
-evidence workflow. All retain source examples and continuous explanations. Full and exam-cram
-never turn an additional practice choice of none into a quiz or bank.
-
 Map learner labels to existing fields: purpose `preview/knowledge/exam`; mode
 `lightweight/full/exam-cram`; depth `standard-detailed/extended`; paper enrichment
 `off/reading-list/integrated`; second pass `automatic/on-request`. Keep other existing enums.
@@ -93,9 +84,7 @@ about this unresolved preference; do not interpret its absence as permission for
 Existing states without the key remain valid. Include its resolved value in input digests.
 
 Persist the complete resolved intake in `preferences.note_configuration` using the object
-shown in `assets/note-configuration.json`. Populate actual values; the asset is a recommendation,
-not evidence of confirmation. `confirmed` becomes true only after a user response or explicit
-delegation. Top-level mode/language/format/learning_outputs/date/hours remain the existing
+shown in `assets/note-configuration.json`. Populate the asset with the resolved values. Top-level mode/language/format/learning_outputs/date/hours remain the existing
 fields; the nested configuration supplies purpose, scope, depth, exact deliverables and layout.
 
 Use `manage_state.py init --note-configuration <resolved-json>` alongside existing flags.

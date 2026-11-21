@@ -8,8 +8,10 @@
 这是给 AI Agent 使用的 Skill（任务说明和配套工具），需要配合支持 Skill、能读取文件的
 Agent 使用。它本身不是双击就能运行的软件。
 
-**当前版本：[v0.3.0](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0)。**
-本页介绍新版的三个学习预设和完整使用流程。
+**当前版本：[v0.3.5](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5)。**
+v0.3.5 会检查读者能否根据正文接着完成下一步。比如讲注意力时，笔记会先交代这道题里谁在查询、两个向量来自哪里，再展开一个点积，让你能接着算下一项。[本版改动](./RELEASE-0.3.5.md)
+
+笔记默认采用适合打印的课程讲义版式：单栏正文、粗体分级标题、独立公式和浅灰表头。知识讲解连续排，题目按小问紧跟解析。HTML 沿用这套层次，可选折叠答案和深色阅读。
 
 ## 先选用途：三个预设怎么选
 
@@ -38,15 +40,15 @@ Agent 使用。它本身不是双击就能运行的软件。
 
 ## 再选成品：PDF 还是 HTML
 
-| 阅读场景 | v0.3.0 安装包 | 调用名称 |
+| 阅读场景 | v0.3.5 安装包 | 调用名称 |
 |---|---|---|
-| 打印笔记、PDF，也可选 Markdown / LaTeX | [pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip) | pre-review-notes |
-| 离线网页笔记、可选折叠问答 | [pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip) | pre-review-notes-html |
+| 打印笔记、PDF，也可选 Markdown / LaTeX | [pre-review-notes-v0.3.5.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.5/pre-review-notes-v0.3.5.zip) | pre-review-notes |
+| 离线网页笔记、可选折叠问答 | [pre-review-notes-html-v0.3.5.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.5/pre-review-notes-html-v0.3.5.zip) | pre-review-notes-html |
 
 **三个预设在两个入口都能使用。** 例如，预习可以用 PDF，考试复习也可以用 HTML。
 两个包可以分别或同时安装；要同时生成两种成品时，各自保存配置和输出。
 
-点击上表下载，或在 [v0.3.0 下载页](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0) 的
+点击上表下载，或在 [v0.3.5 下载页](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5) 的
 Assets 中选择相应 ZIP。具体安装位置和操作见
 [小白使用指南](./USAGE.md)。下载的 `.sha256` 是校验文件，GitHub 自动提供的 Source code
 是仓库源码，它们都不等同于安装 ZIP。
@@ -134,8 +136,8 @@ PDF 入口另有可选的题库、Anki 导出和重测工具；HTML 折叠问答
 [早期课程笔记示例](./examples/stat3007/README.md) 是历史试验，不代表当前版本的效果保证。
 
 实际课程试用主要集中在 AI / 机器学习。跨学科准确性和学习效果尚未经过系统评测。
-本地 37 项回归测试和两份中文 PDF 样本检查通过；HTML 实际浏览器的视觉与交互验收仍待完成。
-完整范围见 [v0.3.0 验证记录](./TESTING-0.3.0.md)。自动化测试不证明教学效果或内容无误，
+本地 45 项回归测试通过，并检查了两页中文 PDF 样章。HTML 示例已验证离线构建，较早的候选版本还实测了窄屏和键盘展开答案。
+完整范围见 [v0.3.5 验证记录](./TESTING-0.3.5.md)。自动化测试不证明教学效果或内容无误，
 实际使用时仍需对照原始资料检查。
 
 课程 slides 和个人资料应保存在本地，不要提交到本仓库。
@@ -144,8 +146,8 @@ PDF 入口另有可选的题库、Anki 导出和重测工具；HTML 折叠问答
 
 ## 版本与开发
 
-当前版本：**v0.3.0**。完整变化和升级说明见 [发布说明](./RELEASE-0.3.0.md)。
-v0.2.10 的两套入口继续兼容原用途配置，新增预习用途；保留旧成品和进度，再让 Agent
+当前版本：**v0.3.5**。完整变化和升级说明见 [发布说明](./RELEASE-0.3.5.md)。
+从旧版升级时，请保留原有成品和进度，替换相应的 Skill 后再让 Agent
 读取新规则处理后续章节。新增检查不会把旧章节自动标记为已经通过。
 
 开发者可阅读 [开发与测试说明](./DEVELOPMENT.md)、[测试方案](./TESTING.md)

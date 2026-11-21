@@ -1,0 +1,110 @@
+# v0.3.5 verification
+
+Local Windows working-copy checks, 22 November 2026 (Brisbane).
+
+## Published installation packages
+
+Each ZIP was built twice from a Git export with automatic line-ending conversion disabled.
+All bundled files matched their Git blobs. Compared with the Windows trial below, only line
+endings changed, in 20 print files and 21 HTML files. All 45 local regression tests passed
+on the exported sources. Each release ZIP also passed standalone skill validation. The
+extracted tools compiled a two-page Chinese PDF with XeLaTeX and built the offline HTML fixture.
+
+| Release asset | SHA-256 |
+|---|---|
+| pre-review-notes-v0.3.5.zip | 6a134f75fdfa83f491ea26a4de5b351674c5a57fea25e7d8690a09009db3de8b |
+| pre-review-notes-html-v0.3.5.zip | eb129895692d6759a54841af3880df5d4431f7204f051baa57c12da91c21175b |
+
+## Repaired local candidate, 22 November
+
+All 45 repository tests passed, including eight new tests and an expanded chapter-reuse
+test. The regressions run the public CLIs against temporary materials, the shipped example
+state, the print templates and the HTML fixture. They exercise earlier-sorting copies,
+ambiguous and unique renames, missing or changed outputs, old state with no file hashes,
+invalid sprint budgets, draft-only slots and the absence of unrequested print sections.
+Both skill directories passed validation. Shared-resource comparison and Python compilation passed.
+
+Two independent first-use trials produced a Chinese PDF preview card with 17 settings and
+a Chinese HTML consolidation card with 19. Both showed all four groups and the alternatives
+for inactive settings up front, and accepted one reply for all recommendations. Every
+catalogue row and alternative matched the previous local ZIP. Across SKILL.md, the preset
+guide and the entry-specific catalogue, non-whitespace character counts fell from 25,885 to
+23,193 for print and from 18,186 to 15,784 for HTML.
+
+Each package was built twice. The two builds matched byte-for-byte, and all 80 archive
+members matched the source checkout or repository license. Both extracted packages passed
+skill validation. The extracted print builder compiled and rendered the existing two-page
+Chinese handout with XeLaTeX. Both pages were inspected for section hierarchy, table and
+equation readability, and question/solution placement. The extracted HTML builder produced
+the offline fixture with its local figure and passed its static checks. Browser interaction
+and course-wide learning outcomes were not re-evaluated in this repair round.
+
+| Local archive | Members | SHA-256 |
+|---|---:|---|
+| pre-review-notes-v0.3.5.zip | 44 | e9288027e658819c7ee864f63020a06e6ce3c21e12317149d97aa926e8478994 |
+| pre-review-notes-html-v0.3.5.zip | 36 | a71435d62fedc691ac81a18241f72e303a7445b6aff0509ccc109ffe728dcb57 |
+
+## Prior candidate packaging and output
+
+* All 37 existing unit/CLI tests passed on that candidate run. The first run exposed a checksum
+  test that decoded HTML as text, normalised CRLF and hashed the re-encoded result. The
+  report already matched the bytes on disk. The corrected assertion hashes the file bytes
+  and decodes a copy for HTML assertions.
+* Both extracted skills passed the UTF-8 skill validator. The shared-source check found
+  zero differences across 20 resources per entry. Python compilation passed.
+* Each local ZIP was built twice, compared byte-for-byte, and checked member-by-member
+  against the working copy, including the license. That print ZIP contains 44 members
+  (SHA-256 `5c1c836f1ad294edcd8be504f7ed78f9115e29786a29556cdffc92655e19c8cd`).
+  The HTML ZIP contains 36 members
+  (`59e3e17b8f777eaa1a5b5b25069be2e5c3da6449bd94f331e912b3ce86f10407`).
+* Extracted print and HTML tools ran independently. After the handout style update,
+  XeLaTeX compiled the packaged English template. An extra automatic-engine run stalled
+  at Tectonic; stopping that attempt allowed the builder to finish with XeLaTeX.
+  The template preamble and layout macros also
+  produced a two-page Chinese sample with a teaching page and a worked-question page.
+  Both rendered pages were inspected for hierarchy, equations, tables and answer placement.
+  The earlier three-page regression example used its own preamble and was only a build check.
+  In the existing HTML fixture, both answers started closed and opened
+  and closed with Enter in Edge at widths of 390 and 1280 pixels with networking and
+  JavaScript disabled. The figure loaded, MathML was visible and neither viewport had
+  document-level horizontal overflow.
+
+## Content trial
+
+Separate agents received the same [three original cards](./tests/fixtures/review/reading-samples.md),
+the corresponding extracted print skill, and the same request for three Chinese exam revision
+excerpts with English exam-answer language. Initial authoring delivered Markdown only and
+deferred the second pass so draft behaviour could be inspected separately.
+
+The v0.3.0 baseline and the first candidate both identified the query and keys, worked the
+dot products and retained the softmax stabilisation detail. Both derived 2.5 and 1.5 for
+the two updates and distinguished 64 DFT terms from 24 convolution products and a minimum
+FFT length of 10. There was no arithmetic advantage on this sample.
+
+Both initial samples repeated numerical conclusions in the English answers to mixed
+questions. The candidate guidance was refined to keep wording tied to the assessed
+explanation. A fresh final-candidate draft still repeated values and added an English
+answer to the wholly numerical C2. This is a regression observed in that sample. It makes
+the post-draft review important even with explicit authoring instructions.
+
+A separate reviewer then applied the packaged second pass to that actual draft. The
+reviewed text removed the translated C2 result, kept only the explanatory clauses for the
+mixed questions, and supplied the values 5 and 9 at their first use. It preserved the
+stability detail, the terminal exception and the distinction between counts and output
+length. It also showed why a transform of length 9 wraps the last contribution to index 0.
+A separate v0.3.0 reviewer received the baseline draft and the same review request. It
+also kept the stability condition, distinguished the two counts and kept English for
+the explanatory subparts. The two authoring-plus-review runs therefore do not show an
+overall win for the candidate. These content trials preceded the final template styling
+change. Real learners have yet to try the samples under blind conditions.
+
+## Folded exercise repair
+
+A deliberately faulty HTML draft hid a required kernel length inside its answer and used
+4 where the source specified 3. It passed the static build checks. An independent agent
+using the candidate skill located the discrepancy and rebuilt the exercise. In the
+repaired narrow-screen browser view with the answer closed, C2 gave the signal length
+of 8 and the kernel length of 3. Opening the answer with Enter revealed
+24 products and a minimum transform length of 10. The faulty copy had 32 and 11.
+This exercised one folded pair of prompts and answers. A full printed practice/solution
+booklet and full-course learning outcomes remain outside this trial.

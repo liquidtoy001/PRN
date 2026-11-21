@@ -43,6 +43,20 @@ explicit user choices. `topic-led` remains available when the learner prefers to
 
 ## Match answer form to the actual question
 
+For each subpart, identify the deliverable, the given conditions it depends on and the
+reasoning needed to obtain it. Similar stems may share an explanation of the principle.
+Give each its own requested result or application. For instance, counting all terms of an
+N-point direct DFT counts N samples for each of N coefficients. Counting all products of
+a direct full linear convolution counts pairs from inputs of lengths N and M. Name the
+operation and the two sets being counted before giving the cost. If an unspecified
+convention changes the answer, state the assumption and illustrate the consequential
+alternatives. Use a verified marking guide when available. Without one, describe a
+concise prose answer as an example and avoid promises about marks.
+
+Distinguish an explicitly excluded exam topic, a prerequisite still needed for an included
+topic, and a topic whose assessment status is unknown. Record the source of the decision
+in the exam plan. A long lab or a past appearance alone does not establish current scope.
+
 Classify each question/subpart by the operation its stem requests, including mixed questions.
 Keep the teaching in the note's language. A separate answer-language snippet is useful only
 when the learner must compose assessed prose and its wording adds value:
@@ -56,7 +70,12 @@ when the learner must compose assessed prose and its wording adds value:
 | Drawing or tracing a process | Labelled construction, intermediate states/arrows and result | No unless a separate prose justification is requested |
 | Programming/code interpretation | Apply the confirmed code setting; otherwise teach the mechanism without a listing and flag any deferred code-dependent requirement | No automatic English paraphrase |
 
-For "calculate and explain", attach a snippet only to the explanatory subpart if useful.
+For "calculate and explain", keep the worked result once in the main answer. A useful
+exam-language sentence starts at the reasoning the learner must express. For example,
+after two update values, a prompt asking *when they agree* calls for the equality
+condition. Repeating both values in English adds nothing to that condition. Include a
+number in the snippet when it is evidence for the requested argument or the learner
+explicitly asks for a complete model response.
 For "true/false and justify", the justification may qualify; the bare selection does not.
 This restriction removes redundant translated answers, not the reasoning needed to understand
 a calculation or choice. If the main language already matches the exam language, do not repeat

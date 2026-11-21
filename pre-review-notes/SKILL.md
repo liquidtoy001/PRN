@@ -5,7 +5,7 @@ description: Build source-grounded, print-first course notes for preview, knowle
 
 # Pre-Review Notes
 
-Version: 0.3.0. Resolve this directory and read `VERSION`
+Version: 0.3.5. Resolve this directory and read `VERSION`
 before starting; disclose which copy is used when multiple installations exist.
 
 Turn scattered course materials into maintainable revision notes whose priorities, worked
@@ -56,18 +56,9 @@ when planning and drafting; a correct inventory of separate points is not a read
 
 ## Start with presets and a complete configuration card
 
-Read [references/learning-presets.md](references/learning-presets.md) and
-[references/configuration.md](references/configuration.md) before generation. Offer 课前预习
-(`preview`), 知识巩固 (`knowledge`) and 考试复习 (`exam`). Show their short comparison and the
-entire grouped PDF configuration in the first configuration exchange: alternatives, current
-values and which are supplied, recommended, evidence-derived or not applicable. Advanced and
-inactive settings stay visible; do not ask for the preset first and reveal the rest later.
-
-Focus decisions on purpose, concrete scope, language and deliverables. Recommend the rest so
-one reply can accept or customise them. Existing choices win over presets. If choices are
-already complete or delegated, show the resolved card and continue; otherwise wait for the
-reply before drafting. Save the complete configuration even for one chapter. On resume, ask
-only unresolved/changed choices instead of repeating the first-use questionnaire.
+Follow the [first-use conversation](references/learning-presets.md) using every row and
+alternative in the [configuration card](references/configuration.md). Show the whole card
+once, including inactive rows. On resume, ask only about missing or changed choices.
 
 Purpose selects the teaching route. Mode selects scope/time: 先做一章 (`lightweight`), 分章完成课程
 (`full`), 限时冲刺 (`exam-cram`). Read [references/modes.md](references/modes.md). All presets
@@ -183,7 +174,8 @@ After the draft exists, read [references/second-pass-review.md](references/secon
 Notify the learner that the automatic second pass is starting, then check every in-scope K ID
 and question/subpart against the final note. Use `assets/second-pass-template.md`, repair
 omissions and non-responsive explanations, read the chapter continuously for prerequisite
-gaps and broken transitions, and rebuild affected outputs. Explicitly deferred
+gaps and broken transitions, try a consequential next step with its result covered,
+and check similar questions against their distinct demands. Rebuild affected outputs. Explicitly deferred
 reviews remain pending. Question checking does not require printing questions in the note.
 
 Run the citation validator when local files are available:

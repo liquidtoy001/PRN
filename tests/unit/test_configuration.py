@@ -8,6 +8,37 @@ from test_scripts import REPOSITORY, run_script
 
 
 class ConfigurationTests(unittest.TestCase):
+    def test_exam_cram_requires_calendar_date_and_positive_finite_hours(self):
+        with tempfile.TemporaryDirectory() as folder:
+            state = Path(folder) / "state.json"
+            init = ("manage_state.py", "init", "--output", state, "--course-id", "R",
+                    "--course-title", "Review", "--mode", "exam-cram", "--language", "en",
+                    "--format", "markdown")
+            cases = [(None, None), (None, "3"), ("2028-02-29", None),
+                     ("2027-02-29", "1"), ("20280229", "1"),
+                     *(("2028-02-29", hours) for hours in ("0", "-2", "nan", "inf"))]
+            for deadline, hours in cases:
+                with self.subTest(deadline=deadline, hours=hours):
+                    args = list(init)
+                    if deadline is not None:
+                        args.extend(["--assessment-date", deadline])
+                    if hours is not None:
+                        args.extend(["--study-hours", hours])
+                    result = run_script(*args)
+                    self.assertNotEqual(result.returncode, 0, result.stderr)
+                    self.assertFalse(state.exists())
+            good = run_script(*init, "--assessment-date", "2028-02-29", "--study-hours", "0.5")
+            self.assertEqual(good.returncode, 0, good.stderr)
+            self.assertEqual(run_script("manage_state.py", "validate", state).returncode, 0)
+            data = json.loads(state.read_text())
+            data["preferences"]["assessment_date"] = None
+            state.write_text(json.dumps(data))
+            before = state.read_bytes()
+            self.assertNotEqual(run_script("manage_state.py", "validate", state).returncode, 0)
+            view = run_script("manage_state.py", "render-progress", state, "--output", Path(folder) / "progress.md")
+            self.assertEqual(view.returncode, 0, view.stderr)
+            self.assertEqual(state.read_bytes(), before)
+
     def test_preview_round_trip_keeps_custom_choices_and_existing_purposes(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

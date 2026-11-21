@@ -23,6 +23,9 @@ Keep necessary compact attribution and content-specific uncertainty. Apply the t
 criteria in coverage-and-depth.md and the post-draft checks in second-pass-review.md.
 Use exam-review.md to decide whether a question needs an answer-language snippet; calculations
 and ordinary choice items do not need translated answer blocks.
+For folded practice, keep shared data, relevant diagrams and all parts of the prompt
+visible before the answer opens. Place reasoning under the matching subpart. Keep the
+main teaching route available when optional self-tests are closed.
 If enabled, mark optional provenance sections with class `source-index` or
 `source-explanation`. The builder rejects those explicit blocks when their settings are off.
 The final content review must also catch unmarked provenance prose or file catalogues.

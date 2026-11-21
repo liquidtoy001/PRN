@@ -19,10 +19,23 @@ Use natural paragraphs rather than repeating these as labelled boxes for every c
 A transition must explain why the next idea is needed, not merely say "next we discuss X".
 
 Keep a useful example running across related concepts where it reveals what changed.
-Introduce another example when the original no longer serves the explanation. Place a
-supporting calculation near the mechanism it explains. Put additional exam applications
+When extending it, carry forward the quantities and conventions the reader already knows.
+Introduce a new case at the first assumption the old example cannot illustrate, and show
+what the reader must now track. Put additional exam applications
 after the relevant explanation reaches a natural stopping point; do not interrupt every
 paragraph with a year/question label or answer-language sentence.
+
+At the first decision a novice must make, identify the actual object in this example.
+For a formula, show where one operand comes from, work one representative substitution
+and interpret that result before moving to the full table. For a diagram, locate the
+starting point and trace the edge, axis or region that justifies the first inference.
+For a conceptual distinction, use one observation that makes the two interpretations
+predict different outcomes. Let repeated cases occupy less space once the operation is clear.
+
+For example, when a target word attends to two source words, identify whose state is
+the query and which two positions supply keys. Show one query–key dot product before
+giving the score vector. This lets the reader compute the next score and explain why
+normalisation runs over the source positions.
 
 ## Restore the prerequisites the chapter actually uses
 

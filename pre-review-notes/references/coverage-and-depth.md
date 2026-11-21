@@ -33,6 +33,16 @@ excluded them. A source-by-source heading list is not a knowledge-point ledger.
 Several K IDs may share one coherent teaching section. Follow `standalone-teaching.md` to
 plan prerequisite bridges and the reading sequence; do not turn each ledger row into a box.
 
+When shortening a draft, check small conditions and counterexamples against their original
+locations. Keep details that change a decision, make a calculation reproducible or show where
+a rule breaks. A numerical stability trick can fit beside its formula in one sentence.
+For a lab, keep the input, observation and interpretation needed to teach the mechanism.
+Repeated outputs, setup commands and logs can usually be condensed unless the chosen
+objective requires interpreting or reproducing them. For preview, use the first accessible
+case; for consolidation, develop the derivation and its limits; for exams, select the
+operations supported by the supplied assessment evidence. Apply these choices within
+the agreed coverage boundary.
+
 ## Teaching depth before marking a point explained
 
 For each K ID, apply the relevant criteria below. A short factual point may need only a

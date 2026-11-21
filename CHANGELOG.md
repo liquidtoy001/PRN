@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.5 — 2026-11-22
+
+Both entries now work the first consequential step from the data at hand and check it again
+while reviewing the chapter. The review also compares related subparts, checks details lost
+during revision and verifies practice/solution alignment when requested.
+The print template defaults to a single-column academic handout with restrained section rules,
+displayed equations and compact tables. The HTML template carries the same visual hierarchy.
+Both entries preserve citation IDs when copies are added and validate sprint budgets. The
+print entry checks registered artifacts before reuse and rejects unfinished templates by default.
+The shorter first-use instructions keep every configuration choice visible.
+[Release notes](RELEASE-0.3.5.md) · [Validation](TESTING-0.3.5.md)
+
 ## v0.3.0 — 2026-11-10
 
 See the [GitHub Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0),
@@ -43,6 +55,7 @@ Release pages/assets are locally archived, while their Git tags remain.
 
 | Version | Changes |
 |---|---|
+| v0.3.5 | Worked-step and second-pass checks, print handout defaults, stable source IDs and verified artifact reuse. |
 | v0.3.0 | Three purpose presets with one complete intake; standalone teaching, evidence-based exam configuration, paper identity review and automatic second-pass checks. |
 | v0.2.10 | Independent offline HTML entry, optional folded questions, shared-resource drift checks and dual packages. |
 | v0.2.9 | Separate image extraction and final-layout reviews, crop and render evidence. |

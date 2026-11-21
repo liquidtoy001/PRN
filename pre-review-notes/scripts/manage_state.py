@@ -4,14 +4,16 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from review_preferences import validate_review_preferences
+from review_preferences import validate_review_preferences, validate_study_time
 
 
 MODES = {"lightweight", "full", "exam-cram"}
@@ -93,7 +95,7 @@ def second_pass_policy(state: dict[str, Any]) -> str | None:
     return configuration.get("second_pass_review") if isinstance(configuration, dict) else None
 
 
-def validate_state(state: dict[str, Any]) -> list[str]:
+def validate_state(state: dict[str, Any], *, check_cram: bool = True) -> list[str]:
     errors: list[str] = []
     schema_version = state.get("schema_version")
     if schema_version not in SUPPORTED_SCHEMA_VERSIONS:
@@ -119,7 +121,9 @@ def validate_state(state: dict[str, Any]) -> list[str]:
         configuration = preferences.get("note_configuration")
         if configuration is not None:
             errors.extend(validate_note_configuration(configuration))
-        if study_hours is not None and (
+        if preferences.get("mode") == "exam-cram" and check_cram:
+            errors.extend(validate_study_time(preferences))
+        elif study_hours is not None and (
             not isinstance(study_hours, (int, float))
             or isinstance(study_hours, bool)
             or study_hours < 0
@@ -229,12 +233,50 @@ def find_chapter(state: dict[str, Any], slug: str) -> dict[str, Any] | None:
     return next((chapter for chapter in state.get("chapters", []) if chapter.get("slug") == slug), None)
 
 
+def portable_root(root: Path, state_path: Path) -> str:
+    try:
+        return os.path.relpath(root.resolve(), state_path.resolve().parent)
+    except ValueError:  # Windows paths on different drives.
+        return str(root.resolve())
+
+
+def artifact_root(state: dict, state_path: Path, override: Path | None) -> Path:
+    recorded = state.get("artifact_root")
+    if recorded is None:
+        return (override or state_path.resolve().parent).resolve()
+    if not isinstance(recorded, str) or not recorded.strip():
+        raise ValueError("artifact_root must be a directory path")
+    root = (state_path.resolve().parent / recorded).resolve()
+    if override is not None and override.resolve() != root:
+        raise ValueError("--project-root conflicts with the recorded artifact root")
+    return root
+
+
+def artifact_hashes(chapter: dict, root: Path) -> dict[str, str]:
+    paths = chapter.get("artifacts", [])
+    if not isinstance(paths, list):
+        raise ValueError("artifacts must be a list of file paths")
+    hashes = {}
+    for name in paths:
+        if not isinstance(name, str) or not name.strip() or not (root / name).is_file():
+            raise ValueError(f"artifact missing or not a file: {name}")
+        digest = hashlib.sha256()
+        with (root / name).open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        hashes[name] = digest.hexdigest()
+    return hashes
+
+
 def command_init(args: argparse.Namespace) -> int:
     if args.output.exists() and not args.force:
         print(f"state already exists: {args.output}; pass --force to replace it", file=sys.stderr)
         return 2
+    output_parent = args.output.resolve().parent
+    default_root = Path.cwd() if output_parent.is_relative_to(Path.cwd()) else output_parent
     state = {
         "schema_version": CURRENT_SCHEMA_VERSION,
+        "artifact_root": portable_root(args.project_root or default_root, args.output),
         "course": {"id": args.course_id, "title": args.course_title},
         "preferences": {
             "mode": args.mode,
@@ -380,6 +422,13 @@ def command_update_chapter(args: argparse.Namespace) -> int:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"state error: {exc}", file=sys.stderr)
         return 2
+    try:
+        root = artifact_root(state, args.state, args.project_root)
+    except ValueError as exc:
+        print(f"state error: {exc}", file=sys.stderr)
+        return 2
+    if args.project_root is not None and "artifact_root" not in state:
+        state["artifact_root"] = portable_root(root, args.state)
     chapter = find_chapter(state, args.slug)
     if chapter is None:
         if not args.title:
@@ -408,12 +457,16 @@ def command_update_chapter(args: argparse.Namespace) -> int:
         }
         state.setdefault("chapters", []).append(chapter)
 
+    previous_status = chapter["status"]
     if args.title:
         chapter["title"] = args.title
     if args.priority_basis is not None:
         chapter["priority_basis"] = args.priority_basis
     if args.input_digest:
         if chapter.get("input_digest") != args.input_digest:
+            if previous_status in {"verified", "delivered"}:
+                chapter["status"] = "drafting"
+            chapter.pop("artifact_sha256", None)
             chapter["second_pass_review"] = second_pass_policy(state)
             qa = chapter.setdefault("qa", {})
             qa.update({"teaching_depth": "pending", "second_pass": "pending"})
@@ -421,7 +474,10 @@ def command_update_chapter(args: argparse.Namespace) -> int:
     if args.source_id:
         chapter["source_ids"] = sorted(set(chapter.get("source_ids", [])) | set(args.source_id))
     if args.artifact:
-        chapter["artifacts"] = sorted(set(chapter.get("artifacts", [])) | set(args.artifact))
+        registered = set(chapter.get("artifacts", []))
+        if set(args.artifact) - registered and previous_status in {"verified", "delivered"}:
+            chapter["status"] = "drafting"
+        chapter["artifacts"] = sorted(registered | set(args.artifact))
 
     qa = chapter.setdefault("qa", {})
     for field in sorted(QA_FIELDS):
@@ -453,6 +509,21 @@ def command_update_chapter(args: argparse.Namespace) -> int:
             if args.status == "delivered" and not chapter.get("artifacts"):
                 print("cannot set delivered; at least one --artifact is required", file=sys.stderr)
                 return 2
+            try:
+                hashes = artifact_hashes(chapter, root)
+            except (OSError, ValueError) as exc:
+                print(f"cannot set {args.status}: {exc}", file=sys.stderr)
+                return 2
+            previous_hashes = chapter.get("artifact_sha256", {})
+            if not isinstance(previous_hashes, dict):
+                print("invalid artifact_sha256 in state", file=sys.stderr)
+                return 2
+            if previous_status in {"verified", "delivered"} and any(
+                hashes.get(path) != digest for path, digest in previous_hashes.items()
+            ):
+                print("verified artifact changed; return to drafting and review before verification", file=sys.stderr)
+                return 2
+            chapter["artifact_sha256"] = hashes
         chapter["status"] = args.status
 
     chapter["updated_at"] = utc_now()
@@ -480,8 +551,17 @@ def command_needs_rebuild(args: argparse.Namespace) -> int:
     reusable = bool(
         chapter
         and chapter.get("status") in {"verified", "delivered"}
+        and DIGEST_PATTERN.fullmatch(args.input_digest)
         and chapter.get("input_digest") == args.input_digest
     )
+    if reusable:
+        try:
+            root = artifact_root(state, args.state, args.project_root)
+            current = artifact_hashes(chapter, root)
+            # A legacy record can establish existence only, until its next verification.
+            reusable = bool(current) and chapter.get("artifact_sha256", current) == current
+        except (OSError, ValueError):
+            reusable = False
     print("reuse" if reusable else "rebuild")
     return 0 if reusable else 3
 
@@ -492,7 +572,7 @@ def command_render_progress(args: argparse.Namespace) -> int:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"state error: {exc}", file=sys.stderr)
         return 2
-    errors = validate_state(state)
+    errors = validate_state(state, check_cram=False)
     if errors:
         for error in errors:
             print(f"ERROR {error}", file=sys.stderr)
@@ -565,6 +645,7 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--mode", choices=sorted(MODES), required=True)
     init.add_argument("--language", choices=sorted(LANGUAGES), required=True)
     init.add_argument("--format", choices=sorted(FORMATS), required=True)
+    init.add_argument("--project-root", type=Path, help="course directory used for relative artifact paths")
     init.add_argument("--assessment-date")
     init.add_argument("--note-configuration", type=Path)
     init.add_argument("--study-hours", type=float)
@@ -591,6 +672,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     update = subparsers.add_parser("update-chapter", help="create or update one chapter")
     update.add_argument("state", type=Path)
+    update.add_argument("--project-root", type=Path, help="base for artifact paths in legacy state")
     update.add_argument("--slug", required=True)
     update.add_argument("--title")
     update.add_argument("--status", choices=sorted(STATUSES))
@@ -605,6 +687,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     rebuild = subparsers.add_parser("needs-rebuild", help="check an incremental input digest")
     rebuild.add_argument("state", type=Path)
+    rebuild.add_argument("--project-root", type=Path, help="base for artifact paths in legacy state")
     rebuild.add_argument("--slug", required=True)
     rebuild.add_argument("--input-digest", required=True)
     rebuild.set_defaults(handler=command_needs_rebuild)

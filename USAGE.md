@@ -2,8 +2,12 @@
 
 这份指南面向第一次使用 Skill 的人。不需要先学 Git、Python 或 LaTeX。
 
-本指南对应 **[v0.3.0](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0)**。
+本指南对应 **[v0.3.5](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5)**。
 请选择下面的新版安装包；旧版 v0.2.10 不包含三预设和新的复核流程。
+
+第一次使用时，先选用途、资料范围和语言，并确认其余推荐值。比如你可以说“用考试复习预设，中文讲，先做第二章”。写完初稿后，Agent 会从题目给出的信息重做一个关键步骤，比较相似题各自要求什么，并核对改短时有无漏掉条件。你可以直接纠正它在哪一行跳步。[本版说明](./RELEASE-0.3.5.md)
+
+接受默认版式就会得到单栏课程讲义。知识讲解按段落连读，公式独立排，题目按小问接解析。想在纸上多留一点书写空间，或沿用自己原来的排版，都可以在第一次确认配置时直接说。
 
 ## 1. 先确认你在用什么
 
@@ -13,10 +17,10 @@
 
 ## 2. 下载：只选一个 ZIP 就能开始
 
-打开 [v0.3.0 下载页](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0)，找到 **Assets**，或直接点击下面的链接。
+打开 [v0.3.5 下载页](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5)，找到 **Assets**，或直接点击下面的链接。
 
-- 想得到能打印的笔记：下载 **[pre-review-notes-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-v0.3.0.zip)**。
-- 想得到浏览器里阅读的笔记：下载 **[pre-review-notes-html-v0.3.0.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.0/pre-review-notes-html-v0.3.0.zip)**。
+- 想得到能打印的笔记：下载 **[pre-review-notes-v0.3.5.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.5/pre-review-notes-v0.3.5.zip)**。
+- 想得到浏览器里阅读的笔记：下载 **[pre-review-notes-html-v0.3.5.zip](https://github.com/liquidtoy001/PRN/releases/download/v0.3.5/pre-review-notes-html-v0.3.5.zip)**。
 
 不要选择 `Source code` 或 `.sha256` 作为 Skill 安装包。后者只是用来核对下载是否完整。
 两种笔记可以都要，第一次建议先选一种、做一章，确认效果。
@@ -100,7 +104,7 @@ Agent 应说明哪些考试信息仍然未知。
 
 ### 三种预设与首次配置
 
-以下流程适用于 v0.3.0；旧版 v0.2.10 下载包采用原流程。
+以下流程适用于 v0.3.5；旧版 v0.2.10 下载包采用原流程。
 
 **先选用途预设，其他设置仍然一次看全：**
 
@@ -178,8 +182,8 @@ PDF 入口显示 17 项，HTML 入口显示 19 项，**不用逐项作答**。�
 
 ## 8. 常见问题
 
-**从 v0.2.10 升级怎么做？** 保留旧笔记和进度，按平台的更新方式替换完整 Skill 文件夹，
-然后让 Agent 确认读到 v0.3.0。两个调用名称不变，已保存选项会沿用；预习是新增用途。
+**从旧版升级怎么做？** 保留旧笔记和进度，按平台的更新方式替换完整 Skill 文件夹，
+然后让 Agent 确认读到 v0.3.5。已有课程会沿用保存的选项。如果旧的限时冲刺计划缺日期或学习时数，继续前请补齐。
 继续旧课程不需要重填全部设置。若要重做旧章，明确要求另存新版，再进行新一轮复核。
 
 **没看到 Skill？** 确认目录名、`SKILL.md` 所在层级和平台是否需要重新加载，

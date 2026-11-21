@@ -1,5 +1,9 @@
 # Browser layout and interaction gate
 
+Carry the handout hierarchy from `note-presentation.md` onto the screen: one main reading
+column, short headings with thin separators, standalone equations and a muted table header.
+Keep mobile tap targets, visible keyboard focus and the selected theme.
+
 Use normal-flow figure/caption/source blocks, proportional images, no cropped fixed-height
 containers, absolute overlays or text wrapping over diagrams. Dense originals need a readable
 local full-size image link or meaningful labelled panels, not only a tiny responsive thumbnail.

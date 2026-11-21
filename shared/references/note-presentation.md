@@ -26,6 +26,25 @@ defaults for newly generated content; old files are revised only as part of requ
 When either option is enabled, use concise relevant information and avoid repeated source
 headers on every concept.
 
+## Default handout layout
+
+Use a single reading column, dark body text, a clear chapter title and bold numbered
+sections. Reserve thin rules for major divisions and light shading for table headers or
+an occasional result. Use paragraph spacing, heading weight and position to carry the
+hierarchy in grayscale. Keep intact any source colors needed to interpret a figure.
+
+In a teaching chapter, start the explanation on the opening page. Keep the symbol or
+given value near its first use, set substantial equations on their own line and put
+comparisons in a compact table when the columns help. In an exam section, keep the
+question number, givens, labelled figure, subpart and its answer easy to find in order.
+Use the same heading hierarchy across both treatments. Ordinary solutions need body-size
+text and may continue across a page. Reserve writing space for a requested practice copy.
+
+Use the learner's saved layout and density choices. A request for compact notes changes
+spacing, while formulas and figure labels must remain legible at the selected page or
+screen size. Printed pages use a simple page number; HTML retains screen navigation,
+keyboard focus, theme selection and optional folded answers.
+
 ## Code in the learning artifact
 
 `include_code=false` is the default. Preserve code as a source of knowledge without importing

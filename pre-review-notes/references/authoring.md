@@ -23,11 +23,15 @@ template blocks.
 For informative source figures and tables, follow `source-visuals.md`: reuse them where useful,
 place them beside the explanation, and explain how to read them and reach the stated conclusion.
 
+In a requested solution booklet, place each subpart beside its reasoning. Reflow text-heavy
+stems and preserve the labels and values of any required figure. During print review, check
+that a page turn has not separated a step from the only copy of its data. In a requested
+practice copy, allow writing space proportional to the calculation or drawing.
+
 Apply `coverage-and-depth.md` and `standalone-teaching.md` before using the template. Group
 related ledger points into a connected explanation, rather than repeating a concept box per
 K ID. Restore the actual prerequisites before first use and explain the relation to nearby
-concepts. The template is expandable. Two to four
-worked problems is a starting guideline, never a cap that drops source exercises. Retain
+concepts. Choose worked applications to match the material and purpose. Retain
 every exercise in the selected scope with a solution, a deferred solution locator, or an
 explicit restriction for active graded work. Do not call deferred work fully explained.
 
@@ -55,15 +59,12 @@ Use `assets/template.tex` for quantitative material or
 `assets/markdown-template.md` for prose-heavy material. Adapt the slots rather than forcing a
 mathematical layout onto every discipline.
 
-Apply note-presentation.md to the following chapter components:
-
-1. a topic header; source/process details appear only if show_source_explanations is enabled;
-2. a connected reading sequence using the course's notation, with local prerequisite bridges;
-3. complete solutions or derivations for two to four high-value real problem types;
-4. sourced misconception or trap boxes;
-5. a compact quick-reference card;
-6. an assessment mapping table only if show_source_index is enabled;
-7. a short practice-next list when requested.
+Start with the topic, then teach the selected material in a connected sequence. Explain
+source problems where they advance the topic using as many steps as the reasoning needs.
+For exam revision, select and justify problem types using the actual assessment evidence.
+Place a sourced misconception beside the step it affects. Add a separate quick reference,
+practice list or retest schedule only when requested. Include a source index or process
+explanation only when its corresponding setting is enabled. See note-presentation.md.
 
 The quality ceiling is not a generic "AI may be wrong" disclaimer. State which source IDs were
 used and omitted, whether OCR or chunking limited coverage, whether exam weighting is

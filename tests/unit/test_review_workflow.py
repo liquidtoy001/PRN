@@ -70,6 +70,50 @@ class ReviewWorkflowTests(unittest.TestCase):
             self.assertEqual(first["duplicate_groups"], second["duplicate_groups"])
             self.assertEqual(first["inventory_digest"], second["inventory_digest"])
 
+    def test_earlier_duplicate_and_unambiguous_rename_preserve_source_ids(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            sources = root / "materials"
+            sources.mkdir()
+            inventory = root / "inventory.json"
+
+            def rescan():
+                result = run_script("inventory_materials.py", sources, "--output", inventory)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                data = json.loads(inventory.read_text(encoding="utf-8"))
+                return {item["path"]: item["id"] for item in data["materials"]}
+
+            original = sources / "B-original.md"
+            original.write_bytes(b"An example from a lecture.")
+            first = rescan()[original.name]
+            copy = sources / "A-copy.md"
+            copy.write_bytes(original.read_bytes())
+            second = rescan()
+            self.assertEqual(second[original.name], first)
+            self.assertNotEqual(second[copy.name], first)
+            original.rename(sources / "C-renamed.md")
+            self.assertEqual(rescan(), {copy.name: second[copy.name], "C-renamed.md": first})
+            copy.unlink()
+            rescan()
+            (sources / "fresh.md").write_bytes(b"A distinct lecture.")
+            self.assertNotIn(rescan()["fresh.md"], second.values())
+
+    def test_two_possible_renames_do_not_take_an_old_citation_id(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            original = root / "original.txt"
+            original.write_bytes(b"Exercise 1")
+            inventory = root / "inventory.json"
+            args = ("inventory_materials.py", root, "--output", inventory)
+            self.assertEqual(run_script(*args).returncode, 0)
+            old_id = json.loads(inventory.read_text())["materials"][0]["id"]
+            original.rename(root / "first.txt")
+            (root / "second.txt").write_bytes(b"Exercise 1")
+            self.assertEqual(run_script(*args).returncode, 0)
+            ids = json.loads(inventory.read_text())["duplicate_groups"][0]["source_ids"]
+            self.assertEqual(len(set(ids)), 2)
+            self.assertNotIn(old_id, ids)
+
     def test_review_gate_rejects_unreviewed_and_changed_drafts(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

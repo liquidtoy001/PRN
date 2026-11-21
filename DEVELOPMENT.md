@@ -50,8 +50,8 @@ python pre-review-notes/scripts/download_materials.py tests/fixtures/stat3007/ma
 Downloads are local third-party inputs. The manifest specifies expected sizes and SHA-256 hashes;
 it does not grant redistribution rights. Never commit those PDFs or private learner state.
 The original HTML fixture in `tests/fixtures/html/` can be used without third-party course data;
-its build command is documented in [TESTING-0.2.10.md](./TESTING-0.2.10.md). Current release
-preparation results are in [TESTING-0.3.0.md](./TESTING-0.3.0.md).
+its build command is documented in [TESTING-0.2.10.md](./TESTING-0.2.10.md). Current release results
+are in [TESTING-0.3.5.md](./TESTING-0.3.5.md).
 
 ## Prepare a version
 

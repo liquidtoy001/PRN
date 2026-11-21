@@ -1,6 +1,30 @@
 """Validate optional teaching/review preferences while accepting existing configurations."""
 from __future__ import annotations
 
+from datetime import date
+import math
+
+
+def validate_study_time(preferences: dict) -> list[str]:
+    deadline = preferences.get("assessment_date")
+    hours = preferences.get("study_hours_available")
+    errors = []
+    if deadline is not None:
+        try:
+            if date.fromisoformat(deadline).isoformat() != deadline:
+                raise ValueError
+        except (TypeError, ValueError):
+            errors.append("assessment_date must be a calendar date in YYYY-MM-DD format")
+    if hours is not None and (
+        type(hours) not in (int, float) or hours <= 0
+        or (isinstance(hours, float) and not math.isfinite(hours))
+    ):
+        errors.append("study_hours_available must be a positive finite number")
+    if preferences.get("mode") == "exam-cram" and (deadline is None or hours is None):
+        errors.append("exam-cram requires a deadline and study hours")
+    return errors
+
+
 FIELDS = {
     "exam_organisation", "exam_basis_source_ids", "exam_answer_language",
     "show_source_index", "show_source_explanations", "second_pass_review",

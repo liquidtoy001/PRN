@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import argparse
-from datetime import date
 import hashlib
 from html import escape
 from html.parser import HTMLParser
 import json
-import math
 from pathlib import Path
 import shutil
 from string import Template
@@ -17,7 +15,7 @@ from urllib.parse import quote, unquote, urlsplit
 from xml.etree import ElementTree
 
 from validate_citations import evidence_sections, find_citations, load_inventory, locator_is_placeholder
-from review_preferences import FIELDS as REVIEW_FIELDS, validate_review_preferences
+from review_preferences import FIELDS as REVIEW_FIELDS, validate_review_preferences, validate_study_time
 
 SKILL = Path(__file__).resolve().parents[1]
 VOID = {"img", "br", "hr"}
@@ -63,15 +61,9 @@ def validate_configuration(value: object) -> dict:
     initial = config["answers_initial"]
     if (config["self_test"] == "none" and initial is not None) or (config["self_test"] == "folded-qa" and initial not in ("open", "closed")):
         raise ValueError("answers_initial must match self_test")
-    deadline, hours = prefs["assessment_date"], prefs["study_hours_available"]
-    if deadline is not None:
-        if not isinstance(deadline, str):
-            raise ValueError("assessment_date must be an ISO date or null")
-        date.fromisoformat(deadline)
-    if hours is not None and (type(hours) not in (int, float) or not math.isfinite(hours) or hours <= 0):
-        raise ValueError("study_hours_available must be positive finite hours or null")
-    if prefs["mode"] == "exam-cram" and (deadline is None or hours is None):
-        raise ValueError("exam-cram requires a deadline and study hours")
+    time_errors = validate_study_time(prefs)
+    if time_errors:
+        raise ValueError("; ".join(time_errors))
     return config
 
 

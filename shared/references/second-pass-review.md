@@ -34,6 +34,14 @@ Record the actual locations checked and any repaired breakpoints. A sampled read
 partial, even when all isolated K/Q checks pass. Do not backfill a readability pass for an
 older artifact whose review did not inspect continuity.
 
+At a consequential worked step, cover the next line and attempt it using only the preceding
+text or figure. Record the input you could locate, the operation you chose, the result
+and where an extra hint was needed. For a qualitative section, trace the evidence for the
+next inference instead. If it breaks, repair the preceding explanation and retry. This is
+an author's reading check; record learner performance only when a learner actually tries it.
+On revision, reconcile removed examples, conditions and useful shortcuts with the selected
+sources and K IDs. Restore a lost detail where the reader would use it.
+
 Check that source code has not leaked into a code-off chapter, including implementation
 identifiers and code-like pseudocode that replace an explanation. Keep mathematical notation
 and genuinely needed canonical labels. Check that question/answer blocks sit after their
@@ -53,10 +61,24 @@ direct reasoning -> option reasons when present -> eligible answer-language snip
 Apply the question-type table in `exam-review.md`; record why a separate snippet was included
 or omitted. Calculations and ordinary choice items still need reasoning, not an English
 restatement of the result. For mixed questions, assess each required operation separately.
+Read each second-language snippet on its own. Cut any clause that only translates an
+already visible result, while retaining the assessed explanation and any evidence it needs.
+Honour a learner's explicit request for full translation.
 The explanation must
 answer every part of this stem. A correct general paragraph on the same subject is insufficient.
 An explanation of an algorithm's process may still fail a question asking what one cell stores.
 Review shared concept anchors independently for each different question.
+
+When two in-scope subparts share a topic but ask for different results, swap the draft
+answers and identify which requested step or condition is lost. Repair generic answers
+that conceal a difference. An identical demand can legitimately reuse its answer.
+
+When the learner requested paired practice and solution copies, match the final rendered
+subparts in order by stable ID, including shared stems, diagrams, given values, prefilled
+cells and corrections. Attempt each item from the practice view alone, check for exposed
+answers, then locate its corresponding solution and verify that it uses the same data.
+For folded HTML practice, do this with answers closed and then open the matching answer.
+Use this check only for the requested practice format.
 
 For multiple-choice material, establish a unique best answer under the stated conditions.
 Verify each All/None component and distinguish a true but incomplete selection from a false

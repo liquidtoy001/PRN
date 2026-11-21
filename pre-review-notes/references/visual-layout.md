@@ -1,5 +1,12 @@
 # Final print-page visual layout
 
+Use the handout style in `note-presentation.md` and the print template. The comfortable
+starting point is single-column A4, 11 pt body type and about 20 mm margins. Use a serif
+text face and clearly differentiated bold headings. For Chinese, select the template's
+CJK class and a locally available font set with full coverage. Keep at least a few lines
+with a new subheading; allow long worked answers to flow. Check one teaching page and
+one question/solution page when both occur. Inspect thin rules, shaded headers, figure
+captions and the first line of each answer at actual print size.
 
 Default to a standalone image block in normal document flow, with caption and source kept
 together. Reserve the entire block height. Avoid text wrapping, absolute positioning,

@@ -9,6 +9,7 @@ import json
 import logging
 import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -147,7 +148,7 @@ def load_previous(path: Path) -> tuple[dict[tuple[str, str], str], dict[str, lis
         return {}, {}, 0
     exact: dict[tuple[str, str], str] = {}
     by_hash: dict[str, list[str]] = {}
-    maximum = 0
+    maximum = raw.get("last_source_number", 0)
     for item in raw.get("materials", []):
         identifier = str(item.get("id", ""))
         digest = str(item.get("sha256", ""))
@@ -161,24 +162,34 @@ def load_previous(path: Path) -> tuple[dict[tuple[str, str], str], dict[str, lis
     return exact, by_hash, maximum
 
 
-def assign_identifier(
-    relative: str,
-    digest: str,
+def assign_identifiers(
+    materials: list[dict[str, Any]],
     exact: dict[tuple[str, str], str],
     by_hash: dict[str, list[str]],
-    used: set[str],
-    next_number: list[int],
-) -> str:
-    candidate = exact.get((relative, digest))
-    if candidate is None:
-        previous = [value for value in by_hash.get(digest, []) if value not in used]
-        if len(previous) == 1:
-            candidate = previous[0]
-    if candidate is None or candidate in used:
-        next_number[0] += 1
-        candidate = f"S{next_number[0]:03d}"
-    used.add(candidate)
-    return candidate
+    maximum: int,
+) -> int:
+    # Reserve surviving paths before considering a new path as a rename.
+    used = set()
+    unmatched = []
+    for item in materials:
+        identifier = exact.get((item["path"], item["sha256"]))
+        if identifier is None:
+            unmatched.append(item)
+        else:
+            item["id"] = identifier
+            used.add(identifier)
+
+    counts = Counter(item["sha256"] for item in unmatched)
+    for item in unmatched:
+        digest = item["sha256"]
+        if counts[digest] == 1:
+            candidates = [value for value in by_hash.get(digest, []) if value not in used]
+            if len(candidates) == 1:
+                item["id"] = candidates[0]
+                continue
+        maximum += 1
+        item["id"] = f"S{maximum:03d}"
+    return maximum
 
 
 def inventory_digest(materials: list[dict[str, Any]]) -> str:
@@ -235,8 +246,6 @@ def main(argv: list[str] | None = None) -> int:
         extensions = DEFAULT_EXTENSIONS
 
     exact, by_hash, maximum = load_previous(output)
-    next_number = [maximum]
-    used: set[str] = set()
     materials: list[dict[str, Any]] = []
     warnings: list[str] = []
 
@@ -256,9 +265,7 @@ def main(argv: list[str] | None = None) -> int:
     for path in candidates:
         relative = path.relative_to(root).as_posix()
         digest = sha256_file(path)
-        identifier = assign_identifier(relative, digest, exact, by_hash, used, next_number)
         item: dict[str, Any] = {
-            "id": identifier,
             "path": relative,
             "extension": path.suffix.lower(),
             "bytes": path.stat().st_size,
@@ -289,7 +296,9 @@ def main(argv: list[str] | None = None) -> int:
             item["token_estimate"] = estimate_file_tokens(path)
         materials.append(item)
 
+    maximum = assign_identifiers(materials, exact, by_hash, maximum)
     result = {
+        "last_source_number": maximum,
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "root": str(root),

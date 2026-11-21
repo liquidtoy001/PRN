@@ -473,13 +473,18 @@ class StateTests(unittest.TestCase):
 
     def test_verified_chapter_is_reused_only_for_the_same_digest(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            state = Path(temporary) / "study_state.json"
+            root = Path(temporary)
+            state = root / "output" / "study_state.json"
+            artifact = root / "output" / "notes.tex"
+            artifact.parent.mkdir()
+            artifact.write_text(r"\section{Regression}", encoding="utf-8")
             digest = "a" * 64
             initialised = run_script(
                 "manage_state.py",
                 "init",
                 "--output",
                 state,
+                "--project-root", root,
                 "--course-id",
                 "STAT3007",
                 "--course-title",
@@ -522,6 +527,7 @@ class StateTests(unittest.TestCase):
                 "verified",
                 "--input-digest",
                 digest,
+                "--artifact", "output/notes.tex",
                 "--source-id",
                 "S001",
                 "--qa-citations",
@@ -555,6 +561,44 @@ class StateTests(unittest.TestCase):
                 "b" * 64,
             )
             self.assertEqual(changed.returncode, 3, changed.stderr)
+
+            check = ("manage_state.py", "needs-rebuild", state, "--slug", "regression", "--input-digest", digest)
+            self.assertEqual(run_script(*check).returncode, 0)
+            original = artifact.read_bytes()
+            artifact.write_bytes(original + b"changed")
+            self.assertEqual(run_script(*check).returncode, 3)
+            before = state.read_bytes()
+            deliver = run_script("manage_state.py", "update-chapter", state, "--slug", "regression",
+                                 "--status", "delivered")
+            self.assertNotEqual(deliver.returncode, 0)
+            self.assertEqual(state.read_bytes(), before)
+            artifact.unlink()
+            self.assertEqual(run_script(*check).returncode, 3)
+            artifact.write_bytes(original)
+            self.assertEqual(run_script(*check).returncode, 0)
+
+    def test_copied_legacy_state_checks_all_files_under_its_project(self):
+        sample = REPOSITORY / "examples/stat3007/notes/study_state.json"
+        data = json.loads(sample.read_text(encoding="utf-8"))
+        chapter = data["chapters"][0]
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            state = root / "state.json"
+            state.write_bytes(sample.read_bytes())
+            check = ("manage_state.py", "needs-rebuild", state, "--slug", chapter["slug"],
+                     "--input-digest", chapter["input_digest"])
+            self.assertEqual(run_script(*check).returncode, 3)
+            self.assertEqual(run_script(*check, "--project-root", REPOSITORY).returncode, 0)
+            for path in chapter["artifacts"]:
+                dest = root / path
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes((REPOSITORY / path).read_bytes())
+            self.assertEqual(run_script(*check).returncode, 0)
+            (root / chapter["artifacts"][0]).unlink()
+            self.assertEqual(run_script(*check).returncode, 3)
+            chapter["artifacts"] = []
+            state.write_text(json.dumps(data))
+            self.assertEqual(run_script(*check).returncode, 3)
 
     def test_pdf_delivery_requires_visual_and_structural_qa(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
