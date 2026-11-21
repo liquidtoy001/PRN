@@ -10,13 +10,13 @@ displayed equations and compact tables. The HTML template carries the same visua
 Both entries preserve citation IDs when copies are added and validate sprint budgets. The
 print entry checks registered artifacts before reuse and rejects unfinished templates by default.
 The shorter first-use instructions keep every configuration choice visible.
-[Release notes](RELEASE-0.3.5.md) · [Validation](TESTING-0.3.5.md)
+[Release notes](docs/releases/v0.3.5.md) · [Validation](docs/testing/v0.3.5.md)
 
 ## v0.3.0 — 2026-11-10
 
 See the [GitHub Release](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.0),
-[release notes](RELEASE-0.3.0.md) and
-[validation](TESTING-0.3.0.md). Existing v0.2.10 artifacts remain unchanged.
+[release notes](docs/releases/v0.3.0.md) and
+[validation](docs/testing/v0.3.0.md). Existing v0.2.10 artifacts remain unchanged.
 
 Keep the PDF and HTML entries, with three explicit purpose presets: preview (new), knowledge
 consolidation and exam revision. The first configuration exchange shows the entire active

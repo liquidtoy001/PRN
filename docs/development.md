@@ -3,7 +3,7 @@
 Python 3.10+ is required for the included CLI tools. Most checks use the standard library.
 PDF metadata and traversal require `pypdf`; PDF compilation requires an available LaTeX engine,
 and representative rendering requires Poppler. These are optional for HTML-only generation.
-Read [USAGE.md](./USAGE.md) for the learner workflow.
+Read [USAGE.md](../USAGE.md) for the learner workflow.
 
 On Windows, `PRN` is a reserved device name. Choose a normal local clone directory:
 
@@ -50,13 +50,14 @@ python pre-review-notes/scripts/download_materials.py tests/fixtures/stat3007/ma
 Downloads are local third-party inputs. The manifest specifies expected sizes and SHA-256 hashes;
 it does not grant redistribution rights. Never commit those PDFs or private learner state.
 The original HTML fixture in `tests/fixtures/html/` can be used without third-party course data;
-its build command is documented in [TESTING-0.2.10.md](./TESTING-0.2.10.md). Current release results
-are in [TESTING-0.3.5.md](./TESTING-0.3.5.md).
+its build command is documented in [v0.2.10 validation record](testing/v0.2.10.md). Current release results
+are in [v0.3.5 validation record](testing/v0.3.5.md).
 
 ## Prepare a version
 
 Update both `VERSION` files, the version lines in both `SKILL.md` files and the HTML state
-template together. Update the release notes, bilingual README and usage instructions; keep
+template together. Add release notes in `docs/releases/` and verification results in `docs/testing/`. Update the bilingual
+README and usage instructions; keep
 historical test reports and existing release archives unchanged. Tests derive package names
 from each entry's version and check that bundled metadata agrees.
 
@@ -87,4 +88,4 @@ for a limited set of credential/path patterns. It reports locations without prin
 values. It is a heuristic check, not a security certification. Recheck the remote repository,
 release attachments and intended public branches before changing visibility.
 
-See [TESTING.md](./TESTING.md) for test scope and the manual teaching-quality evaluation plan.
+See [testing guide](testing/README.md) for test scope and the manual teaching-quality evaluation plan.

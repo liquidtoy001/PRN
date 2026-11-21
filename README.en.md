@@ -9,7 +9,7 @@ This is an Agent Skill: instructions and supporting tools for an AI agent that c
 and create artifacts. It is not a standalone application.
 
 **Current version: [v0.3.5](https://github.com/liquidtoy001/PRN/releases/tag/v0.3.5).**
-v0.3.5 checks whether a reader can work out the next step from the chapter. For example, an attention explanation identifies the query and its source vectors and works one dot product so the reader can calculate the next score. [Release notes](./RELEASE-0.3.5.md)
+v0.3.5 checks whether a reader can work out the next step from the chapter. For example, an attention explanation identifies the query and its source vectors and works one dot product so the reader can calculate the next score. [Release notes](docs/releases/v0.3.5.md)
 
 The layout defaults to a course handout with a single reading column, bold headings,
 displayed equations and lightly shaded table headers. Each worked subpart keeps its solution
@@ -159,7 +159,7 @@ The [older course example](./examples/stat3007/README.md) is a historical trial.
 Actual course trials have concentrated on AI/ML. Cross-domain accuracy and learning gains have
 not been systematically evaluated. All 45 local regression tests passed. Both pages of a Chinese PDF handout were inspected.
 The offline HTML fixture built successfully. Narrow-screen and keyboard checks ran on an earlier candidate.
-See [v0.3.5 validation](./TESTING-0.3.5.md) for the exact scope. Passing automated tests does not
+See [v0.3.5 validation](docs/testing/v0.3.5.md) for the exact scope. Passing automated tests does not
 establish teaching quality or error-free content; compare generated notes with their sources.
 
 Keep private course materials local. Source slides are excluded from installation packages.
@@ -167,11 +167,11 @@ The [MIT License](./LICENSE) covers project code and original templates, not thi
 
 ## Versions and development
 
-The current version is **v0.3.5**; see [release notes and upgrade guidance](./RELEASE-0.3.5.md).
+The current version is **v0.3.5**; see [release notes and upgrade guidance](docs/releases/v0.3.5.md).
 Use the same skill names when upgrading. Existing course progress remains readable.
 Preserve old outputs and progress before using the new workflow for subsequent chapters.
 Historical chapters are never automatically credited with passing the new review.
 
-See [development instructions](./DEVELOPMENT.md), [testing](./TESTING.md) and
-[the changelog](./CHANGELOG.md). Canonical shared resources live in `shared/` and are
-materialised into both independently installable packages.
+See the [development guide](./docs/development.md) for shared resources and packaging.
+The [documentation index](./docs/README.md) lists test reports and release notes. See the
+[changelog](./CHANGELOG.md) for version history.
